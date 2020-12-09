@@ -1,0 +1,200 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.member_container{
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  .head_box{
+    width: 100%;
+    height: 74px;
+    padding: 20px 0 10px;
+    background: linear-gradient(230deg, #00CEBE 0%, #00EFDC 100%);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .head_btn{
+      width: 16px;
+      height: 16px;
+      margin: 0 15px;
+    }
+    .head_title{
+      font-size: 18px;
+      color: #ffffff;
+      font-weight: 500;
+    }
+  }
+  .info_box{
+    width: 100%;
+    height: calc(100% - 88px);
+    overflow-y: auto;
+    .member_info{
+      width: 100%;
+      height: 122px;
+      background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
+      border-radius: 0px 0px 40px 40px;
+    }
+    .member_content{
+      width: 100%;
+    }
+    .member_info_content{
+      width: 100%;
+      height: auto;
+      margin-top: -110px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      .content_image{
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #999999;
+        margin: 0 10px; 
+      }
+      .content_text{
+        width: calc(100% - 80px - 62px);
+        height: auto;
+        padding-right: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .text_name{
+          font-size: 18px;
+          color: #FFFFFF;
+          font-weight: bold; 
+        }
+        .text_item{
+          font-size: 12px;
+          color: #FFFFFF;
+          font-weight: 400; 
+        }
+      }
+      .content_btn{
+        width: 62px;
+        height: 25px;
+        text-align: center; 
+        line-height: 25px; 
+        border-radius: 50px 0px 0px 50px;
+        font-size: 10px;
+        color: #FFFFFF;
+        font-weight: 500;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        &:after{
+          content:'>';
+          padding-left: 2px;
+          margin-top: -2px;
+          font-size: 10px;
+          color: #FFFFFF;
+          font-weight: 500;
+        }
+      }
+    }
+    .member_list{
+      width: calc(100% - 20px);
+      height: auto;
+      margin: 10px 10px 0;
+      background-color: #FFFFFF;
+      box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+      border-radius: 4px;
+    }
+    .member_btn{
+      width: 100%;
+      height: 65px;
+      padding: 10px 10px 15px;
+      .form_btn{
+        background: transparent;
+        border: 1px solid #00CEBE;
+        font-weight: 400;
+        color: #00CEBE;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="member_container">
+    <!-- head  -->
+    <div class="head_box">
+      <div class="head_btn"></div>
+      <div class="head_title">订单详情</div>
+      <div class="head_btn"></div>
+    </div>
+    <div class="info_box">
+      <!-- background -->
+      <div class="member_info"></div>
+      <!-- content -->
+      <div class="member_content">
+        <!-- info -->
+        <div class="member_info_content">
+          <image class="content_image" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <ul class="content_text">
+            <li class="text_name">
+              <text class="name">戴蒙</text>
+              <div></div>
+            </li>
+            <li class="text_item">15268845321</li>
+            <!-- <li class="text_item">老顾客，可适当送些礼品</li> -->
+          </ul>
+          <div class="content_btn">查看更多</div>
+        </div>
+        <!-- orderList -->
+        <div class="member_list">
+          <OrderList />
+        </div>
+        <!-- btn -->
+        <div class="member_btn">
+          <button class="form_btn">撤销订单</button>
+        </div>  
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarBackgroundColor: '#00EFDC',
+  navigationBarTextStyle: 'white',
+  navigationStyle: 'custom',
+  disableScroll: true,
+  usingComponents: {
+    'OrderList': './../../components/orderList',
+  }
+}
+</config>

@@ -1,0 +1,153 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.classify_box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  background: #FFFFFF;
+  .classify_list{
+    width: 90px;
+    height: 100%;
+    overflow-y: auto; 
+    .list_item{
+      width: 100%;
+      height: 60px;
+      text-align: center;
+      line-height: 60px; 
+      font-size: 15px;
+      color: #333333;
+      &.active{
+        background: #F1F1F1;
+        font-weight: bold; 
+      }
+    }
+  }
+  .classify_content{
+    width: calc(100% - 90px);
+    height: 100%;
+    overflow-y: auto;
+    .content_info{
+      width: 100%;
+      height: auto;
+      .info_title{
+        display: flex;
+        font-size: 12px;
+        color: #999999;
+        font-weight: 400;
+        padding: 15px 20px;
+      }
+      .info_list{
+        width: 100%;
+        height: auto;
+        padding: 0 15px 0 25px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .info_item{
+          width: 70px;
+          height: 34px;
+          border: 1px solid #E2E2E2;
+          border-radius: 4px;
+          text-align: center; 
+          line-height: 34px;
+          font-size: 14px;
+          color:#666666;
+          font-weight: 400;
+          margin-right: 10px;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="classify_box">
+    <ul class="classify_list">
+      <li class="list_item {{current === -1&&'active'}}">
+        <text>全部</text>
+      </li>
+      <li class="list_item {{current === item.type&&'active'}}" v-for="item in list">
+        <text>{{item.title}}</text>
+      </li>
+    </ul>
+    <div class="classify_content">
+      <div v-for="item in list">
+        <div class="content_info" v-if="current === -1?current === -1:current ===item.type">
+          <text class="info_title">{{item.title}}</text>
+          <ul class="info_list">
+            <li class="info_item" v-for="it in item.content">{{it}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+      current: 1,
+      list:[
+        {
+          title:'基础产品',
+          type: 0,
+          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
+        },
+        {
+          title:'配套产品',
+          type: 1,
+          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
+        },
+        {
+          title:'售后服务',
+          type: 2,
+          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
+        },
+        {
+          title:'自营产品',
+          type: 3,
+          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
+        }
+      ]
+    },
+    computed: {
+
+    },
+    methods: {
+      bindKeyInput(){
+
+      }
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '选择分类',
+  disableScroll: true,
+  usingComponents: {
+    "orderItem": './../../components/orderItem',
+  }
+}
+</config>

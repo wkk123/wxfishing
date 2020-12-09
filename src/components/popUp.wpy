@@ -1,0 +1,115 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.pop_up{
+  z-index: 100000; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 30, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .pop_up_box{
+    width: calc(100% - 100px);
+    background: #FFFFFF;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    .pop_up_title{
+      font-size: 18px;
+      color: #000000;
+      font-weight: bold; 
+      padding-top: 10px;
+    }
+    .pop_up_subTitle{
+      font-size: 14px;
+      padding: 5px 0;
+      color: #999999;
+    }
+    .pop_up_input{
+      width: calc(100% - 20px);
+      height: 40px;
+      margin: 10px 0;
+      border-radius: 4px;
+      background: #F9F9F9;  
+      text-align: center; 
+    }
+    .pop_up_btn{
+      width: 100%;
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      .btn_item{
+        width: 50%;
+        height: 100%; 
+        font-size: 18px;
+        color: #666666;
+        font-weight: 400;
+        border-top: 1px solid #DCDEE3;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        &:last-child{
+          border-left: 1px solid #DCDEE3;
+          color: #3978FC;
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <!-- 弹框 -->
+  <div class="pop_up" v-show="isShow">
+    <div class="pop_up_box">
+      <text class="pop_up_title">请输入数量</text>
+      <text class="pop_up_subTitle">当前金额¥{{456}}</text>
+      <input class="pop_up_input" type="text" name="" id="" />
+      <ul class="pop_up_btn">
+        <li class="btn_item">取消</li>
+        <li class="btn_item">确定</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      isShow: {
+        type: Boolean,
+        default: false,
+      },
+      list: {
+        type: Array,
+        default: []
+      },
+    },
+    data: {
+      
+    },
+    computed: {
+      
+    },
+    methods: {
+      fun(){
+
+      }
+    },
+    onShow(){
+      console.log(this.props)
+    },
+  });
+</script>

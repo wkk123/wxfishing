@@ -1,0 +1,128 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+
+</style>
+<template>
+  <div class="container">
+    <Grid
+      :gridList="gridList"
+      @subItem="subItem"
+    />
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  // import eventHub from '../common/eventHub';
+  // import store from '../store';
+  // const app = getApp();
+  // import { mapState, mapActions } from '@wepy/redux';
+  // import { COMMIT } from '../store/types';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    hooks: {
+
+    },
+    data: {
+      gridList:[
+        {
+          title:'基础信息',
+          itemList:[
+            {
+              icon:'./../image/icon1.png',
+              subTitle:'门店信息',
+              url:'/pages/shopInfo/index',
+            }
+          ]
+        },
+        {
+          title:'库存管理',
+          itemList:[
+            {
+              icon:'./../image/icon2.png',
+              subTitle:'收银管理',
+              url:'/pages/cashierManagement/index',
+            },
+            {
+              icon:'./../image/icon3.png',
+              subTitle:'入库管理',
+              url:'/pages/stockManagement/index',
+            },
+            {
+              icon:'./../image/icon4.png',
+              subTitle:'我的库存',
+              url:'/pages/myInventory/index',
+            },
+            {
+              icon:'./../image/icon5.png',
+              subTitle:'品牌管理',
+              url:'/pages/brand/index',
+            },{
+              icon:'./../image/icon6.png',
+              subTitle:'会员管理',
+              url:'/pages/memberManagement/index',
+            }
+          ]
+        },
+        {
+          title:'运营管理',
+          itemList:[
+            {
+              icon:'./../image/icon7.png',
+              subTitle:'销售日报',
+              url:'/pages/dailyPaper/index',
+            },
+            {
+              icon:'./../image/icon8.png',
+              subTitle:'DIY定制产品',
+              url:'/pages/diy/index',
+            }
+          ]
+        }
+      ]
+    },
+    computed: {
+
+    },
+    methods: {
+      // 点击某一个
+      subItem(data){
+        // if(!false){
+        //   wx.navigateTo({
+        //     url: '/pages/login/index'
+        //   })
+        // } else {
+          wx.navigateTo({
+            url: data.url
+          })
+        // }
+      }
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/index'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '渔boss',
+  disableScroll: true,
+  usingComponents: {
+    "Grid": './../components/grid' 
+  }
+}
+</config>

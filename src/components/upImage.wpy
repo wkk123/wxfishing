@@ -1,0 +1,91 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.upImage_container{
+  width: 100%;
+  height: auto;
+  .item_titles{
+    font-size: 14px;
+    color: #333333;
+    font-weight: 500;
+    padding: 20px 0 0px; 
+    display: flex;
+    &.active{
+      &:after{
+        content: '*';
+        font-size: 14px;
+        color: #F33C2E;
+        font-weight: 500;
+        padding-left: 5px;
+      }   
+    }
+  }
+  .upImage_box{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    &:after{
+      content: '>';
+      font-size: 18px;
+      color: #999999;
+    }
+    .upImage_icon{
+      width: 50px;
+      height: 50px;
+      margin: 10px 0;
+      border: 1px dashed #DDDDDD;
+      border-radius: 3px;  
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .img_icon{
+        font-size: 24px;
+        color: #DDDDDD;
+      }
+    }  
+  }
+}
+</style>
+<template>
+  <div class="upImage_container">
+    <text class="item_titles {{Sign &&'active'}}">{{title}}</text>
+    <div class="upImage_box">
+      <div class="upImage_icon">
+        <text class="img_icon">+</text>
+      </div>  
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      title: {
+        type: String,
+        default:''
+      },
+      Sign: {
+        type: Boolean,
+        default: false
+      }
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+      fun(){
+
+      }
+    },
+  });
+</script>

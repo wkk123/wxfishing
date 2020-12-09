@@ -1,0 +1,117 @@
+<style lang="stylus" src="./css/public.styl"></style>
+<style src="./css/iconfont.css"></style>
+<script>
+import wepy from '@wepy/core';
+import eventHub from './common/eventHub';
+import wepyRedux from '@wepy/redux';
+import { COMMIT } from './store/types';
+import store from './store';
+const appMap = require('./utils/mapApi');
+wepy.use(wepyRedux);
+
+
+wepy.app({
+  store,
+
+  hooks: {
+
+  },
+
+  globalData: {
+    userInfo: null,
+    userLocation: null,
+    systemInfo: null,
+  },
+
+  onLaunch() {
+    const that = this
+    // 获取设备信息
+    that.$options.globalData.systemInfo = wx.getSystemInfoSync()
+    // 获取设备地址
+    this.getUserLocation()
+  },
+
+  onShow(){
+    // this.getUserLocation()
+  },
+  onUnload(){
+
+  },
+
+  methods: {
+    getUserLocation(){
+      const that = this
+      appMap.reverseGeocoder({
+        success: function(data){
+           let userLocation = {}
+           if(data.result){
+             userLocation['name']        =           data.result.address
+             userLocation['latitude']    =           data.result.location.lat
+             userLocation['longitude']   =           data.result.location.lng
+             userLocation['district']    =           data.result.address_component.district
+             userLocation['city']        =           data.result.address_component.city
+             userLocation['province']    =           data.result.address_component.province
+             userLocation['adcode']      =           data.result.ad_info.adcode
+             userLocation['formatted_address'] =     data.result.address
+             that.$options.globalData.userLocation = userLocation
+             eventHub.$emit('locationSuccess', that.$options.globalData.userLocation);
+           }
+        },
+        fail: function(info){
+          wx.showToast({
+            title: '获取位置失败',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    },
+
+  }
+});
+</script>
+<config>
+{
+  pages: [
+    'pages/index',
+    'pages/login/index',
+    'pages/password/forgetPassword',
+    'pages/password/setPassword',
+    'pages/shopInfo/index',
+    'pages/diy/index',
+    'pages/dailyPaper/index',
+    'pages/brand/index',
+    'pages/brand/info',
+    'pages/stockManagement/index',
+    'pages/stockManagement/item',
+    'pages/memberManagement/index',
+    'pages/memberManagement/memberSearch',
+    'pages/memberManagement/focusSearchInput',
+    'pages/memberManagement/editInformation',
+    'pages/memberManagement/renewVIP',
+    'pages/memberManagement/memberInfo',
+    'pages/memberManagement/orderInfo',
+    'pages/myInventory/index',
+    'pages/myInventory/selectInventory',
+    'pages/myInventory/changedInventory',
+    'pages/myInventory/codeInventory',
+    'pages/myInventory/classify',
+    'pages/cashierManagement/index',
+    'pages/cashierManagement/cashierOrder',
+    'pages/cashierManagement/clearingOrder',
+    'pages/cashierManagement/search',
+    'pages/cashierManagement/cart',
+  ],
+  // permission: {
+  //   "scope.userLocation": {
+  //     "desc": "请点击‘允许’，平台获取您的位置后更方便服务于您"
+  //   }
+  // },
+  window: {
+    backgroundTextStyle: 'light',
+    navigationBarBackgroundColor: '#fff',
+    navigationBarTitleText: 'WeChat',
+    navigationBarTextStyle: 'black'
+  }
+}
+</config>

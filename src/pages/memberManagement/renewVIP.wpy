@@ -1,0 +1,86 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.form_box{
+  width: 100%;
+  height: 100%;
+  padding: 0 10px;
+  overflow-y: auto; 
+  .form_content{
+    width: 100%;
+    min-height: calc(100% - 50px - 30px);
+  }
+  .form_list{
+    width: 100%;
+    height: auto; 
+    .list_item{
+      width: 100%;
+      height: auto;
+      border-bottom: 1px solid rgba(25, 31, 37, 0.08);
+    }
+  }
+  .form_submit{
+    margin: 15px 0;
+  }
+}
+</style>
+<template>
+  <div class="form_box">
+    <div class="form_content">
+      <ul class="form_list">
+        <li class="list_item">
+          <UpImage title="当前等级" />
+        </li>
+        <li class="list_item">
+          <SubInput title="续费等级" :Sign="true" />
+        </li>
+        <li class="list_item">
+          <SubInput title="续费时间" :Sign="true" />
+        </li>
+      </ul>
+    </div>
+    <button class="form_btn form_submit" >保存</button>  
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '续费VIP',
+  disableScroll: true,
+  usingComponents: {
+    "SubInput": './../../components/subInput',
+    "UpImage": './../../components/upImage',
+  }
+}
+</config>

@@ -1,0 +1,150 @@
+// 当前页面
+let currentPage = null
+// 请求地址
+const baseURL = '';
+const http = ({url, params, method} = {}) => {
+    let isLoading = params.isLoading;
+    return new Promise((resolve, reject) => {
+        let header = {
+          'content-type': 'application/json',
+        }
+        if(url!='/user/login'&&url!='/user/login_phone'){
+          let token = wx.getStorageSync('token')
+          if(!token||token===''){
+            if(currentPage) return
+            if(isLoading){
+              wx.hideLoading()
+            }
+            currentPage = 'login'
+            wx.showToast({
+              title: '请先登录',
+              icon: 'none',
+              duration: 1500,
+              complete: function(){
+                setTimeout(()=> {
+                  wx.navigateTo({
+                    url: '/pages/login'
+                  })
+                },1500)
+              }
+            })
+            return
+          }
+          header['token'] = token
+        }
+        if(currentPage)currentPage=null
+        if (isLoading) {
+          wx.showLoading({
+            title: '加载中...'
+          })
+        }
+        delete params.isLoading
+        wx.request({
+            url: baseURL+url,
+            data: params,
+            header: header,
+            method: method,
+            complete: (res) => {
+                if (isLoading) {
+                  wx.hideLoading()
+                }
+                if(res.statusCode === 200||res.statusCode === 204){
+                    if(res.data.code===10000){
+                      resolve(res.data)
+                    }else{
+                      if(res.data.code===30002||res.data.code===30003||res.data.code===30004){
+                        if(currentPage) return
+                        currentPage = 'login'
+                        if(wx.getStorageSync('token')){
+                          wx.removeStorageSync('token')
+                        }
+                        wx.showToast({
+                          title: '请重新登录',
+                          icon: 'none',
+                          duration: 1500,
+                          complete: function(){
+                            setTimeout(()=> {
+                              wx.navigateTo({
+                                url: '/pages/login'
+                              })
+                            },1500)
+                          }
+                        })
+                      }
+                      reject(res)
+                    }
+
+                } else {
+                    reject(res)
+                }
+            }
+        })
+    })
+}
+
+const upload = (url, params) => {
+  return new Promise((resolve, reject) => {
+    const token = wx.getStorageSync('token')
+    if(!token||token===''){
+      wx.showToast({
+        title: '请先登录',
+        icon: 'none',
+        duration: 1500,
+        complete: function(){
+          setTimeout(()=> {
+            wx.navigateTo({
+              url: '/pages/login'
+            })
+          },1500)
+        }
+      })
+      return
+    }
+    wx.uploadFile({
+      url: baseURL+url,
+      filePath: params,
+      name: 'file',
+      header: {
+        "token": token,
+        "content-type": "multipart/form-data"
+      },
+      success (res){
+        resolve(res)
+      },
+      fail (err){
+        reject(err)
+      }
+    })
+  })
+}
+
+const GET = (url, params = {}) => {
+  return http({
+    url,
+    params: {
+      isLoading: true,
+      ...params,
+    },
+    method: "GET",
+  })
+}
+const POST = (url, params = {}) => {
+  return http({
+    url,
+    params: {
+      isLoading: true,
+      ...params,
+    },
+    method: 'POST'
+  })
+}
+
+const UPLOAD = (url, params) => {
+  return upload(url,params)
+}
+
+module.exports = {
+  GET,
+  POST,
+  UPLOAD
+}

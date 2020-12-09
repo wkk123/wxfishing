@@ -1,0 +1,151 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.brand_box{
+  width: 100%;
+  height: 100%;
+  padding: 0px 0px 15px;
+  .brand_list{
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow-y: auto;   
+    .list_item{
+      width: calc(100% - 20px);
+      height: auto;
+      margin: 5px 10px 5px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      box-shadow: 0px 2px 12px 5px rgba(180, 180, 180, 0.1);   
+      padding: 10px 0 10px 10px; 
+      .item_title{
+        font-size: 16px;
+        color: #000000;
+        font-weight: 500; 
+      }
+      .content_item{
+        padding: 5px 0;
+        .item_icon{
+          width: 15px;
+          height: 15px;
+          padding-right: 5px;
+        }
+        .item_text{
+          font-size: 12px;
+          color: #999999;
+        }
+      }
+    }
+  }
+  .brand_nav{
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: calc(100% - 20px); 
+  }
+}
+</style>
+<template>
+  <div class="container">
+    <div class="brand_box">
+      <ul class="brand_list">
+        <li class="list_item" v-for="item in brandList">
+          <text class="item_title">{{item.title}}</text>
+          <ul class="item_content">
+            <li class="content_item">
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <text class="item_text">{{item.co}}</text>
+            </li>
+            <li class="content_item">
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <text class="item_text">{{item.shipAddress}}</text>
+            </li>
+            <li class="content_item">
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <text class="item_text">{{item.telephone}}</text>
+            </li>
+            <li class="content_item">
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <text class="item_text">{{item.remark}}</text>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <button class="brand_nav form_btn" >添加品牌</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+      brandList:[
+        {
+          title:'这里是一个品牌名称',
+          co: '这里商品产地',
+          shipAddress:'这里是发货地址',
+          telephone:'13509322459',
+          remark:'这里是一些备注'
+        },
+        {
+          title:'这里是一个品牌名称',
+          co: '这里商品产地',
+          shipAddress:'这里是发货地址',
+          telephone:'13509322459',
+          remark:'这里是一些备注'
+        },{
+          title:'这里是一个品牌名称',
+          co: '这里商品产地',
+          shipAddress:'这里是发货地址',
+          telephone:'13509322459',
+          remark:'这里是一些备注'
+        },{
+          title:'这里是一个品牌名称',
+          co: '这里商品产地',
+          shipAddress:'这里是发货地址',
+          telephone:'13509322459',
+          remark:'这里是一些备注'
+        },{
+          title:'这里是一个品牌名称',
+          co: '这里商品产地',
+          shipAddress:'这里是发货地址',
+          telephone:'13509322459',
+          remark:'这里是一些备注'
+        }
+      ]
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '品牌管理',
+  disableScroll: true,
+  usingComponents: {
+
+  }
+}
+</config>

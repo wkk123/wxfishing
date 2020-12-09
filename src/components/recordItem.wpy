@@ -1,0 +1,214 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.content_box{
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  .merchant_box{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .merchant_info{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .info_image{
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #999999;
+        margin-right: 5px; 
+      }
+      .info_title{
+        font-size: 14px;
+        color: #333333;
+      }
+    }
+    .merchant_state{
+      font-size: 13px;
+      color: #00CEBE;
+    }
+  }
+  .merchandise_box{
+    width: 100%;
+    height: 60px;
+    margin: 15px 0 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .merchandise_list{
+      width: 240px;
+      height: 60px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      overflow: hidden;
+      .merchandise_item{
+        width: 60px;
+        height: 100%;
+        margin-right: 10px;
+        display:inline-block;
+        &:last-child{
+          margin: 0;
+        }
+      }
+      .item_image{
+        width: 60px;
+        height: 100%;
+        background-color: #999999;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+    }
+    .merchandise_text{
+      width: calc(100% - 240px);
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      font-size: 12px;
+      color: #999999;
+      font-weight: 400;
+      &:after{
+        content:'>';
+        padding-left: 2px;
+        margin-top: -2px;
+        font-size: 12px;
+        color: #999999;
+        font-weight: 400;
+      } 
+    }
+  }
+  .buy_box{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text{
+      font-size: 12px;
+      color: #999999;
+      &:last-child{
+        font-size: 12px;
+        color: #333333;
+        font-weight: bold; 
+      }
+    }
+  }
+  .buyBtn_box{
+    width: 100%;
+    height: 25px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .buy_left{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      .left_icon{
+        width: 20px;
+        height: 20px;
+      }
+      .left_text{
+        font-size: 13px;
+        color: #999999;
+        padding-left: 5px;
+      }
+    }
+    .buy_btn{
+      width: 64px;
+      height: 25px;
+      border-radius: 23px;
+      border: 1px solid #00CEBE;
+      font-size: 12px;
+      color: #00CEBE;
+      font-weight: 400;
+      margin: 0;
+      padding: 0;
+      text-align:center;
+      line-height: 25px;
+    }
+  }
+}
+</style>
+<template>
+  <div class="content_box">
+    <div class="merchant_box">
+      <div class="merchant_info">
+        <image class="info_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        <text class="info_title">这里商家名称</text>
+      </div>
+      <text class="merchant_state">已支付</text>
+    </div>
+    <div class="merchandise_box">
+      <div class="merchandise_list">
+        <div class="merchandise_item" v-for="item in 8">
+          <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        </div>
+      </div>
+      <text class="merchandise_text">{{8}}件商品</text>
+    </div>
+    <div class="buy_box">
+      <text>购买时间：2019-09-10 10：00</text>
+      <text>合计￥453</text>
+    </div>
+    <div class="buyBtn_box">
+      <div class="buy_left">
+        <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        <text class="left_text">分享</text>
+      </div>
+      <button class="buy_btn" @click="gotoInfo()">撤销订单</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      orderData: {
+        type: Object,
+        default () {
+          return {
+            title:'',
+            Version:'',
+            time:'',
+            num:'',
+            status:'',
+            type: '',
+          }
+        }
+      },
+    },
+    data: {
+      
+    },
+    computed: {
+      
+    },
+    methods: {
+      gotoInfo(){
+        wx.navigateTo({
+          url: '/pages/memberManagement/orderInfo'
+        })
+      }
+    },
+    onShow(){
+      console.log(this.props)
+    },
+  });
+</script>

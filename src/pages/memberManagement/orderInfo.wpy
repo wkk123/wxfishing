@@ -1,0 +1,188 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.member_container{
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  padding-top: 15px;
+  overflow-y: auto;
+  .content_box{
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 0 10px 10px;
+    box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+    border-radius: 4px;
+  }
+  .store_box{
+    min-height: 98px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    .store_info{
+      width: calc(100% - 60px - 10px);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      .info_title{
+        font-size: 18px;
+        color: #000000;
+        font-weight: 500; 
+        line-height: 26px;
+      }
+      .info_subtitle{
+        font-size: 12px;
+        color: #999999;
+        font-weight: 400;
+        line-height: 16px;
+        padding: 10px 0;
+      }
+      .store_site{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        .site_img{
+          width: 12px;
+          height: 12px;
+          margin-right: 8px;
+        }
+        .site_text{
+          font-size: 10px;
+          color: #999999;
+          line-height: 14px;
+        }
+      }
+    }
+    .store_img{
+      width: 60px;
+      height: 60px;
+      background-color: #999999;
+      border-radius: 4px; 
+    }
+  }
+  
+  .order_time{
+    padding: 0;
+    .time_item{
+      width: 100%;
+      height: 50px;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      border-bottom: 1px solid #EEEEEE;
+      &:last-child{
+        border: none;
+      }
+      text{
+        color: #333333;
+        &:last-child{
+          color: #666666;
+        }
+      }
+    }
+  }
+  .member_btn{
+    width: 100%;
+    height: 92px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    .btn_item{
+      width: calc(100%/2 - 30px);
+      height: 44px;
+      border-radius: 22px; 
+      background: #FFFFFF;
+      border: 1px solid #999999;
+      padding: 0;
+      margin: 0;
+      font-size: 18px;
+      color:#999999;
+      &.active{
+        color: #00CEBE;
+        border-color: #00CEBE;
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="member_container">
+    <div class="store_box content_box">
+      <div class="store_info">
+        <text class="info_title">戴蒙上个人头官方旗舰店</text>
+        <text class="info_subtitle">这里是一些门店标语这里是</text>
+        <div class="store_site">
+          <image class="site_img" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <text class="site_text">绿汀路21号-28号西溪堂商务中心2幢</text>
+        </div>
+      </div>
+      <image class="store_img" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+    </div>
+
+    <OrderList />
+
+    <ul class="order_time content_box">
+      <li class="time_item">
+        <text>购买时间</text>
+        <text>2019-09-10 10：00</text>
+      </li>
+      <li class="time_item">
+        <text>撤销时间</text>
+        <text>2019-09-10 10：00</text>
+      </li>
+    </ul>
+    <div class="member_btn">
+      <button class="btn_item">分享</button>
+      <button class="btn_item active">撤销订单</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '订单详情',
+  disableScroll: true,
+  usingComponents: {
+    "OrderList": './../../components/orderList',
+  }
+}
+</config>

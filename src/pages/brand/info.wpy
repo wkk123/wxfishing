@@ -1,0 +1,90 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.form_box{
+  width: 100%;
+  height: 100%;
+  padding: 0 10px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  align-items: center;
+  .form_list{
+    width: 100%;
+    height: auto; 
+    .list_item{
+      width: 100%;
+      height: auto;
+      border-bottom: 1px solid rgba(25, 31, 37, 0.08);
+    }
+  }
+}
+</style>
+<template>
+  <div class="container">
+    <div class="form_box">
+      <ul class="form_list">
+        <li class="list_item">
+          <itemInput title="厂家名称"/>
+        </li>
+        <li class="list_item">
+          <itemInput title="商品产地"/>
+        </li>
+        <li class="list_item">
+          <itemInput title="发货地址"/>
+        </li>
+        <li class="list_item">
+          <itemInput title="联系方式"/>
+        </li>
+        <li class="list_item">
+          <itemInput title="备注" />
+        </li>
+      </ul>
+      <button class="form_btn" plain="true">保存</button>  
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      wx.setNavigationBarTitle({
+        title: '添加品牌'
+      })
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: 'DIY定制产品',
+  disableScroll: true,
+  usingComponents: {
+    "itemInput": './../../components/itemInput',
+  }
+}
+</config>

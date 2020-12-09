@@ -1,0 +1,176 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.editOrder_info{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  &:last-child{
+    margin: 0;
+  }
+  .item_left{
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    .left_icon{
+      width: 100%;
+      height: 100%;
+      border-radius: 3px; 
+      background-color: #999999;
+    }
+  }
+  .item_info{
+    width: calc(100% - 80px - 10px);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    .info_text{
+      width: 100%;
+      height: auto;
+    }
+    .info_title{
+      color: #333333;
+      font-size: 16px;
+      font-weight: bold; 
+      display: block;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px;
+    }
+    .info_content{
+      .info_item{
+        color: #999999;
+        font-size: 10px;
+        line-height:16px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }  
+    }
+    .inventory_num{
+      width: 100%;
+      height:  auto;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .num_text{
+        font-size: 16px;
+        color: #FF6439;
+        font-weight: bold;
+        &:before{
+          content: '¥';
+          font-size: 10px;
+          color: #FF6439;
+          padding-right: 5px;
+        }
+      }
+      .num_btn{
+        width: 100px;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        .btn_item{
+          width: 15px;
+          height: 15px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          background: #FFFFFF;
+          border: 1px solid #FFC400;
+          border-radius: 4px; 
+          color: #FFC400;  
+          &:last-child{
+            width: 15px;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            border-radius: 4px; 
+            background: #FFC400;
+            color: #FFFFFF;
+          }
+        }
+        .num_input{
+          width: calc(100% - 30px);
+          height: 24px;
+          text-align: center;
+          line-height: 24px;
+          color: #666666;
+          font-size: 14px;  
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="editOrder_info">
+    <div class="item_left">
+      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+    </div>
+    <div class="item_info">
+      <div class="info_text">
+        <text class="info_title">{{orderData.title}}</text>
+        <ul class="info_content">
+          <li class="info_item">型号：{{orderData.Version}}</li>
+        </ul>  
+      </div>
+      <div class="inventory_num">
+        <text class="num_text">{{orderData.price}}</text>
+        <ul class="num_btn">
+          <li class="btn_item">
+            <text>-</text>
+          </li>
+          <input class="num_input" :value="orderData.num" type="text" />
+          <li class="btn_item">
+            <text>+</text>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      orderData: {
+        type: Object,
+        default () {
+          return {
+            title:'这里是商品名称这里名称这里是商品名称这里名称',
+            Version:'型号：WHHHSI-3，sertlef;23m[黑色]型号：WHHHSI-3，sertlef;23m[黑色]型号：WHHHSI-3，sertlef;23m[黑色]',
+            num: 6,
+            price: 42,
+          }
+        }
+      },
+    },
+    data: {
+      
+    },
+    computed: {
+      
+    },
+    methods: {
+      fun(){
+
+      }
+    },
+    onShow(){
+      
+    },
+  });
+</script>

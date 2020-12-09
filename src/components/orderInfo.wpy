@@ -1,0 +1,133 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.content_box{
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin: 0 10px 10px;
+  box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+  border-radius: 4px;
+}
+.content_item{
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  background-color: #F9F9F9;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .item_image{
+    width: 80px;
+    height: 80px;
+    background-color: #999999;
+    margin-right: 10px;
+  }
+  .item_info{
+    width: calc(100% - 80px - 10px);
+    height: auto;
+    .info_title{
+      color: #333333;
+      font-size: 16px;
+      font-weight: 400;
+      display: block;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px;
+    }
+    .info_content{
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-item: flex-start;
+      .info_item{
+        width: calc(100% - 60px);
+        color: #999999;
+        font-size: 12px;
+        text-align: left; 
+        line-height:16px; 
+      }
+      .info_num{
+        width: 60px;
+        font-size: 15px;
+        color: #999999;
+        text-align: right; 
+      }
+    }
+    .money_box{
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-item: flex-end;
+      text{
+        color: #333333;
+        font-size: 12px;
+        font-weight: 500;
+        &:first-child{
+          padding: 5px 3px 0;
+        }
+        &:last-child{
+          font-size: 18px;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <div class="content_item">
+    <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+    <div class="item_info">
+      <text class="info_title">{{'这里是商品名称这里是名称这里是商品名称这里是名称'}}</text>
+      <ul class="info_content">
+        <li class="info_item">型号：WHHHSI-3，sertlef; 23m[黑色]</li>
+        <li class="info_num">x{{99999}}</li>
+      </ul>
+      <div class="money_box">
+        <text>¥</text>
+        <text>298</text>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      orderData: {
+        type: Object,
+        default () {
+          return {
+            title:'',
+            Version:'',
+            time:'',
+            num:'',
+            status:'',
+            type: '',
+          }
+        }
+      },
+    },
+    data: {
+      
+    },
+    computed: {
+      
+    },
+    methods: {
+      fun(){
+
+      }
+    },
+    onShow(){
+      console.log(this.props)
+    },
+  });
+</script>

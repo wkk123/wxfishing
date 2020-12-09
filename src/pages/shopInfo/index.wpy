@@ -1,0 +1,194 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.hint_box{
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  display: flex; 
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center; 
+  background-color: rgba(255, 196, 0, 0.11);
+  .hint_icon{
+    width: 14px;
+    height: 14px;
+    margin-right: 5px;
+  }
+  .hint_text{
+    font-size: 14px;
+    color: #FF8031;
+  }
+}
+.list_content{
+  width: 100%;
+  height: calc(100% - 30px); 
+  overflow-y: auto;   
+}
+.list_box{
+  padding: 0 10px;
+  width: 100%;
+  height: auto;
+  .list_item{
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid rgba(25, 31, 37, 0.08);
+  }
+  .item_titles{
+    font-size: 14px;
+    color: #333333;
+    font-weight: 500;
+    padding: 20px 0 0px; 
+    display: flex;
+    &:after{
+      content: '*';
+      font-size: 14px;
+      color: #F33C2E;
+      font-weight: 500;
+      padding-left: 5px;
+    }   
+  }
+  .longitudeAndLatitude_box{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .longitudeAndLatitude_box_left{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 200px;
+      height: 50px;
+    }
+    .longitudeAndLatitude_box_btn{
+      width: 90px;
+      height: 30px;
+      line-height: 30px;   
+      padding: 0;
+      margin: 0;
+      border: 1px solid #00CEBE;
+      border-radius: 30px;
+      font-size: 14px;
+      color: #00CEBE;
+      text-align: center;
+      background-color: transparent;
+    }
+  }
+}
+.form_btn{
+  width: calc(100% - 20px);
+  height: 50px;
+  background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: bold;
+  border-radius: 25px;
+  margin: 30px 10px 20px;
+  padding: 0;
+  border: none;  
+}
+</style>
+<template>
+  <div class="container">
+    <div class="hint_box">
+      <image 
+        class="hint_icon"
+        src="./../../image/hint.png" 
+        mode="scaleToFill"
+        lazy-load="false">
+      </image>
+      <text class="hint_text">以下三项填写后付款用户会看到，请准确填写</text>
+    </div>
+    <div class="list_content">
+      <ul class="list_box">
+        <li class="list_item">
+          <itemInput title="店铺名称" :Sign="true" />
+        </li>
+        <li class="list_item">
+          <itemInput title="店铺标语" :Sign="true" />
+        </li>
+        <li class="list_item">
+          <UpImage title="店面logo" />
+        </li>
+        <li class="list_item">
+          <itemInput title="详细地址" />
+        </li>
+        <li class="list_item">
+          <itemInput title="联系人" />
+        </li>
+        <li class="list_item">
+          <itemInput title="联系电话" />
+        </li>
+        <li class="list_item">
+          <text class="item_titles">经纬度</text>
+          <div class="longitudeAndLatitude_box">
+            <div class="longitudeAndLatitude_box_left">
+              <input 
+                class="item_num"
+                value="{{''}}" 
+                type="text"
+                placeholder="经度" 
+                placeholder-class="input_placeholder"
+                @blur="fun()"/>
+              <text>,</text>
+              <input 
+                class="item_num"
+                value="{{''}}" 
+                type="text"
+                placeholder="纬度"
+                placeholder-class="input_placeholder"
+                @blur="fun()"/>  
+            </div>
+            <button class="longitudeAndLatitude_box_btn" plain="true">点击获取</button>
+          </div>
+        </li>
+      </ul>  
+      <button class="form_btn" >保存</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+
+    },
+    computed: {
+
+    },
+    methods: {
+      
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '门店信息',
+  disableScroll: true,
+  usingComponents: {
+    "itemInput": './../../components/itemInput',
+    "UpImage": './../../components/upImage',
+  }
+}
+</config>

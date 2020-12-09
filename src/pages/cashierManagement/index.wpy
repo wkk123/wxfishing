@@ -1,0 +1,318 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.cashier_container{
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  .cashier_info{
+    width: 100%;
+    background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
+    .head_box{
+      width: 100%;
+      height: 78px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .head_btn{
+        width: 16px;
+        height: 16px;
+        margin: 0 15px;
+      }
+      .head_left{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 0 10px;
+        .left_icon{
+          width: 24px;
+          height: 24px;
+          padding-right: 5px;
+        }
+        .left_title{
+          font-size: 18px;
+          color: #ffffff;
+          font-weight: 600;
+        }
+      }
+    }
+    .member_search{
+      width: 100%;
+      height: 60px;
+      padding: 0 10px 20px;
+    }
+  }
+  .cashier_nav{
+    width: 100%;
+    height: 52px;
+    padding: 16px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    .nav_item{
+      font-size: 15px;
+      color: #666666;
+      &.active{
+        font-szie: 18px;
+        color: #333333;
+        font-weight: bold;
+        &:after{
+          content:'';
+          display: block; 
+          margin-top: -6px;
+          width: 100%;
+          height: 4px;
+          background: #00CEBE;
+        }
+      }
+    }
+  }
+  .cashier_content{
+    width: 100%;
+    height: calc(100% - 78px - 60px - 52px - 60px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    .content_left{
+      width: 70px;
+      height: 100%;
+      overflow-y: auto;
+      .left_item{
+        width: 70px;
+        height: 70px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .item_icon{
+          width: 25px;
+          height: 25px;
+          background-color: #999999;
+        }
+        .item_text{
+          font-size: 12px;
+          color: #666666;
+          font-weight: 400; 
+        }
+        &.active{
+          background-color: #F0F0F0;
+          .item_text{
+            font-size: 13px;
+            color: #333333;
+            font-weight: 500; 
+          }
+        }
+      }
+    }
+    .content_right{
+      width: calc(100% - 70px);
+      height: 100%;
+      overflow-y: auto;
+      .right_item{
+        width: calc(100% - 20px);
+        margin: 10px;
+        padding: 10px;
+        background: #FFFFFF;
+        box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+        border-radius: 4px;
+      }
+    }
+  }
+  .cashier_btn{
+    width: 100%;
+    height: 60px;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 10000;
+    position: relative;
+    bottom: 0;
+    .shopping_Cart{
+      width: calc(100% - 85px - 85px);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .cart_left{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .cart_img{
+          width: 30px;
+          height: 30px;
+        }
+        .cart_Num{
+          padding: 3px;
+          margin-top: -4px;
+          margin-left: 2px;
+          background-color: #FFC400;
+          border-radius: 50%;
+          font-size: 12px;
+          font-weight: 500;
+          color: #FFFFFF;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }  
+      }
+      .cart_total{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        font-size: 15px;
+        font-weight: bold; 
+        color: #333333;
+        .total_num{
+          &:before{
+            content:'￥';
+            font-size: 12px;
+            color: #333333;
+          }
+        }
+      }
+    }
+    .btn_item{
+      width: 75px;
+      height: 34px;
+      margin-left: 10px;
+      .btn{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 34px;
+        text-align: center;
+        line-height: 34px;  
+        border-radius: 17px;
+        background: #FFFFFF;
+        border: 1px solid #00CEBE;
+        font-size: 14px;
+        color: #00CEBE;
+      }
+      &:last-child{
+        .btn{
+          border: none;
+          color: #FFFFFF;
+          background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
+        }
+      } 
+    }
+  }
+}
+</style>
+<template>
+  <div class="cashier_container">
+    <!-- 弹框 -->
+    <PopUp :isShow="true" />
+    <!-- 购物车 -->
+    <Cart :isShow="false" />
+    <div class="cashier_info">
+      <div class="head_box">
+        <div class="head_left">
+          <image class="left_icon" src="./../../image/site.png" mode="scaleToFill" lazy-load="false"> </image>
+          <div class="left_title">某某门店</div>  
+        </div>
+        <div class="head_btn"></div>
+      </div>
+      <div class="member_search">
+        <Search />
+      </div>
+    </div>
+    <ul class="cashier_nav">
+      <li class="nav_item {{currentNav === index &&'active'}}" v-for="(item,index) in navList">{{item.title}}</li>
+    </ul>
+    <div class="cashier_content">
+      <ul class="content_left">
+        <li class="left_item {{currentItem === item &&'active'}}" v-for="item in 9">
+          <image class="item_icon" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <text class="item_text">竿</text>
+        </li>
+      </ul>
+      <ul class="content_right">
+        <li class="right_item" v-for="item in 9">
+          <EditOrder />
+        </li>
+      </ul>
+    </div>
+    <ul class="cashier_btn">
+      <li class="shopping_Cart">
+        <div class="cart_left">
+          <image class="cart_img" src="./../../image/cart.png" mode="scaleToFill" lazy-load="false"> </image>
+          <div class="cart_Num">55</div>  
+        </div>
+        <div class="cart_total">
+          <text>合计</text>
+          <text class="total_num">453</text>
+        </div>
+      </li>
+      <li class="btn_item">
+        <button class="btn">改价</button>
+      </li>
+      <li class="btn_item">
+        <button class="btn">去结算</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+      navList:[
+        { title:'基础商品' },
+        { title:'配套产品' },
+        { title:'售后专区' },
+        { title:'小配件' },
+        { title:'自营产品' },
+      ],
+      currentNav: 0,
+      currentItem: 0,
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarBackgroundColor: '#00EFDC',
+  navigationBarTextStyle: 'white',
+  navigationStyle: 'custom',
+  disableScroll: true,
+  usingComponents: {
+    "Search": './../../components/searchInput',
+    "EditOrder": './../../components/editOrder',
+    "PopUp": './../../components/popUp',
+    "Cart": './../../components/cart',
+  }
+}
+</config>

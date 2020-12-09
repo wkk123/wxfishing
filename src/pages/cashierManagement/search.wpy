@@ -1,0 +1,218 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.cashier_container{
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+  .member_search{
+    width: 100%;
+    height: 40px;
+    padding: 0 10px;
+  }
+  .cashier_nav{
+    width: 100%;
+    height: 54px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    .nav_item{
+      width: calc(100%/4);
+      font-size: 16px;
+      text-align: center; 
+      color: #666666;
+      &.active{
+        font-szie: 16px;
+        color: #00CEBE;
+        font-weight: 400;
+      }
+    }
+  }
+  .cashier_content{
+    width: 100%;
+    height: calc(100% - 40px - 54px - 60px);
+    .content_right{
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      .right_item{
+        width: calc(100% - 20px);
+        margin: 10px;
+        padding: 10px;
+        background: #FFFFFF;
+        box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+        border-radius: 4px;
+      }
+    }
+  }
+  .cashier_btn{
+    width: 100%;
+    height: 60px;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    .shopping_Cart{
+      width: calc(100% - 85px - 85px);
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .cart_left{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        .cart_img{
+          width: 30px;
+          height: 30px;
+        }
+        .cart_Num{
+          height: 20px;
+          padding: 5px;
+          margin-top: -4px;
+          margin-left: 2px;
+          background-color: #FFC400;
+          border-radius: 8px;
+          font-size: 12px;
+          font-weight: 500;
+          color: #FFFFFF;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        }  
+      }
+      .cart_total{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        font-size: 15px;
+        font-weight: bold; 
+        color: #333333;
+        .total_num{
+          &:before{
+            content:'￥';
+            font-size: 12px;
+            color: #333333;
+          }
+        }
+      }
+    }
+    .btn_item{
+      width: 75px;
+      height: 34px;
+      margin-left: 10px;
+      .btn{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 34px;
+        text-align: center;
+        line-height: 34px;  
+        border-radius: 17px;
+        background: #FFFFFF;
+        border: 1px solid #00CEBE;
+        font-size: 14px;
+        color: #00CEBE;
+      }
+      &:last-child{
+        .btn{
+          border: none;
+          color: #FFFFFF;
+          background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
+        }
+      } 
+    }
+  }
+}
+</style>
+<template>
+  <div class="cashier_container">
+    <!-- 搜索 -->
+    <div class="member_search">
+      <Search />
+    </div>
+    <!-- 导航 -->
+    <ul class="cashier_nav">
+      <li class="nav_item {{currentNav === index &&'active'}}" v-for="(item,index) in navList">{{item.title}}</li>
+    </ul>
+    <div class="cashier_content">
+      <ul class="content_right">
+        <li class="right_item" v-for="item in 9">
+          <EditOrder />
+        </li>
+      </ul>
+    </div>
+    <ul class="cashier_btn">
+      <li class="shopping_Cart">
+        <div class="cart_left">
+          <image class="cart_img" src="./../../image/cart.png" mode="scaleToFill" lazy-load="false"> </image>
+          <div class="cart_Num">55</div>  
+        </div>
+        <div class="cart_total">
+          <text>合计</text>
+          <text class="total_num">453</text>
+        </div>
+      </li>
+      <li class="btn_item">
+        <button class="btn">改价</button>
+      </li>
+      <li class="btn_item">
+        <button class="btn">去结算</button>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+      navList:[
+        { title:'全部' },
+        { title:'商品名称' },
+        { title:'商品型号' },
+        { title:'条形码号' },
+      ],
+      currentNav: 0,
+      currentItem: 0,
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '搜索',
+  disableScroll: true,
+  usingComponents: {
+    "Search": './../../components/searchInput',
+    "EditOrder": './../../components/editOrder',
+  }
+}
+</config>

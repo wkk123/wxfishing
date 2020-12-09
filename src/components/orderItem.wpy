@@ -1,0 +1,115 @@
+
+<style lang="stylus">
+@import "./../css/public.styl";
+.content_item{
+  width: 100%;
+  padding: 10px 15px 10px 10px;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  &:last-child{
+    margin: 0;
+  }
+  .item_left{
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    position: relative;
+    .left_subtitle{
+      width: 62px;
+      height: 24px;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+      background: #FCD402;  
+      position: absolute;
+      top: 5px;
+      right: 0; 
+      font-size: 10px;
+      color: #333333;
+      font-weight: 500; 
+      line-height: 24px; 
+      text-align:center; 
+    }
+    .left_icon{
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .item_info{
+    width: calc(100% - 80px - 10px);
+    height: auto;
+    .info_title{
+      color: #333333;
+      font-size: 16px;
+      font-weight: bold; 
+      display: block;
+      white-space: nowrap; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 5px;
+    }
+    .info_content{
+      .info_item{
+        color: #999999;
+        font-size: 10px;
+        line-height:16px; 
+      }  
+    }
+  }
+}
+</style>
+<template>
+  <div class="content_item">
+    <div class="item_left">
+      <div class="left_subtitle {{orderData.type===1?'active1':orderData.type===2?'active2':'active3'}}">{{orderData.status}}</div>
+      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+    </div>
+    <div class="item_info">
+      <text class="info_title">{{orderData.title}}</text>
+      <ul class="info_content">
+        <li class="info_item">型号：{{orderData.Version}}</li>
+        <li class="info_item">到期时间：{{orderData.time}}</li>
+        <li class="info_item">库存量：{{orderData.num}}</li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.component({
+    options: {
+      addGlobalClass: true
+    },
+    props: {
+      orderData: {
+        type: Object,
+        default () {
+          return {
+            title:'',
+            Version:'',
+            time:'',
+            num:'',
+            status:'',
+            type: '',
+          }
+        }
+      },
+    },
+    data: {
+      
+    },
+    computed: {
+      
+    },
+    methods: {
+      fun(){
+
+      }
+    },
+    onShow(){
+      console.log(this.props)
+    },
+  });
+</script>

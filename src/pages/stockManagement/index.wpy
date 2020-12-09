@@ -1,0 +1,121 @@
+
+<style lang="stylus">
+@import "./../../css/public.styl";
+.stock_container{
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; 
+}
+</style>
+<template>
+  <div class="stock_container">
+    <grid :gridList="gridList" />
+  </div>
+</template>
+
+<script>
+  import wepy from '@wepy/core';
+  wepy.page({
+    options: {
+      addGlobalClass: true
+    },
+    data: {
+      gridList:[
+        {
+          title:'基础产品',
+          itemList:[
+            {
+              icon:'./../image/icon1.png',
+              subTitle:'竿',
+            },
+            {
+              icon:'./../image/icon2.png',
+              subTitle:'钩',
+            },{
+              icon:'./../image/icon3.png',
+              subTitle:'票',
+            },{
+              icon:'./../image/icon4.png',
+              subTitle:'线',
+            },
+            {
+              icon:'./../image/icon5.png',
+              subTitle:'钩',
+            },{
+              icon:'./../image/icon6.png',
+              subTitle:'票',
+            },{
+              icon:'./../image/icon7.png',
+              subTitle:'线',
+            }
+          ]
+        },
+        {
+          title:'配套产品',
+          itemList:[
+            {
+              icon:'./../image/icon8.png',
+              subTitle:'钓箱',
+            }
+          ]
+        },
+        {
+          title:'售后专区',
+          itemList:[
+            {
+              icon:'./../image/icon2.png',
+              subTitle:'竿',
+            }
+          ]
+        },
+        {
+          title:'小配件',
+          itemList:[
+            {
+              icon:'./../image/icon3.png',
+              subTitle:'竿',
+            }
+          ]
+        },
+        {
+          title:'自营产品',
+          itemList:[
+            {
+              icon:'./../image/icon4.png',
+              subTitle:'竿',
+            }
+          ]
+        },
+      ]
+    },
+    computed: {
+
+    },
+    methods: {
+
+    },
+    onLoad(options){
+      // console.log('options',options)
+    },
+    onShow(){
+      // wx.navigateTo({
+      //   url: '/pages/login'
+      // })
+    },
+    onReady(){
+
+    },
+    onUnload(){
+
+    },
+  });
+</script>
+<config>
+{
+  navigationBarTitleText: '入库管理',
+  disableScroll: true,
+  usingComponents: {
+    "grid": './../../components/grid'
+  }
+}
+</config>
