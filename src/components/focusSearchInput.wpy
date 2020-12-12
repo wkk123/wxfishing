@@ -1,7 +1,7 @@
 
 <style lang="stylus">
 @import "./../css/public.styl";
-.search{
+.focus{
   width: 100%;
   height: 100%;
   display: flex;
@@ -29,7 +29,7 @@
 }
 </style>
 <template>
-  <div class="search">
+  <div class="focus">
     <icon class="search_icon" color="#00CEBE" type="search" size="20"></icon>
     <div
       class="search_input"

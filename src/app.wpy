@@ -28,7 +28,7 @@ wepy.app({
     // 获取设备信息
     that.$options.globalData.systemInfo = wx.getSystemInfoSync()
     // 获取设备地址
-    this.getUserLocation()
+    // this.getUserLocation()
   },
 
   onShow(){

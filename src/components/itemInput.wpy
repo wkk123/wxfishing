@@ -51,7 +51,7 @@
     <div class="input_box">
       <input 
         class="item_input"
-        value="{{''}}" 
+        v-model="value"
         type="text"
         placeholder="请输入" 
         placeholder-class="input_placeholder"
@@ -67,6 +67,10 @@
       addGlobalClass: true
     },
     props: {
+      value: {
+        type: String,
+        default:''
+      },
       title: {
         type: String,
         default:''

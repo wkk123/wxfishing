@@ -19,6 +19,7 @@
   // const app = getApp();
   // import { mapState, mapActions } from '@wepy/redux';
   // import { COMMIT } from '../store/types';
+  import { shopLogin } from '../request/api';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -90,24 +91,36 @@
     methods: {
       // 点击某一个
       subItem(data){
-        // if(!false){
-        //   wx.navigateTo({
-        //     url: '/pages/login/index'
-        //   })
-        // } else {
+        if(false){
+          wx.navigateTo({
+            url: '/pages/login/index'
+          })
+        } else {
           wx.navigateTo({
             url: data.url
           })
-        // }
+        }
+      },
+      loginFun(){
+        let parameter = {
+          "account": "yujua",
+          "password": "123456"
+        }
+        shopLogin(parameter).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })  
       }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/index'
-      // })
+
     },
     onReady(){
 

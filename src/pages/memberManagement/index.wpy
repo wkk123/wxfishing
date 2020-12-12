@@ -30,7 +30,7 @@
 <template>
   <div class="member_container">
     <div class="member_search">
-      <Search
+      <FocusSearch
         @funfocusBtn="funfocus"
       />
     </div>
@@ -95,7 +95,7 @@
   navigationBarTitleText: '会员管理',
   disableScroll: true,
   usingComponents: {
-    "Search": './../../components/focusSearchInput',
+    "FocusSearch": './../../components/focusSearchInput',
     "MemberItem": './../../components/memberItem',
   }
 }

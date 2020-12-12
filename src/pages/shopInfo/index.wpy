@@ -33,6 +33,9 @@
     width: 100%;
     height: auto;
     border-bottom: 1px solid rgba(25, 31, 37, 0.08);
+    .item_num{
+      text-align: center; 
+    }
   }
   .item_titles{
     font-size: 14px;
@@ -105,22 +108,77 @@
     <div class="list_content">
       <ul class="list_box">
         <li class="list_item">
-          <itemInput title="店铺名称" :Sign="true" />
+          <div class="item_box">
+            <text class="item_title active">店铺名称</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="detail.name"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="店铺标语" :Sign="true" />
+          <div class="item_box">
+            <text class="item_title active">店铺标语</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="detail.slogan"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
           <UpImage title="店面logo" />
         </li>
         <li class="list_item">
-          <itemInput title="详细地址" />
+          <div class="item_box">
+            <text class="item_title active">详细地址</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="detail.address"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="联系人" />
+          <div class="item_box">
+            <text class="item_title">联系人</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="detail.contactName"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="联系电话" />
+          <div class="item_box">
+            <text class="item_title">联系电话</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="detail.mobilePhone"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
           <text class="item_titles">经纬度</text>
@@ -128,51 +186,86 @@
             <div class="longitudeAndLatitude_box_left">
               <input 
                 class="item_num"
-                value="{{''}}" 
-                type="text"
+                value="{{detail.lon}}" 
+                type="number"
                 placeholder="经度" 
                 placeholder-class="input_placeholder"
-                @blur="fun()"/>
+                disabled
+              />
               <text>,</text>
               <input 
                 class="item_num"
-                value="{{''}}" 
-                type="text"
+                value="{{detail.lat}}" 
+                type="number"
                 placeholder="纬度"
                 placeholder-class="input_placeholder"
-                @blur="fun()"/>  
+                disabled
+              />  
             </div>
             <button class="longitudeAndLatitude_box_btn" plain="true">点击获取</button>
           </div>
         </li>
-      </ul>  
-      <button class="form_btn" >保存</button>
+      </ul>
+      <button class="form_btn" @click="submit()">保存</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { shopDetail, shopUpdate } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      detail:{
+        name: "渔具AA",
+        mobilePhone: "13333333333",
+        lon: 123.07413,
+        lat: 31.413,
+        contactName: "老陈",
+        slogan: "口号1",
+        logo: "[\"https://xxx.png\",\"https://xxx.png\"]",
+        province: "浙江省",
+        city: null,
+        district: null,
+        address: "浙江省余杭区五常街道",
+      }
     },
     computed: {
 
     },
     methods: {
-      
+      // 更新数据
+      upDateFun(){
+        shopUpdate().then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 保存
+      submit(){
+        console.log('detail',this.detail);
+      }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      // 获取门店信息
+      shopDetail().then( res => {
+        const {code, data, message} = res;
+        if (res.code === 10000) {
+          this.detail = { ...this.detail, ...data };
+        }
+      }).catch(err=> {
+        console.log(err)
+      })
     },
     onReady(){
 
@@ -187,7 +280,6 @@
   navigationBarTitleText: '门店信息',
   disableScroll: true,
   usingComponents: {
-    "itemInput": './../../components/itemInput',
     "UpImage": './../../components/upImage',
   }
 }

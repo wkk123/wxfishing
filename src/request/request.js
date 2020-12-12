@@ -1,85 +1,80 @@
-// 当前页面
-let currentPage = null
 // 请求地址
-const baseURL = '';
+const baseURL = 'https://h5.shitingjiankang.cn/yjapi';
 const http = ({url, params, method} = {}) => {
-    let isLoading = params.isLoading;
-    return new Promise((resolve, reject) => {
-        let header = {
-          'content-type': 'application/json',
+  console.log(url, params, method);
+  let isLoading = params.isLoading;
+  return new Promise((resolve, reject) => {
+    let header = {
+      'content-type': 'application/json',
+    }
+    if(url!='/shop/login'){
+      // let token = wx.getStorageSync('token')
+      let token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5dWp1YSIsImlkIjoxLCJleHAiOjQxOTcwMTU0ODIsImlhdCI6MTYwNTAxNTQ4Mn0.BN-Y2JlpjEs6cWPTQjE56NOfvn3_WXjFFGkIYbnh2Y0GrC-91Qyip4itd9FZ34V4rbugwg47rIl7MRriSPCg2Q';
+          token = 'Bearer' + token;
+      if(!token||token===''){
+        if(isLoading){
+          wx.hideLoading()
         }
-        if(url!='/user/login'&&url!='/user/login_phone'){
-          let token = wx.getStorageSync('token')
-          if(!token||token===''){
-            if(currentPage) return
-            if(isLoading){
-              wx.hideLoading()
-            }
-            currentPage = 'login'
-            wx.showToast({
-              title: '请先登录',
-              icon: 'none',
-              duration: 1500,
-              complete: function(){
-                setTimeout(()=> {
-                  wx.navigateTo({
-                    url: '/pages/login'
-                  })
-                },1500)
-              }
-            })
-            return
+        wx.showToast({
+          title: '请先登录',
+          icon: 'none',
+          duration: 1500,
+          complete: function(){
+            setTimeout(()=> {
+              wx.navigateTo({
+                url: '/pages/login'
+              })
+            },1500)
           }
-          header['token'] = token
-        }
-        if(currentPage)currentPage=null
-        if (isLoading) {
-          wx.showLoading({
-            title: '加载中...'
-          })
-        }
-        delete params.isLoading
-        wx.request({
-            url: baseURL+url,
-            data: params,
-            header: header,
-            method: method,
-            complete: (res) => {
-                if (isLoading) {
-                  wx.hideLoading()
-                }
-                if(res.statusCode === 200||res.statusCode === 204){
-                    if(res.data.code===10000){
-                      resolve(res.data)
-                    }else{
-                      if(res.data.code===30002||res.data.code===30003||res.data.code===30004){
-                        if(currentPage) return
-                        currentPage = 'login'
-                        if(wx.getStorageSync('token')){
-                          wx.removeStorageSync('token')
-                        }
-                        wx.showToast({
-                          title: '请重新登录',
-                          icon: 'none',
-                          duration: 1500,
-                          complete: function(){
-                            setTimeout(()=> {
-                              wx.navigateTo({
-                                url: '/pages/login'
-                              })
-                            },1500)
-                          }
-                        })
-                      }
-                      reject(res)
-                    }
-
-                } else {
-                    reject(res)
-                }
-            }
         })
+        return
+      }
+      header['Authorization'] = token
+    }
+    if (isLoading) {
+      wx.showLoading({
+        title: '加载中...'
+      })
+    }
+    delete params.isLoading
+    wx.request({
+      url: baseURL+url,
+      data: params,
+      header: header,
+      method: method,
+      complete: (res) => {
+        if (isLoading) {
+          wx.hideLoading()
+        }
+        if(res.statusCode === 200||res.statusCode === 204){
+          if(res.data.code===10000){
+            resolve(res.data)
+          }else{
+            // if(res.data.code===30002||res.data.code===30003||res.data.code===30004){
+            //   if(wx.getStorageSync('token')){
+            //     wx.removeStorageSync('token')
+            //   }
+            //   wx.showToast({
+            //     title: '请重新登录',
+            //     icon: 'none',
+            //     duration: 1500,
+            //     complete: function(){
+            //       setTimeout(()=> {
+            //         wx.navigateTo({
+            //           url: '/pages/login'
+            //         })
+            //       },1500)
+            //     }
+            //   })
+            // }
+            reject(res.data)
+          }
+        } else {
+          reject(res.data)
+        }
+      }
     })
+  })
 }
 
 const upload = (url, params) => {

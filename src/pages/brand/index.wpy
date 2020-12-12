@@ -78,11 +78,16 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { brandList } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
+      query:{
+        page: 1,
+        size: 10,
+      },
       brandList:[
         {
           title:'这里是一个品牌名称',
@@ -122,15 +127,27 @@
 
     },
     methods: {
-
+      // 获取品牌列表
+      getBrandList(query){
+        brandList(query).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      let query = {
+        page: 1,
+        size: 10,
+      };
+      this.getBrandList(query);
     },
     onReady(){
 

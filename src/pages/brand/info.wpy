@@ -25,19 +25,74 @@
     <div class="form_box">
       <ul class="form_list">
         <li class="list_item">
-          <itemInput title="厂家名称"/>
+          <div class="item_box">
+            <text class="item_title">厂家名称</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="value"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="商品产地"/>
+          <div class="item_box">
+            <text class="item_title">商品产地</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="value"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="发货地址"/>
+          <div class="item_box">
+            <text class="item_title">发货地址</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="value"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="联系方式"/>
+          <div class="item_box">
+            <text class="item_title">联系方式</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="value"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <itemInput title="备注" />
+          <div class="item_box">
+            <text class="item_title">备注</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="value"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
       </ul>
       <button class="form_btn" plain="true">保存</button>  
@@ -47,6 +102,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsBrand, brandSave, brandUpdate } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -81,10 +137,10 @@
 </script>
 <config>
 {
-  navigationBarTitleText: 'DIY定制产品',
+  navigationBarTitleText: '品牌详情',
   disableScroll: true,
   usingComponents: {
-    "itemInput": './../../components/itemInput',
+
   }
 }
 </config>
