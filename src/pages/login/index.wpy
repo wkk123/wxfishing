@@ -118,10 +118,23 @@
 
       <form class="login_content" catchsubmit="loginBtn"> 
         <div class="content_item">
-          <input bindblur="inputAccount" class="content_input" name="account" placeholder="请输入账号" />
+          <input
+            bindinput="inputAccount"
+            class="content_input"
+            name="account"
+            placeholder="请输入账号"
+            v-model="account"
+          />
         </div>
         <div class="content_item see">
-          <input bindblur="inputPass" class="content_input" name="password" password="{{!showPass}}" placeholder="请输入密码" />
+          <input
+            bindinput="inputPass"
+            class="content_input"
+            name="password"
+            password="{{!showPass}}"
+            placeholder="请输入密码"
+            v-model="password"
+          />
           <div class="see_box">
             <image class="see_icon" src="../../image/see.png" bindtap="seeTap" v-if="showPass"></image>
             <image class="see_icon" src="../../image/nosee.png" bindtap="seeTap" v-else></image>
@@ -140,6 +153,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { shopLogin } from '../../request/api.js';
   wepy.page({
     hooks: {
 
@@ -148,7 +162,9 @@
     data: {
       isAccount: false,
       password: false,
-      showPass: false
+      showPass: false,
+      account: "yujua",
+      password: "123456"
     },
 
     methods: {
@@ -170,34 +186,47 @@
       },
       // 登录
       loginBtn(e){
-        console.log(e.$wx.detail.value)
-        // wx.showModal({
-        //   title: '登录失败',
-        //   content: '账号或密码错误,请重新载入',
-        //   success (res) {
-        //     // if (res.confirm) {
-        //     //   console.log('用户点击确定')
-        //     // } else if (res.cancel) {
-        //     //   console.log('用户点击取消')
-        //     // }
-        //   },
-        //   fail(){
-
-        //   }
-        // })
+        const arg = e.$wx.detail.value;
+        this.loginFun(arg)
+      },
+      // 登录
+      loginFun(arg){
+        shopLogin(arg).then(res => {
+          const {code, data, message} = res;
+          console.log('code, data, message',code, data, message)
+          if (res.code === 10000) {
+            console.log('res',res)
+            wx.setStorageSync('token',data.token);
+          } else {
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          const that = this;
+          wx.showModal({
+            title: '登录失败',
+            content: '账号或密码错误,请重新载入',
+            success (response) {
+              if (response.confirm) {
+                that.account = '';
+                that.password = '';
+              } else if (response.cancel) {
+                wx.navigateBack({
+                  delta: 1
+                })
+              }
+            }
+          })
+        })  
       },
       // 忘记密码
       forgetBtn(){
-        wx.navigateTo({
-          url: '/pages/password/forgetPassword'
-        })
+        // wx.navigateTo({
+        //   url: '/pages/password/forgetPassword'
+        // })
       },
-
     },
     onLoad () {
-      // wx.reLaunch({
-      //   url: '/pages/index',
-      // })
+
     },
     onShow(){
       

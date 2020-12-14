@@ -7,29 +7,19 @@ const http = ({url, params, method} = {}) => {
     let header = {
       'content-type': 'application/json',
     }
-    if(url!='/shop/login'){
-      // let token = wx.getStorageSync('token')
-      let token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5dWp1YSIsImlkIjoxLCJleHAiOjQxOTcwMTU0ODIsImlhdCI6MTYwNTAxNTQ4Mn0.BN-Y2JlpjEs6cWPTQjE56NOfvn3_WXjFFGkIYbnh2Y0GrC-91Qyip4itd9FZ34V4rbugwg47rIl7MRriSPCg2Q';
-          token = 'Bearer' + token;
-      if(!token||token===''){
+    if(url!=='/shop/login'){
+      let token = wx.getStorageSync('token')
+      // let token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5dWp1YSIsImlkIjoxLCJleHAiOjQxOTcwMTU0ODIsImlhdCI6MTYwNTAxNTQ4Mn0.BN-Y2JlpjEs6cWPTQjE56NOfvn3_WXjFFGkIYbnh2Y0GrC-91Qyip4itd9FZ34V4rbugwg47rIl7MRriSPCg2Q';
+      if(!token||token === ''){
         if(isLoading){
           wx.hideLoading()
         }
-        wx.showToast({
-          title: '请先登录',
-          icon: 'none',
-          duration: 1500,
-          complete: function(){
-            setTimeout(()=> {
-              wx.navigateTo({
-                url: '/pages/login'
-              })
-            },1500)
-          }
+        wx.navigateTo({
+          url: '/pages/login'
         })
         return
       }
-      header['Authorization'] = token
+      header['Authorization'] = 'Bearer' + token
     }
     if (isLoading) {
       wx.showLoading({

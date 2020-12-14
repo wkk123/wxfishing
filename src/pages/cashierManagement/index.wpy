@@ -5,6 +5,7 @@
   width: 100%;
   height: 100%;
   background: #FFFFFF;
+  position: relative;
   .cashier_info{
     width: 100%;
     background: linear-gradient(315deg, #00CEBE 0%, #00EFDC 100%);
@@ -206,12 +207,24 @@
       } 
     }
   }
+  .code_box{
+    position: absolute;
+    right: 70px;
+    bottom: 140px;
+  }
+  .code_img{
+    width: 70px;
+    height: 70px;
+  }
 }
 </style>
 <template>
   <div class="cashier_container">
     <!-- 弹框 -->
-    <PopUp :isShow="true" />
+    <PopUp
+      @popupBtn="popupBtns"
+      :popupObj="popupObj"
+    />
     <!-- 购物车 -->
     <Cart :isShow="false" />
     <div class="cashier_info">
@@ -260,6 +273,20 @@
         <button class="btn">去结算</button>
       </li>
     </ul>
+    <movable-area
+      class="code_box"
+    >
+      <movable-view
+        class="max"
+        direction="all"
+        :x="10"
+        :y="200"
+      >
+        <image class="code_img" src="./../../image/code.png" mode="widthFix"
+          lazy-load="false">
+        </image>
+      </movable-view>
+    </movable-area>
   </div>
 </template>
 
@@ -279,12 +306,26 @@
       ],
       currentNav: 0,
       currentItem: 0,
+      popupObj: {
+        popupType: 1,
+        presentMoney: 0,
+        isShow: true,
+      }
     },
     computed: {
 
     },
     methods: {
-
+      // 弹框按钮
+      popupBtns({bool = false, Num = 0}){
+        this.popupObj.isShow = false;
+        if(bool){
+          // 点击确定
+          console.log(Num)
+        } else {
+          // 点击取消
+        }
+      },
     },
     onLoad(options){
       // console.log('options',options)

@@ -161,37 +161,6 @@
           status:'保质期60天',
           type: 3,
         },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },{
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        }
       ]
     },
     computed: {

@@ -49,20 +49,23 @@
   <div class="container">
     <div class="brand_box">
       <ul class="brand_list">
-        <li class="list_item" v-for="item in brandList">
-          <text class="item_title">{{item.title}}</text>
+        <li class="list_item"
+          v-for="item in brandList"
+          @click="editBrand(item)"
+        >
+          <text class="item_title">{{item.name}}</text>
           <ul class="item_content">
             <li class="content_item">
               <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
-              <text class="item_text">{{item.co}}</text>
+              <text class="item_text">{{item.productLocation}}</text>
             </li>
             <li class="content_item">
               <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
-              <text class="item_text">{{item.shipAddress}}</text>
+              <text class="item_text">{{item.deliveryAddress}}</text>
             </li>
             <li class="content_item">
               <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
-              <text class="item_text">{{item.telephone}}</text>
+              <text class="item_text">{{item.contactPhone}}</text>
             </li>
             <li class="content_item">
               <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
@@ -71,7 +74,10 @@
           </ul>
         </li>
       </ul>
-      <button class="brand_nav form_btn" >添加品牌</button>
+      <button
+        class="brand_nav form_btn"
+        @click="addBrand"
+      >添加品牌</button>
     </div>
   </div>
 </template>
@@ -90,35 +96,10 @@
       },
       brandList:[
         {
-          title:'这里是一个品牌名称',
-          co: '这里商品产地',
-          shipAddress:'这里是发货地址',
-          telephone:'13509322459',
-          remark:'这里是一些备注'
-        },
-        {
-          title:'这里是一个品牌名称',
-          co: '这里商品产地',
-          shipAddress:'这里是发货地址',
-          telephone:'13509322459',
-          remark:'这里是一些备注'
-        },{
-          title:'这里是一个品牌名称',
-          co: '这里商品产地',
-          shipAddress:'这里是发货地址',
-          telephone:'13509322459',
-          remark:'这里是一些备注'
-        },{
-          title:'这里是一个品牌名称',
-          co: '这里商品产地',
-          shipAddress:'这里是发货地址',
-          telephone:'13509322459',
-          remark:'这里是一些备注'
-        },{
-          title:'这里是一个品牌名称',
-          co: '这里商品产地',
-          shipAddress:'这里是发货地址',
-          telephone:'13509322459',
+          name:'这里是一个品牌名称',
+          productLocation: '这里商品产地',
+          deliveryAddress:'这里是发货地址',
+          contactPhone:'13509322459',
           remark:'这里是一些备注'
         }
       ]
@@ -127,6 +108,18 @@
 
     },
     methods: {
+      // 编辑品牌
+      editBrand(){
+        wx.navigateTo({
+          url: '/pages/brand/info?type=1&id=1'
+        })
+      },
+      // 添加品牌
+      addBrand(){
+        wx.navigateTo({
+          url: '/pages/brand/info?type=2'
+        })
+      },
       // 获取品牌列表
       getBrandList(query){
         brandList(query).then(res => {

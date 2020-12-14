@@ -86,7 +86,6 @@ wepy.app({
     'pages/stockManagement/item',
     'pages/memberManagement/index',
     'pages/memberManagement/memberSearch',
-    'pages/memberManagement/focusSearchInput',
     'pages/memberManagement/editInformation',
     'pages/memberManagement/renewVIP',
     'pages/memberManagement/memberInfo',

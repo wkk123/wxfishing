@@ -26,11 +26,25 @@
       <ul class="form_list">
         <li class="list_item">
           <div class="item_box">
+            <text class="item_title">品牌名称</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="info.name"
+                type="text"
+                placeholder="请输入" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
+        </li>
+        <li class="list_item">
+          <div class="item_box">
             <text class="item_title">厂家名称</text>
             <div class="input_box">
               <input 
                 class="item_input"
-                v-model="value"
+                v-model="info.factory"
                 type="text"
                 placeholder="请输入" 
                 placeholder-class="input_placeholder"
@@ -44,7 +58,7 @@
             <div class="input_box">
               <input 
                 class="item_input"
-                v-model="value"
+                v-model="info.productLocation"
                 type="text"
                 placeholder="请输入" 
                 placeholder-class="input_placeholder"
@@ -58,7 +72,7 @@
             <div class="input_box">
               <input 
                 class="item_input"
-                v-model="value"
+                v-model="info.deliveryAddress"
                 type="text"
                 placeholder="请输入" 
                 placeholder-class="input_placeholder"
@@ -72,8 +86,8 @@
             <div class="input_box">
               <input 
                 class="item_input"
-                v-model="value"
-                type="text"
+                v-model="info.contactPhone"
+                type="number"
                 placeholder="请输入" 
                 placeholder-class="input_placeholder"
               />   
@@ -86,7 +100,7 @@
             <div class="input_box">
               <input 
                 class="item_input"
-                v-model="value"
+                v-model="info.remark"
                 type="text"
                 placeholder="请输入" 
                 placeholder-class="input_placeholder"
@@ -95,7 +109,7 @@
           </div>
         </li>
       </ul>
-      <button class="form_btn" plain="true">保存</button>  
+      <button class="form_btn" @click="saveFun">保存</button>  
     </div>
   </div>
 </template>
@@ -108,24 +122,66 @@
       addGlobalClass: true
     },
     data: {
-
+      type: '1',
+      id:'',//品牌id
+      info:{
+        name: "",
+        factory: "",
+        productLocation: "",
+        deliveryAddress: "",
+        contactPhone: "",
+        remark: ""  
+      }
     },
     computed: {
 
     },
     methods: {
-
+      // 点击保存
+      saveFun() {
+        let Fun = '';
+        if(this.type === '1'){
+          Fun = brandUpdate;
+        } else {
+          Fun = brandSave;
+        }
+        Fun(this.info).then( res => {
+          const {code, data, message} = res;
+          if( res.code === 10000 ){
+            console.log('res',res)
+            wx.showToast({
+              title: '成功',
+              icon: 'success',
+              duration: 2000
+            })
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
-      wx.setNavigationBarTitle({
-        title: '添加品牌'
-      })
-      // console.log('options',options)
+      console.log('options',options)
+      this.type = options.type;
+      if(options.type === '2') {
+        wx.setNavigationBarTitle({
+          title: '添加品牌'
+        })
+      } else {
+        this.id = options.id;
+        goodsBrand({id:this.id}).then( res => {
+          const {code, data, message} = res;
+          if( res.code === 10000 ){
+            console.log('res',res)
+            this.info = data;
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      }
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
 

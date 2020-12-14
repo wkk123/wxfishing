@@ -68,14 +68,17 @@
 </style>
 <template>
   <!-- 弹框 -->
-  <div class="pop_up" v-show="isShow">
+  <div class="pop_up" v-show="popupObj.isShow">
     <div class="pop_up_box">
-      <text class="pop_up_title">请输入数量</text>
-      <text class="pop_up_subTitle">当前金额¥{{456}}</text>
-      <input class="pop_up_input" type="text" name="" id="" />
+      <text class="pop_up_title">{{popupObj.popupType === 1?'请输入更改金额':'请输入数量'}}</text>
+      <text class="pop_up_subTitle" v-show="popupObj.popupType === 1">当前金额¥{{popupObj.presentMoney}}</text>
+      <input class="pop_up_input"
+        v-model="Num"
+        :type="popupObj.popupType !== 1?'number':'digit'" 
+      />
       <ul class="pop_up_btn">
-        <li class="btn_item">取消</li>
-        <li class="btn_item">确定</li>
+        <li class="btn_item" @click="cancelBtn()">取消</li>
+        <li class="btn_item" @click="confirmBtn()">确定</li>
       </ul>
     </div>
   </div>
@@ -88,28 +91,31 @@
       addGlobalClass: true
     },
     props: {
-      isShow: {
-        type: Boolean,
-        default: false,
-      },
-      list: {
-        type: Array,
-        default: []
+      // 1请输入更改金额 2请输入数量
+      popupObj: {
+        type: Object,
+        default:{
+          popupType: 1,
+          presentMoney: 0,
+          isShow: false,
+        }
       },
     },
     data: {
-      
+      Num: '',
     },
     computed: {
       
     },
     methods: {
-      fun(){
-
+      // 关闭弹框
+      cancelBtn(){
+        this.$emit('popupBtn', {bool:false, Num:this.Num});
+      },
+      // 点击确定
+      confirmBtn(){
+        this.$emit('popupBtn', {bool:true, Num:this.Num});
       }
-    },
-    onShow(){
-      console.log(this.props)
-    },
+    }
   });
 </script>
