@@ -128,35 +128,83 @@
         </ul>
       </div>
     </div>
-    <button class="form_btn form_submit" plain="true">提交</button>  
+    <button
+      class="form_btn form_submit"
+      plain="true"
+      @click="formSubmit()"
+    >提交</button>  
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsUpdate, goodsSave } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      data:{
+        id: '',//商品id
+        firstClassId: '',//一级分类id
+        secondClassId: '',//二级分类id
+        brandId: '',//品牌id
+        propertyId: '',//属性id
+        typeId: '',//类型id
+        number: '',//编号
+        name: '',//名称
+        produceTime: '',//生产日期
+        stockTime: '',//进货日期
+        expireTime: '',//保质期
+        model: '',//型号
+        quantity: '',//数量
+        unitPrice: '',//单价
+        sellPrice: '',//售卖价格
+        imgs: '',//图片 json数据类型字符串
+      }
     },
     computed: {
 
     },
     methods: {
-
+      formSubmit(){
+        if(this.data.id !== ''){
+          this.goodsUpdate();
+        } else {
+          this.goodsSave();
+        }
+      },
+      // 更新商品
+      goodsUpdate(){
+        goodsUpdate({...this.data}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 商品入库
+      goodsSave(){
+        goodsSave({...this.data}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+
     },
     onReady(){
-
+      
     },
     onUnload(){
 

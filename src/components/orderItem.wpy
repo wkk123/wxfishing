@@ -66,11 +66,11 @@
       <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
     </div>
     <div class="item_info">
-      <text class="info_title">{{orderData.title}}</text>
+      <text class="info_title">{{orderData.name}}</text>
       <ul class="info_content">
-        <li class="info_item">型号：{{orderData.Version}}</li>
-        <li class="info_item">到期时间：{{orderData.time}}</li>
-        <li class="info_item">库存量：{{orderData.num}}</li>
+        <li class="info_item">型号：{{orderData.model}}</li>
+        <li class="info_item">到期时间：{{orderData.expireTime}}</li>
+        <li class="info_item">库存量：{{orderData.quantity}}</li>
       </ul>
     </div>
   </div>
@@ -87,10 +87,10 @@
         type: Object,
         default () {
           return {
-            title:'',
-            Version:'',
-            time:'',
-            num:'',
+            name:'',
+            model:'',
+            expireTime:'',
+            quantity:'',
             status:'',
             type: '',
           }

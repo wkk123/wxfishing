@@ -168,57 +168,28 @@
       </li>
     </ul>
     <div class="Inventory_nav">
-      <button class="form_btn" plain="true">提交</button>
+      <button
+        class="form_btn"
+        plain="true"
+        @click="formBtn()"
+      >提交</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsQuantityUpdate } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-      orderList:[
+      orderList:[],
+      data: [
         {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },{
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
+          id: 3,
+          quantity: 2
         }
       ]
     },
@@ -226,17 +197,22 @@
 
     },
     methods: {
-      bindKeyInput(){
-
+      formBtn(){
+        goodsQuantityUpdate({...this.data}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
       }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+
     },
     onReady(){
 

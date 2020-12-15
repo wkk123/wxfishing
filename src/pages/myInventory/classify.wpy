@@ -89,6 +89,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsAllClasses } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -122,17 +123,24 @@
 
     },
     methods: {
-      bindKeyInput(){
-
-      }
+      // 查询所有分类
+      getGoodsAllClasses(){
+        goodsAllClasses().then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+            this.list = data;
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
 

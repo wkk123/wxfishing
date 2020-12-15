@@ -144,6 +144,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsGoodsList } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -152,32 +153,37 @@
       typeNum: 1,
       image1: './../../image/sort1.png',
       image2: './../../image/sort2.png',
-      orderList:[
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-      ]
+      orderList:[],
+      query:{
+        keyword: '',// 搜索关键字
+        sortField: '',//排序字段 heat 热度 quantity 库存量 expire_time 到期时间
+        order:'',//排序规则 desc 降序 asc 升序
+        firstClassId:'',//一级分类id
+        secondClassId:'',//二级分类id
+      }
     },
     computed: {
 
     },
     methods: {
-      bindKeyInput(){
-
-      }
+      // 库存列表
+      getGoodsGoodsList(query){
+        goodsGoodsList(query).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+            this.orderList = data;
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      this.getGoodsGoodsList(this.query);
     },
     onReady(){
 
