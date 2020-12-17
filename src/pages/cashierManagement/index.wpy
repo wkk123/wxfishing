@@ -229,8 +229,11 @@
     <Cart :isShow="false" />
     <div class="cashier_info">
       <div class="head_box">
-        <div class="head_left">
-          <image class="left_icon" src="./../../image/site.png" mode="scaleToFill" lazy-load="false"> </image>
+        <div
+          class="head_left"
+          @click="gotoBack()"
+        >
+          <image class="left_icon" src="./../../image/site.png" mode="widthFix" lazy-load="false"> </image>
           <div class="left_title">某某门店</div>  
         </div>
         <div class="head_btn"></div>
@@ -245,7 +248,7 @@
     <div class="cashier_content">
       <ul class="content_left">
         <li class="left_item {{currentItem === item &&'active'}}" v-for="item in 9">
-          <image class="item_icon" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
           <text class="item_text">竿</text>
         </li>
       </ul>
@@ -258,7 +261,7 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div class="cart_left">
-          <image class="cart_img" src="./../../image/cart.png" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false"> </image>
           <div class="cart_Num">55</div>  
         </div>
         <div class="cart_total">
@@ -270,7 +273,10 @@
         <button class="btn">改价</button>
       </li>
       <li class="btn_item">
-        <button class="btn">去结算</button>
+        <button
+          class="btn"
+          @click="goToCart()"
+        >去结算</button>
       </li>
     </ul>
     <movable-area
@@ -316,6 +322,18 @@
 
     },
     methods: {
+      // 后退
+      gotoBack(){
+        wx.navigateBack({
+          delta: 1
+        })
+      },
+      // 去购物车
+      goToCart(){
+        wx.navigateTo({
+          url: '/pages/cashierManagement/cart'
+        })
+      },
       // 弹框按钮
       popupBtns({bool = false, Num = 0}){
         this.popupObj.isShow = false;

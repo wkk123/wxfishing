@@ -73,7 +73,7 @@
       <ul class="pop_up_head">
         <li class="head_item">共2件商品</li>
         <li class="head_item">
-          <image class="item_icon" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
           <text class="item_text">清空购物车</text>
         </li>
       </ul>

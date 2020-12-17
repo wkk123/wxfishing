@@ -35,7 +35,10 @@
     .head_icon{
       width: 15px;
       height: 15px;
-      background: red;
+      .icon_img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
   .form_list{
@@ -58,31 +61,45 @@
       <div class="content_item">
         <div class="form_head">
           <text class="head_text active">基础信息</text>
-          <div class="head_icon"></div>
+          <div class="head_icon">
+            <image class="icon_img" src="{{true?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          </div>
         </div>
         <ul class="form_list">
           <li class="list_item">
-            <SubInput title="品牌" :Sign="true" />
+            <SubInput
+              :obj="form.brand"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="商品属性" :Sign="true" />
+            <SubInput
+              :obj="form.property"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="商品类型" :Sign="true" />
+            <SubInput
+              :obj="form.mold"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="备注" />
+            <SubInput
+              :obj="form.remark"
+              @inputBtn="inputBtn"
+            />
           </li>
         </ul>
       </div>
-      <div class="content_item">
+      <!-- <div class="content_item">
         <div class="form_head">
           <text class="head_text">商品信息</text>
           <div class="head_icon"></div>
         </div>
         <ul class="form_list">
           <li class="list_item">
-            <UpImage title="图片" />
+            <UpImage title="图片" @upImagePath="upImageFile" />
           </li>
           <li class="list_item">
             <SubInput title="编号" />
@@ -103,8 +120,8 @@
             <SubInput title="质保时间" />
           </li>
         </ul>
-      </div>
-      <div class="content_item">
+      </div> -->
+      <!-- <div class="content_item">
         <div class="form_head">
           <text class="head_text">入库参数</text>
           <div class="head_icon"></div>
@@ -126,11 +143,10 @@
             <SubInput title="商品参数" />
           </li>
         </ul>
-      </div>
+      </div> -->
     </div>
     <button
       class="form_btn form_submit"
-      plain="true"
       @click="formSubmit()"
     >提交</button>  
   </div>
@@ -138,12 +154,98 @@
 
 <script>
   import wepy from '@wepy/core';
-  import { goodsUpdate, goodsSave } from './../../request/api.js';
+  import { goodsUpdate, goodsSave, goodsBrands, goodsPropertiesAndTypes  } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
+      form:{
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        property:{
+          title: '商品属性',
+          placeholder: '请输入商品属性',
+          Sign: true,
+          key: 'property'
+        },
+        mold:{
+          title: '商品类型',
+          placeholder: '请输入商品类型',
+          Sign: true,
+          key: 'mold'
+        },
+        remark:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: true,
+          key: 'remark'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+        brand:{
+          title: '品牌',
+          placeholder: '请输入品牌',
+          Sign: true,
+          key: 'brand'
+        },
+      },
       data:{
         id: '',//商品id
         firstClassId: '',//一级分类id
@@ -161,12 +263,25 @@
         unitPrice: '',//单价
         sellPrice: '',//售卖价格
         imgs: '',//图片 json数据类型字符串
+      },
+      classQuery:{
+        firstClassId:'',//一级分类id
+        secondClassId:'',//二级分类id
       }
     },
     computed: {
 
     },
     methods: {
+      // inputBtn
+      inputBtn(value){
+        console.log('value',value)
+      },
+      // 上传图片
+      upImageFile(path){
+        console.log('path',path);
+      },
+      // 提交
       formSubmit(){
         if(this.data.id !== ''){
           this.goodsUpdate();
@@ -188,6 +303,28 @@
       // 商品入库
       goodsSave(){
         goodsSave({...this.data}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 商户的所有品牌
+      getGoodsBrands(){
+        goodsBrands(this.classQuery).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 分类下商品属性及类别
+      getGoodsTypes(){
+        goodsPropertiesAndTypes().then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
             console.log('res',res)

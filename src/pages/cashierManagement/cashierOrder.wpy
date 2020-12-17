@@ -121,7 +121,12 @@
   <div class="member_container">
     <!-- head  -->
     <div class="head_box">
-      <div class="head_btn"></div>
+      <image
+        class="head_btn"
+        src="../../image/right1.png"
+        mode="widthFix"
+        @click="gotoBack()"
+      />
       <div class="head_title">订单详情</div>
       <div class="head_btn"></div>
     </div>
@@ -132,7 +137,7 @@
       <div class="member_content">
         <!-- info -->
         <div class="member_info_content">
-          <image class="content_image" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false"> </image>
           <ul class="content_text">
             <li class="text_name">
               <text class="name">戴蒙</text>
@@ -149,7 +154,10 @@
         </div>
         <!-- btn -->
         <div class="member_btn">
-          <button class="form_btn">撤销订单</button>
+          <button
+            class="form_btn"
+            @click="repealBtn()"
+          >撤销订单</button>
         </div>  
       </div>
     </div>
@@ -158,18 +166,47 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { orderDetail, orderRevoke } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      id: 14,
+      orderId: 13,
     },
     computed: {
 
     },
     methods: {
-
+      // 后退
+      gotoBack(){
+        wx.navigateBack({
+          delta: 1
+        })
+      },
+      // 获取订单详情
+      getDetail() {
+        orderDetail({id: this.id}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 撤销订单
+      repealBtn() {
+        orderRevoke({id: this.orderId}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)

@@ -1,5 +1,5 @@
 
-<style lang="stylus">
+<style lang="stylus" scope>
 @import "./../css/public.styl";
 .item_box{
   width: 100%;
@@ -47,16 +47,15 @@
 </style>
 <template>
   <div class="item_box">
-    <text class="item_title {{Sign ?'active':''}}">{{title}}</text>
+    <text class="item_title {{obj.Sign ?'active':''}}">{{obj.title}}</text>
     <div class="input_box">
       <input 
         class="item_input"
-        value="{{''}}"
         type="text"
-        placeholder="请输入" 
+        v-model="value"
+        :placeholder="obj.placeholder" 
         placeholder-class="input_placeholder"
-        :bindfocus="funfocus()"
-        @blur="fun()"/>   
+        @input="bindinput()"/> 
     </div>
   </div>
 </template>
@@ -68,29 +67,46 @@
       addGlobalClass: true
     },
     props: {
-      title: {
-        type: String,
-        default:''
+      obj: {
+        type: Object,
+        default: () => {
+          return {
+            title: {
+              type: String,
+              default:''
+            },
+            placeholder: {
+              type: String,
+              default:'请输入'
+            },
+            Sign: {
+              type: Boolean,
+              default: false
+            },
+            key: {
+              type: String,
+              default: ''
+            },
+          }
+        }
       },
-      Sign: {
-        type: Boolean,
-        default: false
-      }
     },
     data: {
-
+      value:'',
     },
     computed: {
 
     },
     methods: {
-      funfocus(){
-        console.log('data')
-        // this.$emit('funfocusBtn', 1234)
+      bindinput(){
+        this.$emit('inputBtn', {
+          key: this.obj.key,
+          value: this.value,
+        });
       },
-      fun(){
-
-      }
+    },
+    onShow(){
+      
     },
   });
 </script>

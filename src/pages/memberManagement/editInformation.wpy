@@ -29,7 +29,7 @@
     <div class="form_content">
       <ul class="form_list">
         <li class="list_item">
-          <UpImage title="头像" />
+          <UpImage title="头像" @upImagePath="upImageFile" />
         </li>
         <li class="list_item">
           <SubInput title="姓名" />
@@ -62,7 +62,10 @@
 
     },
     methods: {
-
+      // 上传图片
+      upImageFile(path){
+        console.log('path',path);
+      },
     },
     onLoad(options){
       // console.log('options',options)

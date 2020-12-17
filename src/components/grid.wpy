@@ -52,7 +52,7 @@
           :key="'i-'+i"
           @tap="subItem(it)"
         >
-          <image class="sub_icon" src="{{it.icon}}" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="sub_icon" src="{{it.icon}}" mode="widthFix" lazy-load="false"> </image>
           <text class="sub_title">{{it.subTitle}}</text>
         </li>
       </ul>

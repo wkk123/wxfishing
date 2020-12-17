@@ -51,39 +51,94 @@
       border-radius: 4px;
     }
   }
+  .member_btn{
+    width: 100%;
+    height: 65px;
+    padding: 10px 10px 15px;
+  }
 }
 </style>
 <template>
   <div class="clearing_box">
     <div class="hint_box">
-      <image class="hint_icon" src="./../../image/hint.png" mode="scaleToFill" lazy-load="false"> </image>
+      <image class="hint_icon" src="./../../image/hint.png" mode="widthFix" lazy-load="false"> </image>
       <text class="hint_text">请让用户公众号内使用支付功能扫码</text>
     </div>
     <div class="clearing_content">
       <div class="clearing_img">
-        <image class="code_img" src="" mode="scaleToFill" lazy-load="false"> </image>
+        <image class="code_img" src="" mode="widthFix" lazy-load="false"> </image>
       </div>
       <div class="clearing_list">
         <OrderList />
       </div>
+    </div>
+    <div class="member_btn">
+      <button class="form_btn" @click="getResults()">查询结果</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { orderQRCode, orderWechatPaymentStatus, orderOfflinePay } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      codeData:{
+        id: 1,
+      },
+      outTradeNo:'',
+      payment:{
+        id: 1,
+        openid: "xxxx"
+      }
     },
     computed: {
 
     },
     methods: {
-
+      // 获取二维码
+      getCode(){
+        orderQRCode(this.codeData).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 获取支付结果
+      getResults() {
+        orderWechatPaymentStatus({outTradeNo: this.outTradeNo}).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+          this.goToOrderInfo();
+        })
+      },
+      // 线下支付
+      offlinePayment(){
+        orderOfflinePay(this.payment).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 进入订单详情
+      goToOrderInfo(){
+        wx.navigateTo({
+          url: '/pages/cashierManagement/cashierOrder'
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)

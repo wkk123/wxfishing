@@ -118,7 +118,7 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div class="cart_left">
-          <image class="cart_img" src="./../../image/cart.png" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false"> </image>
           <div class="cart_Num">55</div>  
         </div>
         <div class="cart_total">
@@ -130,7 +130,10 @@
         <button class="btn">改价</button>
       </li>
       <li class="btn_item">
-        <button class="btn">去结算</button>
+        <button
+          @click="placeAnOrder()"
+          class="btn"
+        >去结算</button>
       </li>
     </ul>
   </div>
@@ -138,26 +141,46 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { orderCreate } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      order:{
+        totalMoney: 20.3,
+        goodsList: [
+          {
+            id: 3,
+            quantity: 1
+          }
+        ]
+      }
     },
     computed: {
 
     },
     methods: {
-
+      // 下单
+      placeAnOrder(){
+        orderCreate(this.order).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+          }
+        }).catch(err=> {
+          console.log(err)
+          wx.navigateTo({
+            url: '/pages/cashierManagement/payWay'
+          })
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
 

@@ -45,7 +45,12 @@
         font-size: 24px;
         color: #DDDDDD;
       }
-    }  
+    }
+    .upImage_img{
+      width: 50px;
+      height: 50px;
+      margin: 10px 0;
+    }
   }
 }
 </style>
@@ -53,9 +58,14 @@
   <div class="upImage_container">
     <text class="item_titles {{Sign &&'active'}}">{{title}}</text>
     <div class="upImage_box">
-      <div class="upImage_icon">
+      <div
+        v-if="!imageFile"
+        class="upImage_icon"
+        @click="upImageBtn()"
+      >
         <text class="img_icon">+</text>
-      </div>  
+      </div>
+      <image v-else class="upImage_img" :src="imageFile" mode="widthFix" />
     </div>
   </div>
 </template>
@@ -77,14 +87,23 @@
       }
     },
     data: {
-
+      imageFile:'',
     },
     computed: {
 
     },
     methods: {
-      fun(){
-
+      upImageBtn(){
+        const that = this;
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+          success (res) {
+            that.imageFile = res.tempFilePaths[0];
+            that.$emit('upImagePath', res.tempFilePaths);
+          }
+        })
       }
     },
   });

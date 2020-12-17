@@ -107,7 +107,9 @@
       // console.log('options',options)
     },
     onShow(){
-
+      // wx.navigateTo({
+      //   url: '/pages/stockManagement/item'
+      // })
     },
     onReady(){
 

@@ -150,7 +150,7 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div class="cart_left">
-          <image class="cart_img" src="./../../image/cart.png" mode="scaleToFill" lazy-load="false"> </image>
+          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false"> </image>
           <div class="cart_Num">55</div>  
         </div>
         <div class="cart_total">
@@ -162,7 +162,10 @@
         <button class="btn">改价</button>
       </li>
       <li class="btn_item">
-        <button class="btn">去结算</button>
+        <button
+          class="btn"
+          @click="goToCart()"
+        >去结算</button>
       </li>
     </ul>
   </div>
@@ -188,7 +191,12 @@
 
     },
     methods: {
-
+      // 去购物车
+      goToCart(){
+        wx.navigateTo({
+          url: '/pages/cashierManagement/cart'
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)

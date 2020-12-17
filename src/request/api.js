@@ -64,14 +64,6 @@ export const goodsPropertiesAndTypes = p => {
 export const orderCreate = p => {
   return request.POST('/order/create',  {...p, isLoading: false})
 }
-// 撤销订单
-export const orderRevoke = p => {
-  return request.POST('/order/revoke',  {...p, isLoading: false})
-}
-// 线下支付
-export const orderOfflinePay = p => {
-  return request.POST('/order/offlinePay',  {...p, isLoading: false})
-}
 // 订单二维码
 export const orderQRCode = p => {
   return request.GET('/order/QRCode', {...p, isLoading: false})
@@ -80,7 +72,15 @@ export const orderQRCode = p => {
 export const orderDetail = p => {
   return request.GET('/order/detail', {...p, isLoading: false})
 }
-// 微信支付信息
+// 撤销订单
+export const orderRevoke = p => {
+  return request.POST('/order/revoke',  {...p, isLoading: false})
+}
+// 线下支付
+export const orderOfflinePay = p => {
+  return request.POST('/order/offlinePay',  {...p, isLoading: false})
+}
+// 微信支付信息****
 export const orderWechatPayment = p => {
   return request.GET('/order/wechatPayment', {...p, isLoading: false})
 }

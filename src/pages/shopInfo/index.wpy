@@ -97,10 +97,10 @@
 <template>
   <div class="container">
     <div class="hint_box">
-      <image 
+      <image
         class="hint_icon"
         src="./../../image/hint.png" 
-        mode="scaleToFill"
+        mode="widthFix"
         lazy-load="false">
       </image>
       <text class="hint_text">以下三项填写后付款用户会看到，请准确填写</text>
@@ -136,7 +136,7 @@
           </div>
         </li>
         <li class="list_item">
-          <UpImage title="店面logo" />
+          <UpImage title="店面logo" @upImagePath="upImageFile" />
         </li>
         <li class="list_item">
           <div class="item_box">
@@ -237,6 +237,11 @@
 
     },
     methods: {
+      // 上传图片
+      upImageFile(path){
+        console.log('path',path);
+        this.detail.logo = path;
+      },
       // 更新数据
       upDateFun(){
         shopUpdate().then(res => {

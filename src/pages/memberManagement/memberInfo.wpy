@@ -136,12 +136,17 @@
   <div class="member_container">
     <div class="member_info">
       <div class="head_box">
-        <div class="head_btn"></div>
+        <image 
+          class="head_btn"
+          src="../../image/right1.png"
+          mode="widthFix"
+          @click="gotoBack()"
+        />
         <div class="head_title">会员详情</div>
         <div class="head_btn"></div>
       </div>
       <div class="info_content">
-        <image class="content_image" src="{{}}" mode="scaleToFill" lazy-load="false"> </image>
+        <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false"> </image>
         <ul class="content_text">
           <li class="text_name">
             <text class="name">戴蒙</text>
@@ -189,6 +194,12 @@
 
     },
     methods: {
+      // 后退
+      gotoBack(){
+        wx.navigateBack({
+          delta: 1
+        })
+      },
       // 编辑信息
       editInfoBtn(){
         wx.navigateTo({
