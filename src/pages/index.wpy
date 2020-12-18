@@ -14,11 +14,11 @@
 
 <script>
   import wepy from '@wepy/core';
-  // import eventHub from '../common/eventHub';
-  // import store from '../store';
-  // const app = getApp();
-  // import { mapState, mapActions } from '@wepy/redux';
-  // import { COMMIT } from '../store/types';
+  import eventHub from '../common/eventHub';
+  import store from '../store';
+  const app = getApp();
+  import { mapState, mapActions } from '@wepy/redux';
+  import { COMMIT } from '../store/types';
   import { shopLogin } from '../request/api';
   wepy.page({
     options: {
@@ -94,7 +94,7 @@
         let token = wx.getStorageSync('token');
         if(!token || token === ''){
           wx.navigateTo({
-            url: '/pages/login/index'
+            url: `/pages/login/index?url=${data.url}`
           })
         } else {
           wx.navigateTo({
@@ -110,6 +110,7 @@
       // wx.navigateTo({
       //   url: '/pages/stockManagement/item'
       // })
+      console.log('this.$store',this.$store)
     },
     onReady(){
 

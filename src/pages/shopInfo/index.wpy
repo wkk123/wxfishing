@@ -101,8 +101,8 @@
         class="hint_icon"
         src="./../../image/hint.png" 
         mode="widthFix"
-        lazy-load="false">
-      </image>
+        lazy-load="false" 
+      />
       <text class="hint_text">以下三项填写后付款用户会看到，请准确填写</text>
     </div>
     <div class="list_content">

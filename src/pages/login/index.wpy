@@ -140,7 +140,7 @@
             <image class="see_icon" src="../../image/nosee.png" bindtap="seeTap" v-else />
           </div>
         </div>
-        <button class="content_btn {{(isAccount && password) && 'active'}}" disabled="{{!(isAccount && password)}}" formType="submit" plain="true">登录</button>
+        <button class="content_btn {{(account && password) && 'active'}}" disabled="{{!(account && password)}}" formType="submit" plain="true">登录</button>
       </form>
 
       <div class="login_forget">
@@ -155,16 +155,11 @@
   import wepy from '@wepy/core';
   import { shopLogin } from '../../request/api.js';
   wepy.page({
-    hooks: {
-
-    },
-
     data: {
-      isAccount: false,
-      password: false,
       showPass: false,
       account: "yujua",
-      password: "123456"
+      password: "123456",
+      url:'',
     },
 
     methods: {
@@ -175,13 +170,13 @@
       // 输入账号
       inputAccount(e){
         if(e.$wx.detail.value){
-          this.isAccount = true;
+          this.account = e.$wx.detail.value;
         }
       },
       // 输入密码
       inputPass(e){
         if(e.$wx.detail.value){
-          this.password = true;
+          this.password = e.$wx.detail.value;
         }
       },
       // 登录
@@ -193,12 +188,17 @@
       loginFun(arg){
         shopLogin(arg).then(res => {
           const {code, data, message} = res;
-          console.log('code, data, message',code, data, message)
           if (res.code === 10000) {
-            console.log('res',res)
             wx.setStorageSync('token',data.token);
+            wx.setStorageSync('id',data.id);
+            wx.redirectTo({
+              url: this.url
+            })
           } else {
-            console.log('res',res)
+            wx.showModal({
+              title: '提示',
+              content: message,
+            })
           }
         }).catch(err=> {
           const that = this;
@@ -225,8 +225,9 @@
         // })
       },
     },
-    onLoad () {
-
+    onLoad(options){
+      console.log('options',options)
+      this.url = options.url;
     },
     onShow(){
       

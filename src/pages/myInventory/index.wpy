@@ -127,8 +127,8 @@
           class="item_img"
           :src="typeNum===1?image1:image2"
           mode="widthFix"
-          lazy-load="false">
-        </image>
+          lazy-load="false"
+        />
         <text class="item_text">热度</text>
       </li>
       <li class="sort_item">
@@ -136,8 +136,8 @@
           class="item_img"
           :src="typeNum===2?image1:image2"
           mode="widthFix"
-          lazy-load="false">
-        </image>
+          lazy-load="false"
+        />
         <text class="item_text">库存量</text>
       </li>
       <li class="sort_item">
@@ -145,13 +145,13 @@
           class="item_img"
           :src="typeNum===3?image1:image2"
           mode="widthFix"
-          lazy-load="false">
-        </image>
+          lazy-load="false"
+        />
         <text class="item_text">到期时间</text>
       </li>
     </ul>
     <ul class="myInventory_content">
-      <li class="content_item" v-for="item in orderList">
+      <li class="content_item" :key="'item'+index" v-for="(item,index) in orderList">
         <orderItem :orderData="item"/>
       </li>
     </ul>

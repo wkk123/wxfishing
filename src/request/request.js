@@ -9,7 +9,6 @@ const http = ({url, params, method} = {}) => {
     }
     if(url!=='/shop/login'){
       let token = wx.getStorageSync('token')
-      // let token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ5dWp1YSIsImlkIjoxLCJleHAiOjQxOTcwMTU0ODIsImlhdCI6MTYwNTAxNTQ4Mn0.BN-Y2JlpjEs6cWPTQjE56NOfvn3_WXjFFGkIYbnh2Y0GrC-91Qyip4itd9FZ34V4rbugwg47rIl7MRriSPCg2Q';
       if(!token||token === ''){
         if(isLoading){
           wx.hideLoading()
