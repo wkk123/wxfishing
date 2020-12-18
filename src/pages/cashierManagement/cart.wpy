@@ -110,7 +110,7 @@
   <div class="cashier_container">
     <div class="cashier_content">
       <ul class="content_right">
-        <li class="right_item" v-for="item in 9">
+        <li class="right_item" v-for="(item,index) in 9" :key="'item'+index">
           <EditOrder />
         </li>
       </ul>
@@ -118,7 +118,7 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div class="cart_left">
-          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false"> </image>
+          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
           <div class="cart_Num">55</div>  
         </div>
         <div class="cart_total">

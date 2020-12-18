@@ -61,12 +61,12 @@
 <template>
   <div class="clearing_box">
     <div class="hint_box">
-      <image class="hint_icon" src="./../../image/hint.png" mode="widthFix" lazy-load="false"> </image>
+      <image class="hint_icon" src="./../../image/hint.png" mode="widthFix" lazy-load="false" />
       <text class="hint_text">请让用户公众号内使用支付功能扫码</text>
     </div>
     <div class="clearing_content">
       <div class="clearing_img">
-        <image class="code_img" src="" mode="widthFix" lazy-load="false"> </image>
+        <image class="code_img" src="" mode="widthFix" lazy-load="false" />
       </div>
       <div class="clearing_list">
         <OrderList />

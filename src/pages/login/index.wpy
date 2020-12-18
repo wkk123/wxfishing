@@ -109,7 +109,7 @@
   <div class="container">
     <div class="login_box">
       <div class="login_info">
-        <image class="login_icon"  :src="" /> 
+        <image class="login_icon"  src="" />
         <div class="login_head">
           <H3 class="head_text">您好</H3>
           <text class="head_subText">欢迎来到**,感受不一样的体验吧!</text>
@@ -136,8 +136,8 @@
             v-model="password"
           />
           <div class="see_box">
-            <image class="see_icon" src="../../image/see.png" bindtap="seeTap" v-if="showPass"></image>
-            <image class="see_icon" src="../../image/nosee.png" bindtap="seeTap" v-else></image>
+            <image class="see_icon" src="../../image/see.png" bindtap="seeTap" v-if="showPass" />
+            <image class="see_icon" src="../../image/nosee.png" bindtap="seeTap" v-else />
           </div>
         </div>
         <button class="content_btn {{(isAccount && password) && 'active'}}" disabled="{{!(isAccount && password)}}" formType="submit" plain="true">登录</button>

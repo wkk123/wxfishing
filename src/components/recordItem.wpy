@@ -146,15 +146,15 @@
   <div class="content_box">
     <div class="merchant_box">
       <div class="merchant_info">
-        <image class="info_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        <image class="info_image" src="{{}}" mode="widthFix" lazy-load="true" />
         <text class="info_title">这里商家名称</text>
       </div>
       <text class="merchant_state">已支付</text>
     </div>
     <div class="merchandise_box">
       <div class="merchandise_list">
-        <div class="merchandise_item" v-for="item in 8">
-          <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        <div class="merchandise_item" :key="'item'+index" v-for="(item,index) in 8">
+          <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true" />
         </div>
       </div>
       <text class="merchandise_text">{{8}}件商品</text>
@@ -165,7 +165,7 @@
     </div>
     <div class="buyBtn_box">
       <div class="buy_left">
-        <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+        <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
         <text class="left_text">分享</text>
       </div>
       <button class="buy_btn" @click="gotoInfo()">撤销订单</button>

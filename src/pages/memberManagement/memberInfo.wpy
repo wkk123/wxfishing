@@ -146,7 +146,7 @@
         <div class="head_btn"></div>
       </div>
       <div class="info_content">
-        <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+        <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false" />
         <ul class="content_text">
           <li class="text_name">
             <text class="name">戴蒙</text>

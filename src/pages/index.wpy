@@ -91,16 +91,16 @@
     methods: {
       // 点击某一个
       subItem(data){
-        // let token = wx.getStorageSync('token');
-        // if(!token || token === ''){
-        //   wx.navigateTo({
-        //     url: '/pages/login/index'
-        //   })
-        // } else {
+        let token = wx.getStorageSync('token');
+        if(!token || token === ''){
+          wx.navigateTo({
+            url: '/pages/login/index'
+          })
+        } else {
           wx.navigateTo({
             url: data.url
           })
-        // }
+        }
       },
     },
     onLoad(options){

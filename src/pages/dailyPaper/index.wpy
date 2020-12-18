@@ -43,7 +43,7 @@
         <picker class="picker_date" mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
           <view class="picker">{{date}}</view>
         </picker>
-        <image class="picker_icon" src="./../../image/calendar.png" mode="widthFix" lazy-load="false"> </image>
+        <image class="picker_icon" src="./../../image/calendar.png" mode="widthFix" lazy-load="false" />
       </div>
     </div>
   </div>

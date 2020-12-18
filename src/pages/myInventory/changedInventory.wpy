@@ -139,11 +139,11 @@
 <template>
   <div class="Inventory_box">
     <ul class="Inventory_list">
-      <li class="list_item" v-for="item in orderList">
+      <li class="list_item" v-for="(item, index) in orderList" :key="'item'+index">
         <div class="content_item">
           <div class="item_left">
             <div class="left_subtitle {{item.type===1?'active1':item.type===2?'active2':'active3'}}">{{item.status}}</div>
-            <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+            <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
           </div>
           <div class="item_info">
             <text class="info_title">{{item.title}}</text>

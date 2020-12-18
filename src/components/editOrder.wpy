@@ -114,7 +114,7 @@
 <template>
   <div class="editOrder_info">
     <div class="item_left">
-      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
     </div>
     <div class="item_info">
       <div class="info_text">

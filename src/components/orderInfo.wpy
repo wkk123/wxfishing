@@ -79,7 +79,7 @@
 </style>
 <template>
   <div class="content_item">
-    <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+    <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true" />
     <div class="item_info">
       <text class="info_title">{{'这里是商品名称这里是名称这里是商品名称这里是名称'}}</text>
       <ul class="info_content">

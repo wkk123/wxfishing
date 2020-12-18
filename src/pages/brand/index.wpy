@@ -50,25 +50,26 @@
     <div class="brand_box">
       <ul class="brand_list">
         <li class="list_item"
-          v-for="item in brandList"
+          :key="'item'+index"
+          v-for="(item,index) in brandList"
           @click="editBrand(item)"
         >
           <text class="item_title">{{item.name}}</text>
           <ul class="item_content">
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.productLocation}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.deliveryAddress}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.contactPhone}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.remark}}</text>
             </li>
           </ul>

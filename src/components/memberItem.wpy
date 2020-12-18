@@ -87,7 +87,7 @@
 </style>
 <template>
   <div class="member_item">
-    <image class="item_img" src="{{}}" mode="widthFix" lazy-load="true"> </image>
+    <image class="item_img" src="{{}}" mode="widthFix" lazy-load="true" />
     <div class="item_content">
       <div class="content_info">
         <div class="info_title">

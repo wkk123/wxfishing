@@ -120,11 +120,11 @@
         <text class="info_title">戴蒙上个人头官方旗舰店</text>
         <text class="info_subtitle">这里是一些门店标语这里是</text>
         <div class="store_site">
-          <image class="site_img" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+          <image class="site_img" src="{{}}" mode="widthFix" lazy-load="false" />
           <text class="site_text">绿汀路21号-28号西溪堂商务中心2幢</text>
         </div>
       </div>
-      <image class="store_img" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+      <image class="store_img" src="{{}}" mode="widthFix" lazy-load="false" />
     </div>
 
     <OrderList />

@@ -233,7 +233,7 @@
           class="head_left"
           @click="gotoBack()"
         >
-          <image class="left_icon" src="./../../image/site.png" mode="widthFix" lazy-load="false"> </image>
+          <image class="left_icon" src="./../../image/site.png" mode="widthFix" lazy-load="false" />
           <div class="left_title">某某门店</div>  
         </div>
         <div class="head_btn"></div>
@@ -243,17 +243,17 @@
       </div>
     </div>
     <ul class="cashier_nav">
-      <li class="nav_item {{currentNav === index &&'active'}}" v-for="(item,index) in navList">{{item.title}}</li>
+      <li class="nav_item {{currentNav === index &&'active'}}" :key="'item'+index" v-for="(item,index) in navList">{{item.title}}</li>
     </ul>
     <div class="cashier_content">
       <ul class="content_left">
-        <li class="left_item {{currentItem === item &&'active'}}" v-for="item in 9">
-          <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false"> </image>
+        <li class="left_item {{currentItem === item &&'active'}}" :key="'left'+index" v-for="(item,index) in 9">
+          <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
           <text class="item_text">竿</text>
         </li>
       </ul>
       <ul class="content_right">
-        <li class="right_item" v-for="item in 9">
+        <li class="right_item" :key="'right'+index" v-for="(item,index) in 9">
           <EditOrder />
         </li>
       </ul>
@@ -261,7 +261,7 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div class="cart_left">
-          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false"> </image>
+          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
           <div class="cart_Num">55</div>  
         </div>
         <div class="cart_total">
@@ -288,9 +288,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix"
-          lazy-load="false">
-        </image>
+        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
       </movable-view>
     </movable-area>
   </div>
