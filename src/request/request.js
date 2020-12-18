@@ -18,7 +18,7 @@ const http = ({url, params, method} = {}) => {
         })
         return
       }
-      header['Authorization'] = 'Bearer' + token
+      header['Authorization'] = `Bearer ${token}`;
     }
     if (isLoading) {
       wx.showLoading({

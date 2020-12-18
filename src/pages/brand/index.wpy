@@ -97,11 +97,11 @@
       },
       brandList:[
         {
-          name:'这里是一个品牌名称',
-          productLocation: '这里商品产地',
-          deliveryAddress:'这里是发货地址',
-          contactPhone:'13509322459',
-          remark:'这里是一些备注'
+          name:'',
+          productLocation: '',
+          deliveryAddress:'',
+          contactPhone:'',
+          remark:'',
         }
       ]
     },
@@ -110,9 +110,9 @@
     },
     methods: {
       // 编辑品牌
-      editBrand(){
+      editBrand(data){
         wx.navigateTo({
-          url: '/pages/brand/info?type=1&id=1'
+          url: `/pages/brand/info?type=${1}&id=${data.id}`
         })
       },
       // 添加品牌
@@ -126,10 +126,13 @@
         brandList(query).then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
-            console.log('res',res)
+            this.brandList = data;
           }
         }).catch(err=> {
-          console.log(err)
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
         })
       }
     },
