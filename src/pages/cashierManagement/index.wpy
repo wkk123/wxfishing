@@ -226,7 +226,12 @@
       :popupObj="popupObj"
     />
     <!-- 购物车 -->
-    <Cart :isShow="false" />
+    <Cart 
+      :isShow="showCart"
+      :cartList="cartList"
+      @emptyCart="emptyCart"
+      @click="cartBtn()"
+    />
     <div class="cashier_info">
       <div class="head_box">
         <div
@@ -243,26 +248,45 @@
       </div>
     </div>
     <ul class="cashier_nav">
-      <li class="nav_item {{currentNav === index &&'active'}}" :key="'item'+index" v-for="(item,index) in navList">{{item.title}}</li>
+      <li 
+        class="nav_item {{currentNav === item.id &&'active'}}" 
+        :key="'item'+item.id"
+        v-for="item in navList"
+        @click="navItem(item)"
+      >{{item.name}}</li>
     </ul>
     <div class="cashier_content">
       <ul class="content_left">
-        <li class="left_item {{currentItem === item &&'active'}}" :key="'left'+index" v-for="(item,index) in 9">
+        <li class="left_item {{currentItem === index &&'active'}}" 
+          :key="'left'+index"
+          v-for="(item,index) in goodsClassList"
+          @click="leftItem(item,index)"
+        >
           <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
-          <text class="item_text">竿</text>
+          <text class="item_text">{{item.name}}</text>
         </li>
       </ul>
       <ul class="content_right">
-        <li class="right_item" :key="'right'+index" v-for="(item,index) in 9">
-          <EditOrder />
+        <li 
+          class="right_item" 
+          :key="'order'+item.id" 
+          v-for="item in orderList"
+        >
+          <EditOrder
+            :orderData="{...item,num: 0}"
+            @editCart="editCartFun"
+          />
         </li>
       </ul>
     </div>
     <ul class="cashier_btn">
       <li class="shopping_Cart">
-        <div class="cart_left">
+        <div
+          class="cart_left"
+          @click="cartBtn()"
+        >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num">55</div>  
+          <div class="cart_Num" v-if="cartNum >= 1">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
           <text>合计</text>
@@ -296,30 +320,55 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsAllClasses, goodsGoodsList } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-      navList:[
-        { title:'基础商品' },
-        { title:'配套产品' },
-        { title:'售后专区' },
-        { title:'小配件' },
-        { title:'自营产品' },
-      ],
-      currentNav: 0,
+      navList:[],
+      currentNav: 1,
+      goodsClassList: [],
       currentItem: 0,
       popupObj: {
         popupType: 1,
         presentMoney: 0,
         isShow: true,
-      }
+      },
+      orderList: [],//商品列表
+      query:{
+        keyword: '',// 搜索关键字
+        sortField: '',//排序字段 heat 热度 quantity 库存量 expire_time 到期时间
+        order:'',//排序规则 desc 降序 asc 升序
+        firstClassId:'',//一级分类id
+        secondClassId:'',//二级分类id
+      },
+      showCart: false,//购物车显隐
+      cartNum: 0,
+      cartList: [],//购物车
     },
     computed: {
 
     },
     methods: {
+      // 添加购物车
+      editCartFun(order){
+        const Index = this.cartList.findIndex(item => item.id === order.id);
+        if (Index === -1) {
+          this.cartList.push(order);
+        } else {
+          if( order.num > 0){
+            this.cartList.splice(Index,1,order);
+          } else {
+            this.cartList.splice(Index, 1);
+          }
+        }
+        let total = 0;
+        this.cartList.forEach((item)=>{
+          total += item.num;
+        })
+        this.cartNum = total;
+      },
       // 后退
       gotoBack(){
         wx.navigateBack({
@@ -342,6 +391,55 @@
           // 点击取消
         }
       },
+      // 清空购物车
+      emptyCart(){
+        this.cartList = [];
+        this.cartNum = 0;
+      },
+      // 显隐购物车
+      cartBtn(){
+        this.showCart = !this.showCart;
+      },
+      // 点击导航选择列表
+      navItem(data){
+        this.currentNav = data.id;
+        this.goodsClassList = data.goodsClassSeconds;
+        this.currentItem = 0;
+        this.getGoodsGoodsList({firstClassId: this.goodsClassList[this.currentItem].firstClassId,secondClassId: this.goodsClassList[this.currentItem].id});
+      },
+      // 选择left
+      leftItem(item,index){
+        this.currentItem = index;
+        this.getGoodsGoodsList({firstClassId: this.goodsClassList[this.currentItem].firstClassId,secondClassId: this.goodsClassList[this.currentItem].id});
+      },
+      // 查询所有分类
+      getGoodsAllClasses(){
+        goodsAllClasses().then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            this.navList = data;
+            this.goodsClassList = data[0].goodsClassSeconds;
+            const list = data[0].goodsClassSeconds
+            if(list.length !== 0){
+              this.getGoodsGoodsList({firstClassId: list[0].firstClassId,secondClassId: list[0].id});
+            }
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
+      // 库存列表
+      getGoodsGoodsList(query){
+        goodsGoodsList(query).then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+            this.orderList = data;
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)
@@ -352,7 +450,7 @@
       // })
     },
     onReady(){
-
+      this.getGoodsAllClasses();
     },
     onUnload(){
 

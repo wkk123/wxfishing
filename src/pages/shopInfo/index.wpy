@@ -136,7 +136,7 @@
           </div>
         </li>
         <li class="list_item">
-          <UpImage :title="'店面logo'" :imageFile="detail.logo" :Sign="true" @upImagePath="upImageFile" />
+          <UpImage title="店面logo" :imageFile="detail.logo" @upImagePath="upImageFile" />
         </li>
         <li class="list_item">
           <div class="item_box">
@@ -220,12 +220,15 @@
     },
     data: {
       detail: {},
-      img:'',
     },
     computed: {
 
     },
     methods: {
+      // 上传图片
+      upImageFile(path){
+        this.detail.logo = path;
+      },
       // 获取经纬度
       loctionBtn(){
         const that = this;
@@ -237,22 +240,21 @@
           }
         })
       },
-      // 上传图片
-      upImageFile(path){
-        console.log('path',path)
-        this.detail.logo = path;
-        this.img = path;
-      },
       // 更新数据
       upDateFun(){
-        shopUpdate(this.detail).then(res => {
+        shopUpdate({...this.detail }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
             wx.showToast({
               title: '保存成功',
               icon: 'success',
-              duration: 2000
+              duration: 2000,
+              complete(){
+                wx.navigateBack({
+                  delta: 1
+                })
+              }
             })
           }
         }).catch(err=> {
@@ -261,7 +263,6 @@
       },
       // 保存
       submit(){
-        this.detail.logo = this.img;
         this.upDateFun();
       }
     },
@@ -269,21 +270,18 @@
       // console.log('options',options)
     },
     onShow(){
+      
+    },
+    onReady(){
       // 获取门店信息
       shopDetail().then( res => {
         const {code, data, message} = res;
         if (res.code === 10000) {
-          if(data.logo){
-            this.img = data.logo;
-          }
           this.detail = data;
         }
       }).catch(err=> {
         console.log(err)
       })
-    },
-    onReady(){
-
     },
     onUnload(){
 

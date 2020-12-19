@@ -54,6 +54,39 @@
     margin-top: 15px;
   }
 }
+.item_box{
+  width: 100%;
+  height: auto;
+  .item_title{
+    font-size: 12px;
+    color: #666666;
+    font-weight: 500;
+    padding: 20px 0 0px; 
+    display: flex;
+    &.active{
+      &:after{
+        content: '*';
+        font-size: 14px;
+        color: #F33C2E;
+        font-weight: 500;
+        padding-left: 5px;
+      }   
+    }
+  }
+  .picker_box{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+.input_code{
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+}
 </style>
 <template>
   <div class="form_box">
@@ -61,28 +94,60 @@
       <div class="content_item">
         <div class="form_head">
           <text class="head_text active">基础信息</text>
-          <div class="head_icon">
-            <image class="icon_img" src="{{true?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          <div class="head_icon" @click="headIcon(1)">
+            <image class="icon_img" src="{{one ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
           </div>
         </div>
-        <ul class="form_list">
+        <ul class="form_list" v-show="one">
           <li class="list_item">
-            <SubInput
-              :obj="form.brand"
-              @inputBtn="inputBtn"
-            />
+            <div class="item_box">
+              <text class="item_title active">品牌</text>
+              <picker
+                class="picker_box"
+                bindchange="bindPickerChange"
+                value="{{brandIndex}}"
+                range="{{brandArray}}"
+                range-key="name"
+              >
+                <view class="picker">
+                  {{brandArray[brandIndex].name}}
+                </view>
+              </picker>
+            </div>
           </li>
           <li class="list_item">
-            <SubInput
-              :obj="form.property"
-              @inputBtn="inputBtn"
-            />
+            <view class="item_box">
+              <text class="item_title active">商品属性</text>
+              <picker
+                class="picker_box"
+                mode="selector"
+                @change="propertyPickerChange"
+                value="{{propertyIndex}}"
+                range="{{propertyArray}}"
+                range-key="name"
+              >
+                <view class="picker">
+                  {{propertyArray[propertyIndex].name}}
+                </view>
+              </picker>
+            </view>
           </li>
           <li class="list_item">
-            <SubInput
-              :obj="form.mold"
-              @inputBtn="inputBtn"
-            />
+            <div class="item_box">
+              <text class="item_title active">商品类型</text>
+              <picker
+                class="picker_box"
+                mode="selector"
+                @change="moldPickerChange"
+                value="{{moldIndex}}"
+                range="{{moldArray}}"
+                range-key="name"
+              >
+                <view class="picker">
+                  {{moldArray[moldIndex].name}}
+                </view>
+              </picker>
+            </div>
           </li>
           <li class="list_item">
             <SubInput
@@ -92,58 +157,131 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="content_item">
+      <div class="content_item">
         <div class="form_head">
           <text class="head_text">商品信息</text>
-          <div class="head_icon"></div>
+          <div class="head_icon" @click="headIcon(2)">
+            <image class="icon_img" src="{{two ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          </div>
         </div>
-        <ul class="form_list">
+        <ul class="form_list" v-show="two">
           <li class="list_item">
-            <UpImage title="图片" @upImagePath="upImageFile" />
+            <UpImage title="图片" :imageFile="info.imgs" @upImagePath="upImageFile" />
           </li>
           <li class="list_item">
-            <SubInput title="编号" />
+            <div class="item_box">
+              <text class="item_title active">编号</text>
+              <div class="input_box">
+                <input 
+                  class="item_input"
+                  type="text"
+                  v-model="info.number"
+                  placeholder="请输入编号" 
+                  placeholder-class="input_placeholder"
+                />
+                <image @click="scanCode()" class="input_code" src="./../../image/codeIcon.png" mode="widthFiX" />
+              </div>
+            </div>
           </li>
           <li class="list_item">
-            <SubInput title="商品名称" />
+            <SubInput
+              :obj="form.name"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="生产日期" />
+            <view class="item_box">
+              <text class="item_title active">生产日期</text>
+              <picker
+                class="picker_box"
+                mode="date"
+                value="{{info.produceTime}}"
+                bindchange="DateProduceTime"
+                start="2015-09-01" end="2017-09-01"
+              >
+                <view class="picker">
+                  {{info.produceTime}}
+                </view>
+              </picker>
+            </view>
           </li>
           <li class="list_item">
-            <SubInput title="进货日期" />
+            <view class="item_box">
+              <text class="item_title active">进货日期</text>
+              <picker
+                class="picker_box"
+                mode="date"
+                value="{{info.stockTime}}"
+                bindchange="DateStockTime"
+                start="2015-09-01" end="2017-09-01"
+              >
+                <view class="picker">
+                  {{info.stockTime}}
+                </view>
+              </picker>
+            </view>
           </li>
           <li class="list_item">
-            <SubInput title="保质期" />
+            <view class="item_box">
+              <text class="item_title active">保质期</text>
+              <picker
+                class="picker_box"
+                mode="date"
+                value="{{info.expireTime}}"
+                bindchange="DateExpireTime"
+                start="2015-09-01" end="2017-09-01"
+              >
+                <view class="picker">
+                  {{info.expireTime}}
+                </view>
+              </picker>
+            </view>
           </li>
           <li class="list_item">
-            <SubInput title="质保时间" />
+            <SubInput
+              :obj="form.safeTime"
+              @inputBtn="inputBtn"
+            />
           </li>
         </ul>
-      </div> -->
-      <!-- <div class="content_item">
+      </div>
+      <div class="content_item">
         <div class="form_head">
           <text class="head_text">入库参数</text>
-          <div class="head_icon"></div>
+          <div class="head_icon" @click="headIcon(3)">
+            <image class="icon_img" src="{{three ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          </div>
         </div>
-        <ul class="form_list">
+        <ul class="form_list" v-show="three">
           <li class="list_item">
-            <SubInput title="型号" />
+            <SubInput
+              :obj="form.model"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="数量" />
+            <SubInput
+              :obj="form.quantity"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="单价（进货价）" />
+            <SubInput
+              :obj="form.unitPrice"
+              @inputBtn="inputBtn"
+            />
           </li>
           <li class="list_item">
-            <SubInput title="售卖价格" />
+            <SubInput
+              :obj="form.sellPrice"
+              @inputBtn="inputBtn"
+            />
           </li>
-          <li class="list_item">
+          <!-- <li class="list_item">
             <SubInput title="商品参数" />
-          </li>
+          </li> -->
         </ul>
-      </div> -->
+      </div>
     </div>
     <button
       class="form_btn form_submit"
@@ -160,93 +298,81 @@
       addGlobalClass: true
     },
     data: {
+      one: true,
+      two: true,
+      three: true,
+      brandIndex: 0,
+      brandArray: [],
+      brandObj: {},
+      propertyIndex: 0,
+      propertyArray: [],
+      propertyObj: {},
+      moldIndex: 0,
+      moldArray: [],
+      moldObj: {},
       form:{
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
-          Sign: true,
-          key: 'brand'
-        },
-        property:{
-          title: '商品属性',
-          placeholder: '请输入商品属性',
-          Sign: true,
-          key: 'property'
-        },
-        mold:{
-          title: '商品类型',
-          placeholder: '请输入商品类型',
-          Sign: true,
-          key: 'mold'
-        },
         remark:{
           title: '备注',
           placeholder: '请输入备注',
           Sign: true,
           key: 'remark'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        name:{
+          title: '商品名称',
+          placeholder: '请输入商品名称',
           Sign: true,
-          key: 'brand'
+          key: 'name'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        produceTime:{
+          title: '生产日期',
+          placeholder: '请输入生产日期',
           Sign: true,
-          key: 'brand'
+          key: 'produceTime'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        stockTime:{
+          title: '进货日期',
+          placeholder: '请输入进货日期',
           Sign: true,
-          key: 'brand'
+          key: 'stockTime'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        expireTime:{
+          title: '保质期',
+          placeholder: '请输入保质期',
           Sign: true,
-          key: 'brand'
+          key: 'expireTime'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        safeTime:{
+          title: '质保时间',
+          placeholder: '请输入质保时间',
           Sign: true,
-          key: 'brand'
+          key: 'safeTime'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        model:{
+          title: '型号',
+          placeholder: '请输入型号',
           Sign: true,
-          key: 'brand'
+          key: 'model'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        quantity:{
+          title: '数量',
+          placeholder: '请输入数量',
           Sign: true,
-          key: 'brand'
+          key: 'quantity'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        unitPrice:{
+          title: '单价 (进货价)',
+          placeholder: '请输入单价',
           Sign: true,
-          key: 'brand'
+          key: 'unitPrice'
         },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
+        sellPrice:{
+          title: '售卖价格',
+          placeholder: '请输入售卖价格',
           Sign: true,
-          key: 'brand'
-        },
-        brand:{
-          title: '品牌',
-          placeholder: '请输入品牌',
-          Sign: true,
-          key: 'brand'
+          key: 'sellPrice'
         },
       },
-      data:{
+      info:{
         id: '',//商品id
         firstClassId: '',//一级分类id
         secondClassId: '',//二级分类id
@@ -265,33 +391,84 @@
         imgs: '',//图片 json数据类型字符串
       },
       classQuery:{
-        firstClassId:'',//一级分类id
-        secondClassId:'',//二级分类id
-      }
+        firstClassId: 1,//一级分类id
+        secondClassId: 1,//二级分类id
+      },
+      parameter:{},//参数
     },
     computed: {
 
     },
     methods: {
+      // 
+      DateProduceTime(){
+
+      },
+      DateStockTime(){
+
+      },
+      DateExpireTime(){
+
+      },
+      // 上拉列表
+      headIcon(key) {
+        switch (key) {
+          case 1:
+            this.one = !this.one;
+            break;
+          case 2:
+            this.two = !this.two;
+            break;
+          default:
+            this.three = !this.three;
+            break;
+        }
+      },
+      // 扫码
+      scanCode(){
+        const that = this;
+        wx.scanCode({
+          success (res) {
+            console.log(res,res.result)
+            that.info.number = res.result;
+          }
+        })
+      },
+      //选择品牌
+      bindPickerChange(e){
+        this.brandIndex = e.$wx.detail.value;
+        this.brandObj = this.brandArray[this.brandIndex];
+      },
+      //选择商品属性
+      propertyPickerChange(e){
+        this.propertyIndex = e.$wx.detail.value;
+        this.propertyObj = this.propertyArray[this.propertyIndex];
+      },
+      //选择商品类型
+      moldPickerChange(e){
+        this.moldIndex = e.$wx.detail.value;
+        this.moldObj = this.moldArray[this.moldIndex];
+      },
       // inputBtn
-      inputBtn(value){
-        console.log('value',value)
+      inputBtn(data){
+        this.info[data.key] = data.value;
       },
       // 上传图片
       upImageFile(path){
-        console.log('path',path);
+        this.info.imgs = path;
       },
       // 提交
       formSubmit(){
-        if(this.data.id !== ''){
-          this.goodsUpdate();
-        } else {
-          this.goodsSave();
-        }
+        console.log(this.info);
+        // if(this.info.id !== ''){
+        //   this.goodsUpdate();
+        // } else {
+        //   this.goodsSave();
+        // }
       },
       // 更新商品
       goodsUpdate(){
-        goodsUpdate({...this.data}).then(res => {
+        goodsUpdate(...this.info).then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
             console.log('res',res)
@@ -302,7 +479,7 @@
       },
       // 商品入库
       goodsSave(){
-        goodsSave({...this.data}).then(res => {
+        goodsSave({...this.info}).then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
             console.log('res',res)
@@ -313,10 +490,11 @@
       },
       // 商户的所有品牌
       getGoodsBrands(){
-        goodsBrands(this.classQuery).then(res => {
+        goodsBrands().then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
             console.log('res',res)
+            this.brandArray = data;
           }
         }).catch(err=> {
           console.log(err)
@@ -324,10 +502,17 @@
       },
       // 分类下商品属性及类别
       getGoodsTypes(){
-        goodsPropertiesAndTypes().then(res => {
+        this.classQuery = {
+          firstClassId: this.parameter.firstClassId,//一级分类id
+          secondClassId: this.parameter.secondClassId,//二级分类id
+        };
+        goodsPropertiesAndTypes(this.classQuery).then(res => {
           const {code, data, message} = res;
           if(res.code===10000){
-            console.log('res',res)
+            this.propertyArray = data.goodsClassPropertyList;
+            this.propertyObj = this.propertyArray[this.propertyIndex];
+            this.moldArray = data.goodsClassTypeList;
+            this.moldObj = this.moldArray[this.moldIndex];
           }
         }).catch(err=> {
           console.log(err)
@@ -335,13 +520,18 @@
       }
     },
     onLoad(options){
-      // console.log('options',options)
+      console.log('options',options)
+      this.parameter = options;
+      wx.setNavigationBarTitle({
+        title: options.title
+      })
     },
     onShow(){
-
+      
     },
     onReady(){
-      
+      this.getGoodsBrands();
+      this.getGoodsTypes();
     },
     onUnload(){
 
@@ -350,7 +540,7 @@
 </script>
 <config>
 {
-  navigationBarTitleText: '项目',
+  navigationBarTitleText: '',
   disableScroll: true,
   usingComponents: {
     "SubInput": './../../components/subInput',

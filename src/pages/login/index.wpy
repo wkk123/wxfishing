@@ -45,6 +45,7 @@
       height: 50px;
       margin-bottom: 10px;
       .content_input{
+        width: calc(100% - 40px);
         height: 50px;
         border-radius: 4px;
         background-color: #F9F9F9; 
@@ -55,6 +56,19 @@
         color: #333333;
       }
       &.see{
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        .content_input{
+          width: calc(100% - 50px - 40px);
+          height: 50px;
+          border-radius: 4px;
+          background-color: #F9F9F9; 
+          display: flex;
+          justify-content: flex-start;
+          padding: 0 20px;
+          font-size: 16px;
+          color: #333333;
+        }
         position: relative;
         .see_box{
           width: 50px;

@@ -75,7 +75,7 @@
         height: auto;
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: flex-end;
         align-items: center;
         .btn_item{
           width: 15px;
@@ -85,26 +85,19 @@
           justify-content: center;
           align-items: center;
           background: #FFFFFF;
-          border: 1px solid #FFC400;
-          border-radius: 4px; 
-          color: #FFC400;  
-          &:last-child{
-            width: 15px;
-            height: 15px;
-            line-height: 15px;
-            text-align: center;
-            border-radius: 4px; 
-            background: #FFC400;
-            color: #FFFFFF;
+          .btn_icon{
+            width: 100%;
+            height: 100%;
           }
         }
         .num_input{
-          width: calc(100% - 30px);
+          width: calc(100% - 30px - 20px);
           height: 24px;
           text-align: center;
           line-height: 24px;
           color: #666666;
-          font-size: 14px;  
+          font-size: 14px;
+          margin: 0 10px;
         }
       }
     }
@@ -114,24 +107,24 @@
 <template>
   <div class="editOrder_info">
     <div class="item_left">
-      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
+      <image class="left_icon" src="{{orderData.imgs}}" mode="widthFix" lazy-load="true" />
     </div>
     <div class="item_info">
       <div class="info_text">
-        <text class="info_title">{{orderData.title}}</text>
+        <text class="info_title">{{orderData.name}}</text>
         <ul class="info_content">
-          <li class="info_item">型号：{{orderData.Version}}</li>
+          <li class="info_item">型号：{{orderData.model}}</li>
         </ul>  
       </div>
       <div class="inventory_num">
-        <text class="num_text">{{orderData.price}}</text>
+        <text class="num_text">{{orderData.unitPrice}}</text>
         <ul class="num_btn">
-          <li class="btn_item">
-            <text>-</text>
+          <li @click="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
+            <image class="btn_icon" src="../image/minus.png" mode="widthFix" lazy-load="true" />
           </li>
-          <input class="num_input" :value="orderData.num" type="text" />
-          <li class="btn_item">
-            <text>+</text>
+          <input class="num_input" v-if="orderData.num >= 1" :min="0" :value="orderData.num" type="text" />
+          <li @click="addBtn()" class="btn_item">
+            <image class="btn_icon" src="../image/add.png" mode="widthFix" lazy-load="true" />
           </li>
         </ul>
       </div>
@@ -150,10 +143,12 @@
         type: Object,
         default () {
           return {
-            title:'这里是商品名称这里名称这里是商品名称这里名称',
-            Version:'型号：WHHHSI-3，sertlef;23m[黑色]型号：WHHHSI-3，sertlef;23m[黑色]型号：WHHHSI-3，sertlef;23m[黑色]',
-            num: 6,
-            price: 42,
+            name:'',
+            model:'',
+            quantity: '',
+            unitPrice: '',
+            imgs: '',
+            num: 0,
           }
         }
       },
@@ -165,12 +160,17 @@
       
     },
     methods: {
-      fun(){
-
+      minusBtn(){
+        this.orderData.num = this.orderData.num - 1;
+        this.$emit('editCart',this.orderData)
+      },
+      addBtn(){
+        this.orderData.num = this.orderData.num + 1;
+        this.$emit('editCart',this.orderData)
       }
     },
     onShow(){
-      
+
     },
   });
 </script>

@@ -68,7 +68,7 @@
       <image
         v-else
         class="upImage_img"
-        :src="imageFile?imageFile:image"
+        :src="image?image:imageFile"
         mode="widthFix"
         @click="upImageBtn()"
       />
@@ -103,6 +103,7 @@
 
     },
     methods: {
+      // 
       upImageBtn(){
         const that = this;
         wx.chooseImage({
@@ -111,10 +112,10 @@
           sourceType: ['album', 'camera'],
           success (res) {
             that.image = res.tempFilePaths[0];
-            that.$emit('upImagePath', that.image);
+            that.$emit('upImagePath', res.tempFilePaths[0]);
           }
         })
-      }
+      },
     },
   });
 </script>

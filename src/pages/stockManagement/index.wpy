@@ -6,15 +6,70 @@
   height: 100%;
   overflow-y: auto; 
 }
+.grid_list{
+  width: 100%;
+  height: auto;
+  .list_item{
+    width:100%;
+    height: auto;
+    .item_title{
+      font-size: 18px;
+      color: #333333;
+      font-weight: bold; 
+      padding-left: 20px;
+    }
+    .item_list{
+      display:flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;   
+      padding: 0 10px;
+      .sub_item{
+        width: 25%;
+        height: auto;
+        padding: 10px 0;
+        display:flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        .sub_icon{
+          width: 44px;
+          height: 44px;
+          margin-bottom: 10px;
+        }
+        .sub_title{
+          font-size: 12px;
+          color: #333333;
+        }
+      }
+    }
+  }
+}
 </style>
 <template>
   <div class="stock_container">
-    <grid :gridList="gridList" />
+    <div class="grid_list">
+      <div class="list_item" v-for="(item, index) in gridList" :key="'item-'+index">
+        <text class="item_title">{{item.name}}</text>
+        <ul class="item_list">
+          <li class="sub_item"
+            v-for="(it,i) in item.goodsClassSeconds"
+            :key="'i-'+i"
+            @tap="subItem(it)"
+          >
+            <image class="sub_icon" :src="'./../../image/icon'+item.id+'.png'" mode="widthFix" lazy-load="false" />
+            <text class="sub_title">{{it.name}}</text>
+          </li>
+        </ul>
+      </div>  
+    </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { goodsAllClasses } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -28,62 +83,6 @@
               icon:'./../image/icon1.png',
               subTitle:'竿',
             },
-            {
-              icon:'./../image/icon2.png',
-              subTitle:'钩',
-            },{
-              icon:'./../image/icon3.png',
-              subTitle:'票',
-            },{
-              icon:'./../image/icon4.png',
-              subTitle:'线',
-            },
-            {
-              icon:'./../image/icon5.png',
-              subTitle:'钩',
-            },{
-              icon:'./../image/icon6.png',
-              subTitle:'票',
-            },{
-              icon:'./../image/icon7.png',
-              subTitle:'线',
-            }
-          ]
-        },
-        {
-          title:'配套产品',
-          itemList:[
-            {
-              icon:'./../image/icon8.png',
-              subTitle:'钓箱',
-            }
-          ]
-        },
-        {
-          title:'售后专区',
-          itemList:[
-            {
-              icon:'./../image/icon2.png',
-              subTitle:'竿',
-            }
-          ]
-        },
-        {
-          title:'小配件',
-          itemList:[
-            {
-              icon:'./../image/icon3.png',
-              subTitle:'竿',
-            }
-          ]
-        },
-        {
-          title:'自营产品',
-          itemList:[
-            {
-              icon:'./../image/icon4.png',
-              subTitle:'竿',
-            }
           ]
         },
       ]
@@ -92,18 +91,33 @@
 
     },
     methods: {
-
+      // 点击某一个列
+      subItem(data){
+        wx.navigateTo({
+          url: `/pages/stockManagement/item?title=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}`
+        })
+      },
+      // 查询所有分类
+      getGoodsAllClasses(){
+        goodsAllClasses().then(res => {
+          const {code, data, message} = res;
+          if(res.code===10000){
+            console.log('res',res)
+            this.gridList = data;
+          }
+        }).catch(err=> {
+          console.log(err)
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+
     },
     onReady(){
-
+      this.getGoodsAllClasses();
     },
     onUnload(){
 

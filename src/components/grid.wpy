@@ -1,5 +1,5 @@
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import "./../css/public.styl";
 .grid_list{
   width: 100%;

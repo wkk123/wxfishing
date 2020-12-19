@@ -5,8 +5,7 @@ export const shopLogin = p => {
 }
 // 门店信息 ------
 export const shopDetail = p => {
-  return request.POST('/shop/detail', {...p, isLoading: false})
-  // return request.GET('/shop/detail', {...p, isLoading: false})
+  return request.GET('/shop/detail', {...p, isLoading: false})
 }
 // 更新门店信息
 export const shopUpdate = p => {
