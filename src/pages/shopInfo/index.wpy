@@ -115,7 +115,7 @@
                 class="item_input"
                 v-model="detail.name"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入店铺名称" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -129,14 +129,14 @@
                 class="item_input"
                 v-model="detail.slogan"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入店铺标语" 
                 placeholder-class="input_placeholder"
               />   
             </div>
           </div>
         </li>
         <li class="list_item">
-          <UpImage title="店面logo" @upImagePath="upImageFile" />
+          <UpImage :title="'店面logo'" :imageFile="detail.logo" :Sign="true" @upImagePath="upImageFile" />
         </li>
         <li class="list_item">
           <div class="item_box">
@@ -146,7 +146,7 @@
                 class="item_input"
                 v-model="detail.address"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入详细地址" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -160,7 +160,7 @@
                 class="item_input"
                 v-model="detail.contactName"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入联系人" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -173,8 +173,8 @@
               <input 
                 class="item_input"
                 v-model="detail.mobilePhone"
-                type="text"
-                placeholder="请输入" 
+                type="number"
+                placeholder="请输入联系电话" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -202,7 +202,7 @@
                 disabled
               />  
             </div>
-            <button class="longitudeAndLatitude_box_btn" plain="true">点击获取</button>
+            <button @click="loctionBtn()" class="longitudeAndLatitude_box_btn" plain="true">点击获取</button>
           </div>
         </li>
       </ul>
@@ -219,35 +219,41 @@
       addGlobalClass: true
     },
     data: {
-      detail:{
-        name: "渔具AA",
-        mobilePhone: "13333333333",
-        lon: 123.07413,
-        lat: 31.413,
-        contactName: "老陈",
-        slogan: "口号1",
-        logo: "[\"https://xxx.png\",\"https://xxx.png\"]",
-        province: "浙江省",
-        city: null,
-        district: null,
-        address: "浙江省余杭区五常街道",
-      }
+      detail: {},
+      img:'',
     },
     computed: {
 
     },
     methods: {
+      // 获取经纬度
+      loctionBtn(){
+        const that = this;
+        wx.getLocation({
+          type: 'wgs84',
+          success (res) {
+            that.detail.lon = res.longitude;
+            that.detail.lat = res.latitude;
+          }
+        })
+      },
       // 上传图片
       upImageFile(path){
-        console.log('path',path);
+        console.log('path',path)
         this.detail.logo = path;
+        this.img = path;
       },
       // 更新数据
       upDateFun(){
-        shopUpdate().then(res => {
+        shopUpdate(this.detail).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
+            wx.showToast({
+              title: '保存成功',
+              icon: 'success',
+              duration: 2000
+            })
           }
         }).catch(err=> {
           console.log(err)
@@ -255,7 +261,8 @@
       },
       // 保存
       submit(){
-        console.log('detail',this.detail);
+        this.detail.logo = this.img;
+        this.upDateFun();
       }
     },
     onLoad(options){
@@ -266,7 +273,10 @@
       shopDetail().then( res => {
         const {code, data, message} = res;
         if (res.code === 10000) {
-          this.detail = { ...this.detail, ...data };
+          if(data.logo){
+            this.img = data.logo;
+          }
+          this.detail = data;
         }
       }).catch(err=> {
         console.log(err)

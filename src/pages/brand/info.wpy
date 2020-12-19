@@ -32,7 +32,7 @@
                 class="item_input"
                 v-model="info.name"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入品牌名称" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -46,7 +46,7 @@
                 class="item_input"
                 v-model="info.factory"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入厂家名称" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -60,7 +60,7 @@
                 class="item_input"
                 v-model="info.productLocation"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入商品产地" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -74,7 +74,7 @@
                 class="item_input"
                 v-model="info.deliveryAddress"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入发货地址" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -88,7 +88,7 @@
                 class="item_input"
                 v-model="info.contactPhone"
                 type="number"
-                placeholder="请输入" 
+                placeholder="请输入联系方式" 
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -102,7 +102,7 @@
                 class="item_input"
                 v-model="info.remark"
                 type="text"
-                placeholder="请输入" 
+                placeholder="请输入备注"
                 placeholder-class="input_placeholder"
               />   
             </div>
@@ -145,19 +145,66 @@
         } else {
           Fun = brandSave;
         }
+        if(!this.messageFun()){
+          return;
+        }
         Fun(this.info).then( res => {
           const {code, data, message} = res;
           if( res.code === 10000 ){
             console.log('res',res)
             wx.showToast({
-              title: '成功',
+              title: '保存成功',
               icon: 'success',
-              duration: 2000
+              duration: 2000,
+              complete(){
+                wx.navigateBack({
+                  delta: 1
+                })
+              }
             })
           }
         }).catch(err=> {
           console.log(err)
         })
+      },
+      // 判断数据不能为空
+      messageFun(){
+        if(!this.info.name) {
+          wx.showToast({
+            title: '品牌名称不能为空!',
+            icon: 'error',
+            duration: 2000
+          })
+          return false;
+        } else if(!this.info.factory) {
+          wx.showToast({
+            title: '厂家名称不能为空!',
+            icon: 'error',
+            duration: 2000
+          })
+          return false;
+        } else if(!this.info.productLocation) {
+          wx.showToast({
+            title: '商品产地不能为空!',
+            icon: 'error',
+            duration: 2000
+          })
+          return false;
+        } else if(!this.info.deliveryAddress) {
+          wx.showToast({
+            title: '发货地址不能为空!',
+            icon: 'error',
+            duration: 2000
+          })
+          return false;
+        } else if(!this.info.contactPhone) {
+          wx.showToast({
+            title: '联系方式不能为空!',
+            icon: 'error',
+            duration: 2000
+          })
+          return false;
+        }
       },
     },
     onLoad(options){
@@ -169,11 +216,16 @@
         })
       } else {
         this.id = options.id;
-        goodsBrand({id:this.id}).then( res => {
+        goodsBrand({id: this.id}).then( res => {
           const {code, data, message} = res;
           if( res.code === 10000 ){
             console.log('res',res)
             this.info = data;
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: message,
+            })
           }
         }).catch(err=> {
           console.log(err)

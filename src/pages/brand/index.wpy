@@ -20,14 +20,19 @@
       .item_title{
         font-size: 16px;
         color: #000000;
-        font-weight: 500; 
+        font-weight: 500;
+        padding-bottom: 8px;
       }
       .content_item{
-        padding: 5px 0;
+        padding: 2px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;   
         .item_icon{
           width: 15px;
           height: 15px;
-          padding-right: 5px;
+          margin-right: 5px;
         }
         .item_text{
           font-size: 12px;
@@ -48,8 +53,13 @@
 <template>
   <div class="container">
     <div class="brand_box">
-      <ul class="brand_list">
-        <li class="list_item"
+      <scroll-view
+        class="brand_list"
+        scroll-y="true"
+        bindscrolltolower="lower"
+      >
+        <view
+          class="list_item"
           :key="'item'+index"
           v-for="(item,index) in brandList"
           @click="editBrand(item)"
@@ -57,24 +67,24 @@
           <text class="item_title">{{item.name}}</text>
           <ul class="item_content">
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand1.png" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.productLocation}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand2.png" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.deliveryAddress}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand3.png" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.contactPhone}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand4.png" mode="widthFix" lazy-load="false" />
               <text class="item_text">{{item.remark}}</text>
             </li>
           </ul>
-        </li>
-      </ul>
+        </view>
+      </scroll-view>
       <button
         class="brand_nav form_btn"
         @click="addBrand"
@@ -95,15 +105,8 @@
         page: 1,
         size: 10,
       },
-      brandList:[
-        {
-          name:'',
-          productLocation: '',
-          deliveryAddress:'',
-          contactPhone:'',
-          remark:'',
-        }
-      ]
+      brandList:[],
+      isUpload: true,
     },
     computed: {
 
@@ -121,12 +124,24 @@
           url: '/pages/brand/info?type=2'
         })
       },
+      // 上拉
+      lower(){
+        this.getBrandList();
+      },
       // 获取品牌列表
-      getBrandList(query){
-        brandList(query).then(res => {
+      getBrandList(){
+        if(!this.isUpload){
+          return;
+        }
+        brandList(this.query).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
-            this.brandList = data;
+          if(res.code === 10000){
+            if(data.length === 10) {
+              this.brandList = [ ...this.brandList, ...data ];
+              this.query.page += 1;
+            } else {
+              this.isUpload = false;
+            }
           }
         }).catch(err=> {
           wx.showModal({
@@ -140,11 +155,7 @@
       // console.log('options',options)
     },
     onShow(){
-      let query = {
-        page: 1,
-        size: 10,
-      };
-      this.getBrandList(query);
+      this.getBrandList();
     },
     onReady(){
 

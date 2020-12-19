@@ -59,13 +59,19 @@
     <text class="item_titles {{Sign &&'active'}}">{{title}}</text>
     <div class="upImage_box">
       <div
-        v-if="!imageFile"
+        v-if="!(imageFile?imageFile:image)"
         class="upImage_icon"
         @click="upImageBtn()"
       >
         <text class="img_icon">+</text>
       </div>
-      <image v-else class="upImage_img" :src="imageFile" mode="widthFix" />
+      <image
+        v-else
+        class="upImage_img"
+        :src="imageFile?imageFile:image"
+        mode="widthFix"
+        @click="upImageBtn()"
+      />
     </div>
   </div>
 </template>
@@ -81,13 +87,17 @@
         type: String,
         default:''
       },
+      imageFile: {
+        type: String,
+        default:''
+      },
       Sign: {
         type: Boolean,
         default: false
       }
     },
     data: {
-      imageFile:'',
+      image:'',
     },
     computed: {
 
@@ -100,8 +110,8 @@
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
           success (res) {
-            that.imageFile = res.tempFilePaths[0];
-            that.$emit('upImagePath', res.tempFilePaths);
+            that.image = res.tempFilePaths[0];
+            that.$emit('upImagePath', that.image);
           }
         })
       }
