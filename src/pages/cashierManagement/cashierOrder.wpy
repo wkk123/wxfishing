@@ -189,7 +189,7 @@
       getDetail() {
         orderDetail({id: this.id}).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
@@ -200,7 +200,7 @@
       repealBtn() {
         orderRevoke({id: this.orderId}).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {

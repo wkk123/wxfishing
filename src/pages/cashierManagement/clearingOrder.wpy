@@ -103,7 +103,7 @@
       getCode(){
         orderQRCode(this.codeData).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
@@ -114,7 +114,7 @@
       getResults() {
         orderWechatPaymentStatus({outTradeNo: this.outTradeNo}).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
@@ -126,7 +126,7 @@
       offlinePayment(){
         orderOfflinePay(this.payment).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {

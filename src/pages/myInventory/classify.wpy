@@ -96,28 +96,7 @@
     },
     data: {
       current: 1,
-      list:[
-        {
-          title:'基础产品',
-          type: 0,
-          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
-        },
-        {
-          title:'配套产品',
-          type: 1,
-          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
-        },
-        {
-          title:'售后服务',
-          type: 2,
-          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
-        },
-        {
-          title:'自营产品',
-          type: 3,
-          content:['竿','钩','鳔','线','仕挂','线组','饵料','轮']
-        }
-      ]
+      list: [],
     },
     computed: {
 
@@ -127,7 +106,7 @@
       getGoodsAllClasses(){
         goodsAllClasses().then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
             this.list = data;
           }

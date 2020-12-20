@@ -470,7 +470,7 @@
       goodsUpdate(){
         goodsUpdate(...this.info).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
@@ -481,7 +481,7 @@
       goodsSave(){
         goodsSave({...this.info}).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
@@ -492,7 +492,7 @@
       getGoodsBrands(){
         goodsBrands().then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
             this.brandArray = data;
           }
@@ -508,7 +508,7 @@
         };
         goodsPropertiesAndTypes(this.classQuery).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             this.propertyArray = data.goodsClassPropertyList;
             this.propertyObj = this.propertyArray[this.propertyIndex];
             this.moldArray = data.goodsClassTypeList;

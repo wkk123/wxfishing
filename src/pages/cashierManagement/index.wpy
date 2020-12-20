@@ -418,7 +418,7 @@
       getGoodsAllClasses(){
         goodsAllClasses().then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             this.navList = data;
             this.goodsClassList = data[0].goodsClassSeconds;
             const list = data[0].goodsClassSeconds
@@ -434,7 +434,7 @@
       getGoodsGoodsList(query){
         goodsGoodsList(query).then(res => {
           const {code, data, message} = res;
-          if(res.code===10000){
+          if(res.code === 10000){
             console.log('res',res)
             this.orderList = data;
           }
