@@ -164,8 +164,11 @@
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState } from '@wepy/redux';
+  import store from './../../store';
   import { goodsGoodsList } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
@@ -184,7 +187,7 @@
       }
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
       // 跳转分类
@@ -194,8 +197,16 @@
         })
       },
       // 库存列表
-      getGoodsGoodsList(query){
-        goodsGoodsList(query).then(res => {
+      getGoodsGoodsList(){
+        const { name, firstClassId, secondClassId } = this.publics.checkedSort;
+        this.query = {
+          keyword: '',
+          sortField: '',
+          order:'',
+          firstClassId: firstClassId,
+          secondClassId: secondClassId
+        }
+        goodsGoodsList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
@@ -210,7 +221,12 @@
       console.log('options',options)
     },
     onShow(){
-      this.getGoodsGoodsList(this.query);
+      console.log(this.publics);
+      const { name, firstClassId, secondClassId } = this.publics.checkedSort;
+      if(name !== ''){
+        this.searchClass = name
+      }
+      this.getGoodsGoodsList();
     },
     onReady(){
 

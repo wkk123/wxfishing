@@ -167,16 +167,25 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { COMMIT } from './../../store/types';
   import { shopLogin } from '../../request/api.js';
   wepy.page({
+    store,
     data: {
       showPass: false,
       account: "yujua",
       password: "123456",
       url:'',
     },
+    computed: {
 
+    },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
       // 是否显示密码
       seeTap(){
         this.showPass = !this.showPass;
@@ -207,6 +216,11 @@
             wx.setStorageSync('id',data.id);
             wx.redirectTo({
               url: this.url
+            })
+            this.commit({
+              id: data.id,
+              token: data.token,
+              status: data.token?1:2,
             })
           } else {
             wx.showModal({
@@ -244,7 +258,7 @@
       this.url = options.url;
     },
     onShow(){
-      
+
     },
     onUnload(){
 

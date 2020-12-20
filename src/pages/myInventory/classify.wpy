@@ -99,7 +99,7 @@
   import wepy from '@wepy/core';
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
-  import { COMMIT } from './../../store/types';
+  import { SORT } from './../../store/types';
   import { goodsAllClasses } from './../../request/api.js';
   wepy.page({
     options: {
@@ -115,18 +115,24 @@
     },
     methods: {
       ...mapActions({
-        commit: COMMIT
+        sort: SORT
       }),
       // 点击右侧导航列表
       navItemBtn(id){
         this.current = id;
-        this.commit({
-          token: '9999'
-        })
       },
       // 点击某个项目
       itemBtn(data){
-        console.log(this.publics,this.$store)
+        this.sort({
+          checkedSort: {
+            name: data.name,
+            firstClassId: data.firstClassId,// 一级分类id
+            secondClassId: data.id,// 二级分类id
+          }
+        })
+        wx.navigateBack({
+          delta: 1
+        })
         // console.log()
         // wx.redirectTo({
         //   url: `/pages/myInventory/index?name=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}`
@@ -149,7 +155,7 @@
       // console.log('options',options)
     },
     onShow(){
-      
+
     },
     onReady(){
       this.getGoodsAllClasses();
