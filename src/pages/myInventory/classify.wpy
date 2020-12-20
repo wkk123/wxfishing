@@ -67,41 +67,71 @@
 <template>
   <div class="classify_box">
     <ul class="classify_list">
-      <li class="list_item {{current === -1&&'active'}}">
+      <li
+        @click="navItemBtn(-1)"
+        class="list_item {{current === -1&&'active'}}"
+      >
         <text>全部</text>
       </li>
-      <li class="list_item {{current === item.type&&'active'}}" v-for="item in list">
-        <text>{{item.title}}</text>
+      <li
+        class="list_item {{current === item.id&&'active'}}"
+        v-for="item in list"
+        @click="navItemBtn(item.id)"
+      >
+        <text>{{item.name}}</text>
       </li>
     </ul>
     <div class="classify_content">
       <div v-for="item in list">
-        <div class="content_info" v-if="current === -1?current === -1:current ===item.type">
-          <text class="info_title">{{item.title}}</text>
+        <div class="content_info" v-if="current === -1?current === -1:current ===item.id">
+          <text class="info_title">{{item.name}}</text>
           <ul class="info_list">
-            <li class="info_item" v-for="it in item.content">{{it}}</li>
+            <li class="info_item" @click="itemBtn(it)" v-for="it in item.goodsClassSeconds">{{it.name}}</li>
           </ul>
         </div>
       </div>
+      <text>{{token}}</text>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { COMMIT } from './../../store/types';
   import { goodsAllClasses } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
+    store,
     data: {
-      current: 1,
+      current: -1,
       list: [],
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
+      // 点击右侧导航列表
+      navItemBtn(id){
+        this.current = id;
+        this.commit({
+          token: '9999'
+        })
+      },
+      // 点击某个项目
+      itemBtn(data){
+        console.log(this.publics,this.$store)
+        // console.log()
+        // wx.redirectTo({
+        //   url: `/pages/myInventory/index?name=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}`
+        // })
+      },
       // 查询所有分类
       getGoodsAllClasses(){
         goodsAllClasses().then(res => {
@@ -122,7 +152,7 @@
       
     },
     onReady(){
-
+      this.getGoodsAllClasses();
     },
     onUnload(){
 

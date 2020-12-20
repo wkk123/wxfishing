@@ -207,7 +207,7 @@
       },
     },
     onLoad(options){
-      // console.log('options',options)
+      console.log('options',options)
     },
     onShow(){
       this.getGoodsGoodsList(this.query);

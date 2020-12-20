@@ -16,7 +16,6 @@
   import wepy from '@wepy/core';
   import eventHub from '../common/eventHub';
   import store from '../store';
-  const app = getApp();
   import { mapState, mapActions } from '@wepy/redux';
   import { COMMIT } from '../store/types';
   import { shopLogin } from '../request/api';
@@ -107,10 +106,7 @@
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/stockManagement/item'
-      // })
-      console.log('this.$store',this.$store)
+      
     },
     onReady(){
 
