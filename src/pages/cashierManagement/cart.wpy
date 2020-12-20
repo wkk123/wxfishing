@@ -46,12 +46,13 @@
           height: 30px;
         }
         .cart_Num{
+          min-width: 20px;
           height: 20px;
           padding: 5px;
           margin-top: -4px;
           margin-left: 2px;
           background-color: #FFC400;
-          border-radius: 8px;
+          border-radius: 10px;
           font-size: 12px;
           font-weight: 500;
           color: #FFFFFF;
