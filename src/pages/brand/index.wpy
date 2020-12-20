@@ -121,7 +121,7 @@
       // 添加品牌
       addBrand(){
         wx.navigateTo({
-          url: '/pages/brand/info?type=2'
+          url: `/pages/brand/info?type=${2}`
         })
       },
       // 上拉
@@ -136,8 +136,8 @@
         brandList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
+            this.brandList = [ ...this.brandList, ...data ];
             if(data.length === 10) {
-              this.brandList = [ ...this.brandList, ...data ];
               this.query.page += 1;
             } else {
               this.isUpload = false;
@@ -155,10 +155,10 @@
       // console.log('options',options)
     },
     onShow(){
-      this.getBrandList();
+      
     },
     onReady(){
-
+      this.getBrandList();
     },
     onUnload(){
 
