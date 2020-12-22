@@ -29,8 +29,11 @@
     <icon class="search_icon" color="#00CEBE" type="search" size="20"></icon>
     <input 
       class="search_input"
-      @focus="funfocus"
       placeholder="搜索"
+      confirm-type="search"
+      v-model="searchValue"
+      @blur="blurFun()"
+      @confirm="confirmBtn()"
     />
   </div>
 </template>
@@ -45,18 +48,17 @@
 
     },
     data: {
-
+      searchValue: '',
     },
     computed: {
 
     },
     methods: {
-      funfocus(){
-        // console.log('data')
-        this.$emit('funfocusBtn', 1234)
+      blurFun(){
+        this.$emit('searchBtn', this.searchValue);
       },
-      fun(){
-
+      confirmBtn(){
+        this.$emit('searchBtn', this.searchValue);
       }
     },
   });

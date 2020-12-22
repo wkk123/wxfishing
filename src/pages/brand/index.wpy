@@ -56,7 +56,7 @@
       <scroll-view
         class="brand_list"
         scroll-y="true"
-        bindscrolltolower="lower"
+        bindscrolltolower="lowerList"
       >
         <view
           class="list_item"
@@ -125,7 +125,7 @@
         })
       },
       // 上拉
-      lower(){
+      lowerList(){
         this.getBrandList();
       },
       // 获取品牌列表

@@ -133,10 +133,6 @@
         wx.navigateBack({
           delta: 1
         })
-        // console.log()
-        // wx.redirectTo({
-        //   url: `/pages/myInventory/index?name=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}`
-        // })
       },
       // 查询所有分类
       getGoodsAllClasses(){

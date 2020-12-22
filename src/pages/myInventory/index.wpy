@@ -24,6 +24,10 @@
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      word-break: break-all;
       &:after{
         content: '';
         display: inline-block;
@@ -60,8 +64,8 @@
         color: #00CEBE;
       }
       .item_img{
-        width: 13px;
-        height: 14px;
+        width: 20px;
+        height: 20px;
       }
     }
   }
@@ -118,36 +122,23 @@
         @click="searchClassBtn()"
       >{{searchClass}}</div>
       <div class="search_box">
-        <Search />
+        <Search @searchBtn="searchInput" />
       </div>
     </div>
     <ul class="myInventory_sort">
-      <li class="sort_item {{true&&'active'}}">
+      <li
+        class="sort_item {{currentKey === item.key?'active':''}}"
+        @click="sortNav(item.key)"
+        v-for="item in navList"
+        :key="item.key"
+      >
         <image
           class="item_img"
-          :src="typeNum===1?image1:image2"
+          :src="currentKey === item.key?defaultImage:image1"
           mode="widthFix"
           lazy-load="false"
         />
-        <text class="item_text">热度</text>
-      </li>
-      <li class="sort_item">
-        <image
-          class="item_img"
-          :src="typeNum===2?image1:image2"
-          mode="widthFix"
-          lazy-load="false"
-        />
-        <text class="item_text">库存量</text>
-      </li>
-      <li class="sort_item">
-        <image
-          class="item_img"
-          :src="typeNum===3?image1:image2"
-          mode="widthFix"
-          lazy-load="false"
-        />
-        <text class="item_text">到期时间</text>
+        <text class="item_text">{{item.text}}</text>
       </li>
     </ul>
     <ul class="myInventory_content">
@@ -156,16 +147,20 @@
       </li>
     </ul>
     <div class="myInventory_nav">
-      <text class="nav_text">库存汇总：<text class="text_num">¥{{109932}}</text></text>
-      <button class="nav_btn">库存变动</button>
+      <text class="nav_text">库存汇总：<text class="text_num">¥{{collectPrice}}</text></text>
+      <button
+        class="nav_btn"
+        @click="inventoryBtn()"
+      >库存变动</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
-  import {  mapState } from '@wepy/redux';
+  import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
+  import { SETINVENTORY, SORT } from './../../store/types';
   import { goodsGoodsList } from './../../request/api.js';
   wepy.page({
     store,
@@ -173,66 +168,133 @@
       addGlobalClass: true
     },
     data: {
+      navList:[
+        {
+          text:'热度',
+          key:'heat',
+          type: 1,
+        },{
+          text:'库存量',
+          key:'quantity',
+          type: 2,
+        },{
+          text:'到期时间',
+          key:'expire_time',
+          type: 3,
+        }
+      ],
+      collectPrice: 0,//汇总金额
       searchClass: '全部',
-      typeNum: 1,
-      image1: './../../image/sort1.png',
-      image2: './../../image/sort2.png',
+      currentKey: '',
+      defaultImage: '',
+      image1: './../../image/sort.png',
+      image2: './../../image/sort1.png',//升
+      image3: './../../image/sort2.png',//降
       orderList:[],
+      frequency: 2,// 点击次数
       query:{
         keyword: '',// 搜索关键字
-        sortField: '',//排序字段 heat 热度 quantity 库存量 expire_time 到期时间
-        order:'',//排序规则 desc 降序 asc 升序
+        sortField: 'heat',//排序字段 heat 热度 quantity 库存量 expire_time 到期时间
+        order: 'asc',//排序规则 desc 降序 asc 升序
         firstClassId:'',//一级分类id
         secondClassId:'',//二级分类id
       }
     },
     computed: {
-      ...mapState([ 'publics' ])
+      ...mapState([ 'publics', 'inventoryList' ])
     },
     methods: {
+      ...mapActions({
+        sort: SORT,
+      }),
+      // 搜索输入值
+      searchInput(value) {
+        this.query.keyword = value;
+        this.getGoodsGoodsList();
+      },
+      // 点击库存变动
+      inventoryBtn(){
+        const { keyword, sortField, order, firstClassId, secondClassId } = this.query;
+        wx.navigateTo({
+          url: `/pages/myInventory/selectInventory?keyword=${keyword}&sortField=${sortField}&order=${order}&firstClassId=${firstClassId}&secondClassId=${secondClassId}`
+        })
+      },
+      // 选择排序字段与顺序
+      sortNav(key) {
+        if(key === this.currentKey && this.frequency === 1){ //降
+          this.frequency = 2;
+          this.query.order = 'desc';
+          this.defaultImage = this.image3;
+        } else {// 升
+          this.frequency = 1;
+          this.query.order = 'asc';
+          this.defaultImage = this.image2;
+        }
+        this.currentKey = key;
+        this.query.sortField = key;
+        this.getGoodsGoodsList();
+      },
       // 跳转分类
       searchClassBtn() {
+        if(this.orderList.length!==0){
+          console.log('跳转')
+        }
         wx.navigateTo({
           url: '/pages/myInventory/classify'
         })
       },
       // 库存列表
       getGoodsGoodsList(){
-        const { name, firstClassId, secondClassId } = this.publics.checkedSort;
+        const { firstClassId, secondClassId } = this.publics.checkedSort;
         this.query = {
-          keyword: '',
-          sortField: '',
-          order:'',
+          ...this.query,
           firstClassId: firstClassId,
           secondClassId: secondClassId
         }
         goodsGoodsList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            console.log('res',res)
             this.orderList = data;
+            this.collectPrice = 0;
+            if (Array.isArray(this.orderList)){
+              this.orderList.forEach((item)=>{
+                this.collectPrice += (item.quantity * item.sellPrice * 100);
+              })
+            }
+            this.collectPrice = this.collectPrice/100;
           }
         }).catch(err=> {
-          console.log(err)
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
         })
       },
     },
     onLoad(options){
-      console.log('options',options)
+      // console.log('options',options)
     },
     onShow(){
-      console.log(this.publics);
-      const { name, firstClassId, secondClassId } = this.publics.checkedSort;
+      const { name } = this.publics.checkedSort;
+      this.query = { ...this.query, ...this.inventoryList.queryObj };
+      this.currentKey = this.query.sortField;
       if(name !== ''){
-        this.searchClass = name
+        this.searchClass = name;
+        this.getGoodsGoodsList();
       }
-      this.getGoodsGoodsList();
     },
     onReady(){
-
+      this.sortNav('heat');
     },
     onUnload(){
-
+      this.sort({
+        checkedSort: {
+          name: '',
+          firstClassId: '',// 一级分类id
+          secondClassId: '',// 二级分类id
+        }
+      })
     },
   });
 </script>

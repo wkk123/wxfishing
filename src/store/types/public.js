@@ -10,6 +10,10 @@
 // types里存储的是触发action的函数名 记住 types的都是函数名 不处理任何逻辑 命名规则是全大写
 export const SETID = 'SETID';
 
-export const COMMIT = 'COMMIT'
+export const COMMIT = 'COMMIT';
 
-export const SORT = 'SORT'
+export const SORT = 'SORT';
+
+export const SETQUERY = 'SETQUERY';
+
+export const SETINVENTORY = 'SETINVENTORY';
