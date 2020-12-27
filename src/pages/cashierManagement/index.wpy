@@ -209,19 +209,22 @@
       } 
     }
   }
-  .code_box{
-    position: absolute;
-    right: 70px;
-    bottom: 140px;
-  }
-  .code_img{
-    width: 70px;
-    height: 70px;
-  }
 }
 </style>
 <template>
   <div class="cashier_container">
+    <movable-area
+      class="code_box"
+    >
+      <movable-view
+        class="max"
+        direction="all"
+        :x="10"
+        :y="200"
+      >
+        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+      </movable-view>
+    </movable-area>
     <!-- 弹框 -->
     <PopUp
       @popupBtn="popupBtns"
@@ -305,18 +308,6 @@
         >去结算</button>
       </li>
     </ul>
-    <movable-area
-      class="code_box"
-    >
-      <movable-view
-        class="max"
-        direction="all"
-        :x="10"
-        :y="200"
-      >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
-      </movable-view>
-    </movable-area>
   </div>
 </template>
 

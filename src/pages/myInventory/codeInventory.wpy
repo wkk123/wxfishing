@@ -39,6 +39,18 @@
 </style>
 <template>
   <div class="Inventory_box">
+    <movable-area
+      class="code_box"
+    >
+      <movable-view
+        class="max"
+        direction="all"
+        :x="10"
+        :y="200"
+      >
+        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+      </movable-view>
+    </movable-area>
     <ul class="Inventory_list">
       <li class="list_item" v-for="item in orderList" :key="'item'+index">
         <div class="content_item">

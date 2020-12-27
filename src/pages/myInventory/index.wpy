@@ -116,6 +116,18 @@
 </style>
 <template>
   <div class="myInventory_box">
+    <movable-area
+      class="code_box"
+    >
+      <movable-view
+        class="max"
+        direction="all"
+        :x="10"
+        :y="200"
+      >
+        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+      </movable-view>
+    </movable-area>
     <div class="myInventory_search">
       <div
         class="search_class"
