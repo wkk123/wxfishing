@@ -91,7 +91,7 @@
         align-items: center;
         .item_checked{
           width: 20px;
-          height: 20px; 
+          height: 20px;
         }
       }
       .select_info{
@@ -163,12 +163,9 @@
       </li>
     </ul>
     <ul class="myInventory_content">
-      <li class="content_item" :key="'order'+item.id" v-for="item in orderList">
-        <div
-          class="select_item"
-          @click="selectItem(item)"
-        >
-          <image class="item_checked" src="{{currentId === item.id?'./../../image/checked1.png':'./../../image/unchecked.png'}}" mode="widthFix" />
+      <li class="content_item" @click="selectItem(item,index)" :key="'order'+item.id" v-for="(item,index) in orderList">
+        <div class="select_item">
+          <image class="item_checked" :src="item.image" mode="widthFix" />
         </div>
         <div class="select_info">
           <orderItem :orderData="item"/>  
@@ -231,10 +228,25 @@
         setQuery: SETQUERY,
         setList: SETINVENTORY,
       }),
-      // 
       // 选择当前
-      selectItem(data){
-        this.checkedList.push(data);
+      selectItem(data,index){
+        let check = data.checked === true ? false : true;
+        this.orderList[index].checked = check;
+        let a = this.checkedList.findIndex(item=>{
+          return item.id === data.id;
+        })
+        if(a !== -1){
+          this.checkedList.splice(a,1);
+        }
+        if(check){
+          this.orderList[index].image = './../../image/checked1.png';
+          this.checkedList.push(data);
+        } else {
+          this.orderList[index].image = './../../image/unchecked.png';
+        }
+        console.log('a--',a,data,index);
+        console.log('this.checkedList',this.checkedList);
+        console.log('this.orderList',this.orderList);
       },
       // 搜索输入值
       searchInput(value) {
@@ -261,14 +273,16 @@
         goodsGoodsList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            this.orderList = data;
-            this.collectPrice = 0;
-            if (Array.isArray(this.orderList)){
-              this.orderList.forEach((item)=>{
-                this.collectPrice += (item.quantity * item.sellPrice * 100);
+            let price = 0;
+            if (Array.isArray(data)){
+              data.forEach((item) => {
+                item.checked = false;
+                item.image = './../../image/unchecked.png';
+                price += (item.quantity * item.sellPrice * 100);
               })
             }
-            this.collectPrice = this.collectPrice/100;
+            this.orderList = data;
+            this.collectPrice = price/100;
           }
         }).catch(err=> {
           const { message } = err;
