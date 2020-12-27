@@ -80,11 +80,21 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    overflow: hidden;
+  }
+  .picker{
+    width: 360px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    color: #333333;
   }
 }
 .input_code{
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   padding: 10px;
 }
 </style>
@@ -195,29 +205,17 @@
               <picker
                 class="picker_box"
                 mode="date"
-                value="{{info.produceTime}}"
-                bindchange="DateProduceTime"
-                start="2015-09-01" end="2017-09-01"
+                @change="DateProduceTime"
               >
-                <view class="picker">
-                  {{info.produceTime}}
-                </view>
+                <input class="picker" type="date" value="{{info.produceTime?info.produceTime:'请输入生产日期'}}" name="produceTime" id="produceTime">
               </picker>
             </view>
           </li>
           <li class="list_item">
             <view class="item_box">
               <text class="item_title active">进货日期</text>
-              <picker
-                class="picker_box"
-                mode="date"
-                value="{{info.stockTime}}"
-                bindchange="DateStockTime"
-                start="2015-09-01" end="2017-09-01"
-              >
-                <view class="picker">
-                  {{info.stockTime}}
-                </view>
+              <picker class="picker_box" mode="date" @change="DateStockTime" >
+                <input class="picker" type="date" value="{{info.stockTime?info.stockTime:'请输入进货日期'}}" name="stockTime" id="stockTime">
               </picker>
             </view>
           </li>
@@ -227,21 +225,24 @@
               <picker
                 class="picker_box"
                 mode="date"
-                value="{{info.expireTime}}"
-                bindchange="DateExpireTime"
-                start="2015-09-01" end="2017-09-01"
+                @change="DateExpireTime"
               >
-                <view class="picker">
-                  {{info.expireTime}}
-                </view>
+                <input class="picker" type="date" value="{{info.expireTime?info.expireTime:'请输入保质期'}}" name="expireTime" id="expireTime">
               </picker>
             </view>
           </li>
           <li class="list_item">
-            <SubInput
-              :obj="form.safeTime"
-              @inputBtn="inputBtn"
-            />
+            <view class="item_box">
+              <text class="item_title active">质保时间</text>
+              <picker
+                class="picker_box"
+                mode="date"
+                :value="info.safeTime"
+                @change="DateSafeTime"
+              >
+                <input class="picker" placeholder-class="pickerTime" type="date" :value="info.safeTime?info.safeTime:'请输入质保时间'" name="safeTime" id="safeTime">
+              </picker>
+            </view>
           </li>
         </ul>
       </div>
@@ -323,30 +324,6 @@
           Sign: true,
           key: 'name'
         },
-        produceTime:{
-          title: '生产日期',
-          placeholder: '请输入生产日期',
-          Sign: true,
-          key: 'produceTime'
-        },
-        stockTime:{
-          title: '进货日期',
-          placeholder: '请输入进货日期',
-          Sign: true,
-          key: 'stockTime'
-        },
-        expireTime:{
-          title: '保质期',
-          placeholder: '请输入保质期',
-          Sign: true,
-          key: 'expireTime'
-        },
-        safeTime:{
-          title: '质保时间',
-          placeholder: '请输入质保时间',
-          Sign: true,
-          key: 'safeTime'
-        },
         model:{
           title: '型号',
           placeholder: '请输入型号',
@@ -384,6 +361,7 @@
         produceTime: '',//生产日期
         stockTime: '',//进货日期
         expireTime: '',//保质期
+        safeTime:'',
         model: '',//型号
         quantity: '',//数量
         unitPrice: '',//单价
@@ -401,14 +379,17 @@
     },
     methods: {
       // 
-      DateProduceTime(){
-
+      DateProduceTime(e){
+        this.info.produceTime = e.$wx.detail.value;
       },
-      DateStockTime(){
-
+      DateStockTime(e){
+        this.info.stockTime = e.$wx.detail.value;
       },
-      DateExpireTime(){
-
+      DateExpireTime(e){
+        this.info.expireTime = e.$wx.detail.value;
+      },
+      DateSafeTime(e){
+        this.info.safeTime = e.$wx.detail.value;
       },
       // 上拉列表
       headIcon(key) {
@@ -460,11 +441,11 @@
       // 提交
       formSubmit(){
         console.log(this.info);
-        // if(this.info.id !== ''){
-        //   this.goodsUpdate();
-        // } else {
-        //   this.goodsSave();
-        // }
+        if(this.info.id !== ''){
+          this.goodsUpdate();
+        } else {
+          this.goodsSave();
+        }
       },
       // 更新商品
       goodsUpdate(){
