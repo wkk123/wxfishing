@@ -19,3 +19,5 @@ export const SETQUERY = 'SETQUERY';
 export const SETINVENTORY = 'SETINVENTORY';
 
 export const SETCHECKED = 'SETCHECKED';
+
+export const SETCART = 'SETCART';

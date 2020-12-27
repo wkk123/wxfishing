@@ -2,8 +2,10 @@
 import { combineReducers } from 'redux';
 import publics from './public';
 import inventoryList from './inventoryList';
+import cart from './shoppingCart';
 
 export default combineReducers({
   publics,
-  inventoryList
+  inventoryList,
+  cart
 });

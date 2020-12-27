@@ -287,19 +287,20 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div
+          v-if="cartNum > 0"
           class="cart_left"
           @click="cartBtn()"
         >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num" v-if="cartNum >= 1">{{cartNum}}</div>  
+          <div class="cart_Num" v-show="cartNum > 0">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
-          <text>合计</text>
-          <text class="total_num">453</text>
+          <text v-show="cartNum > 0">合计</text>
+          <text v-show="cartNum > 0" class="total_num">{{(totalPrice)}}</text>
         </div>
       </li>
       <li class="btn_item">
-        <button class="btn">改价</button>
+        <button class="btn" v-show="cartNum > 0" @click="changePrice()">改价</button>
       </li>
       <li class="btn_item">
         <button
@@ -313,8 +314,12 @@
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { SETCART } from './../../store/types';
   import { goodsAllClasses, goodsGoodsList } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
@@ -326,7 +331,7 @@
       popupObj: {
         popupType: 1,
         presentMoney: 0,
-        isShow: true,
+        isShow: false,
       },
       orderList: [],//商品列表
       query:{
@@ -338,14 +343,19 @@
       },
       showCart: false,//购物车显隐
       cartNum: 0,
+      totalPrice: 0,//
       cartList: [],//购物车
     },
     computed: {
-
+      ...mapState([ 'cart' ])
     },
     methods: {
+      ...mapActions({
+        setCart: SETCART,
+      }),
       // 添加购物车
       editCartFun(order){
+        console.log(order);
         const Index = this.cartList.findIndex(item => item.id === order.id);
         if (Index === -1) {
           this.cartList.push(order);
@@ -357,10 +367,13 @@
           }
         }
         let total = 0;
+        let price = 0;
         this.cartList.forEach((item)=>{
           total += item.num;
+          price += item.num * (item.sellPrice*1000);
         })
         this.cartNum = total;
+        this.totalPrice = price/1000; 
       },
       // 后退
       gotoBack(){
@@ -370,18 +383,36 @@
       },
       // 去购物车
       goToCart(){
+        this.setCart({
+          cart:{
+            Num: this.cartNum,
+            List: this.cartList,
+            total: this.totalPrice,  
+          }
+        })
+        if(this.cartList.length === 0){
+          wx.showModal({
+            title: '提示',
+            content: '请选择商品',
+          })
+          return;
+        }
         wx.navigateTo({
           url: '/pages/cashierManagement/cart'
         })
       },
+      changePrice(){
+        this.popupObj = {
+          popupType: 1,
+          isShow: true,
+          presentMoney: this.totalPrice,
+        };
+      },
       // 弹框按钮
       popupBtns({bool = false, Num = 0}){
         this.popupObj.isShow = false;
-        if(bool){
-          // 点击确定
-          console.log(Num)
-        } else {
-          // 点击取消
+        if(bool){  // 点击确定
+          this.totalPrice = Num;
         }
       },
       // 清空购物车
@@ -441,6 +472,11 @@
       // wx.navigateTo({
       //   url: '/pages/login'
       // })
+      const { cart:{ Num, List, total } } = this.cart;
+      console.log('Num, List, total',Num, List, total)
+      this.cartNum = Num;
+      this.totalPrice = total;
+      this.cartList = List;
     },
     onReady(){
       this.getGoodsAllClasses();

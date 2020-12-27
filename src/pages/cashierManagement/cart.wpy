@@ -30,6 +30,9 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    z-index: 10000;
+    position: relative;
+    bottom: 0;
     .shopping_Cart{
       width: calc(100% - 85px - 85px);
       display: flex;
@@ -109,26 +112,58 @@
 </style>
 <template>
   <div class="cashier_container">
+        <movable-area
+      class="code_box"
+    >
+      <movable-view
+        class="max"
+        direction="all"
+        :x="10"
+        :y="200"
+      >
+        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+      </movable-view>
+    </movable-area>
+    <!-- 弹框 -->
+    <PopUp
+      @popupBtn="popupBtns"
+      :popupObj="popupObj"
+    />
+    <!-- 购物车 -->
+    <Cart 
+      :isShow="showCart"
+      :cartList="cartList"
+      @emptyCart="emptyCart"
+      @click="cartBtn()"
+    />
     <div class="cashier_content">
       <ul class="content_right">
-        <li class="right_item" v-for="(item,index) in 9" :key="'item'+index">
-          <EditOrder />
+        <li class="right_item" v-for="(item,index) in cartList" :key="'item'+index">
+          <EditOrder
+            :editType="1"
+            :orderData="{...item}"
+            @editCart="editCartFun"
+          />
         </li>
       </ul>
     </div>
     <ul class="cashier_btn">
       <li class="shopping_Cart">
-        <div class="cart_left">
+        <div
+          v-if="cartNum > 0"
+          class="cart_left"
+          @click="cartBtn()"
+        >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num">55</div>  
+          <div class="cart_Num">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
           <text>合计</text>
-          <text class="total_num">453</text>
+          <text class="total_num">{{totalPrice}}</text>
         </div>
       </li>
       <li class="btn_item">
-        <button class="btn">改价</button>
+        <button class="btn" @click="changePrice()">改价</button>
       </li>
       <li class="btn_item">
         <button
@@ -142,12 +177,20 @@
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { SETCART } from './../../store/types';
   import { orderCreate } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
+      cartNum: 0,
+      totalPrice: 0,//
+      showCart: false,//购物车显隐
+      cartList: [],
       order:{
         totalMoney: 20.3,
         goodsList: [
@@ -156,38 +199,102 @@
             quantity: 1
           }
         ]
-      }
+      },
+      popupObj: {
+        popupType: 1,
+        presentMoney: 0,
+        isShow: false,
+      },
     },
     computed: {
-
+      ...mapState([ 'cart' ])
     },
     methods: {
+      ...mapActions({
+        setCart: SETCART,
+      }),
       // 下单
       placeAnOrder(){
-        orderCreate(this.order).then(res => {
-          const {code, data, message} = res;
-          if(res.code === 10000){
-            console.log('res',res)
-          }
-        }).catch(err=> {
-          console.log(err)
-          wx.navigateTo({
-            url: '/pages/cashierManagement/payWay'
-          })
+        wx.navigateTo({
+          url: '/pages/cashierManagement/payWay'
         })
-      }
+        // orderCreate(this.order).then(res => {
+        //   const {code, data, message} = res;
+        //   if(res.code === 10000){
+        //     console.log('res',res)
+        //   }
+        // }).catch(err=> {
+        //   console.log(err)
+        //   wx.navigateTo({
+        //     url: '/pages/cashierManagement/payWay'
+        //   })
+        // })
+      },
+      // 添加购物车
+      editCartFun(order){
+        const Index = this.cartList.findIndex(item => item.id === order.id);
+        if (Index === -1) {
+          this.cartList.push(order);
+        } else {
+          if( order.num > 0){
+            this.cartList.splice(Index,1,order);
+          } else {
+            this.cartList.splice(Index, 1);
+          }
+        }
+        let total = 0;
+        let price = 0;
+        this.cartList.forEach((item)=>{
+          total += item.num;
+          price += item.num * (item.sellPrice*1000);
+        })
+        this.cartNum = total;
+        this.totalPrice = price/1000; 
+      },
+      // 弹框按钮
+      popupBtns({bool = false, Num = 0}){
+        this.popupObj.isShow = false;
+        if(bool){  // 点击确定
+          this.totalPrice = Num;
+        }
+      },
+      // 清空购物车
+      emptyCart(){
+        this.cartList = [];
+        this.cartNum = 0;
+      },
+      // 显隐购物车
+      cartBtn(){
+        this.showCart = !this.showCart;
+      },
+      changePrice(){
+        this.popupObj = {
+          popupType: 1,
+          isShow: true,
+          presentMoney: this.totalPrice,
+        };
+      },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      
+
     },
     onReady(){
-
+      const { cart:{ Num, List, total } } = this.cart;
+      this.cartNum = Num;
+      this.totalPrice = total;
+      this.cartList = List;
     },
     onUnload(){
-
+      this.setCart({
+        cart:{
+          Num: this.cartNum,
+          List: this.cartList,
+          total: this.totalPrice,  
+        }
+      })
     },
   });
 </script>
@@ -197,6 +304,8 @@
   disableScroll: true,
   usingComponents: {
     "EditOrder": './../../components/editOrder',
+    "PopUp": './../../components/popUp',
+    "Cart": './../../components/cart',
   }
 }
 </config>

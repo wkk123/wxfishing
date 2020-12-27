@@ -110,11 +110,13 @@
     methods: {
       // 关闭弹框
       cancelBtn(){
-        this.$emit('popupBtn', {bool:false, Num:this.Num});
+        const { presentMoney } = this.popupObj;
+        this.$emit('popupBtn', {bool:false, Num:this.Num !== ''?this.Num:presentMoney});
       },
       // 点击确定
       confirmBtn(){
-        this.$emit('popupBtn', {bool:true, Num:this.Num});
+        const { presentMoney } = this.popupObj;
+        this.$emit('popupBtn', {bool:true, Num:this.Num !== ''?this.Num:presentMoney});
       }
     }
   });

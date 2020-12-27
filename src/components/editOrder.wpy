@@ -117,7 +117,7 @@
         </ul>  
       </div>
       <div class="inventory_num">
-        <text class="num_text">{{orderData.unitPrice}}</text>
+        <text class="num_text">{{orderData.sellPrice}}</text>
         <ul class="num_btn">
           <li @click="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
             <image class="btn_icon" src="../image/minus.png" mode="widthFix" lazy-load="true" />
@@ -139,6 +139,7 @@
       addGlobalClass: true
     },
     props: {
+      editType : 0,
       orderData: {
         type: Object,
         default () {
@@ -161,6 +162,14 @@
     },
     methods: {
       minusBtn(){
+        if(this.editType === 1 && this.orderData.num === 1){
+          wx.showToast({
+            title: '商品最少一个',
+            icon: 'error',
+            duration: 1500
+          })
+          return;
+        }
         this.orderData.num = this.orderData.num - 1;
         this.$emit('editCart',this.orderData)
       },
