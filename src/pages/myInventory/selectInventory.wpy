@@ -173,8 +173,8 @@
       </li>
     </ul>
     <div class="myInventory_nav">
-      <text class="nav_text">已选：{{3}}件商品</text>
-      <button class="nav_btn" >选好了</button>
+      <text class="nav_text">已选：{{checkedList.length}}件商品</text>
+      <button class="nav_btn" @click="checkedNav()">选好了</button>
     </div>
   </div>
 </template>
@@ -183,7 +183,7 @@
   import wepy from '@wepy/core';
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
-  import { SETINVENTORY, SETQUERY } from './../../store/types';
+  import { SETINVENTORY, SETQUERY, SETCHECKED } from './../../store/types';
   import { goodsGoodsList } from './../../request/api.js';
   wepy.page({
     store,
@@ -221,13 +221,23 @@
       checkedList:[],//选中的
     },
     computed: {
-      ...mapState([ 'publics' ])
+      ...mapState([ 'publics', 'inventoryList' ])
     },
     methods: {
       ...mapActions({
         setQuery: SETQUERY,
         setList: SETINVENTORY,
+        setChecked: SETCHECKED,
       }),
+      // 进入选中
+      checkedNav(){
+        this.setChecked({
+          checedList: this.checkedList
+        })
+        wx.navigateTo({
+          url: '/pages/myInventory/changedInventory'
+        })
+      },
       // 选择当前
       selectItem(data,index){
         let check = data.checked === true ? false : true;
@@ -244,9 +254,6 @@
         } else {
           this.orderList[index].image = './../../image/unchecked.png';
         }
-        console.log('a--',a,data,index);
-        console.log('this.checkedList',this.checkedList);
-        console.log('this.orderList',this.orderList);
       },
       // 搜索输入值
       searchInput(value) {
@@ -262,6 +269,7 @@
       // 库存列表
       getGoodsGoodsList(){
         const { firstClassId, secondClassId } = this.publics.checkedSort;
+        const { checedList } = this.inventoryList;
         this.query = {
           ...this.query,
           firstClassId: firstClassId,
@@ -273,16 +281,20 @@
         goodsGoodsList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            let price = 0;
             if (Array.isArray(data)){
               data.forEach((item) => {
+                let findData = checedList.find((it)=>{
+                  return it.id === item.id
+                })
                 item.checked = false;
                 item.image = './../../image/unchecked.png';
-                price += (item.quantity * item.sellPrice * 100);
+                if(findData){
+                  item.checked = true;
+                  item.image = './../../image/checked1.png';
+                }
               })
             }
             this.orderList = data;
-            this.collectPrice = price/100;
           }
         }).catch(err=> {
           const { message } = err;

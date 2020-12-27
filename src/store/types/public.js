@@ -17,3 +17,5 @@ export const SORT = 'SORT';
 export const SETQUERY = 'SETQUERY';
 
 export const SETINVENTORY = 'SETINVENTORY';
+
+export const SETCHECKED = 'SETCHECKED';

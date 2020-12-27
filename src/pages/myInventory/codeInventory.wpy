@@ -40,20 +40,23 @@
 <template>
   <div class="Inventory_box">
     <ul class="Inventory_list">
-      <li class="list_item" v-for="item in orderList">
+      <li class="list_item" v-for="item in orderList" :key="'item'+index">
         <div class="content_item">
           <orderItem :orderData="item" />
         </div>
       </li>
     </ul>
     <div class="Inventory_nav">
-      <button class="form_btn">库存变动</button>
+      <button @click="formBtn" class="form_btn">库存变动</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { SETCHECKED } from './../../store/types';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -67,46 +70,23 @@
           num:'3456',
           status:'保质期60天',
           type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        },{
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
         }
       ]
     },
     computed: {
-
+      ...mapState([ 'inventoryList' ])
     },
     methods: {
-      bindKeyInput(){
-
+      ...mapActions({
+        setChecked: SETCHECKED,
+      }),
+      formBtn(){
+        this.setChecked({
+          checedList: this.orderList
+        })
+        wx.navigateTo({
+          url: '/pages/myInventory/changedInventory'
+        })
       }
     },
     onLoad(options){
