@@ -119,11 +119,11 @@
       <div class="inventory_num">
         <text class="num_text">{{orderData.sellPrice}}</text>
         <ul class="num_btn">
-          <li @click="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
+          <li @click.stop="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
             <image class="btn_icon" src="../image/minus.png" mode="widthFix" lazy-load="true" />
           </li>
           <input class="num_input" v-if="orderData.num >= 1" :min="0" :value="orderData.num" type="text" />
-          <li @click="addBtn()" class="btn_item">
+          <li @click.stop="addBtn()" class="btn_item">
             <image class="btn_icon" src="../image/add.png" mode="widthFix" lazy-load="true" />
           </li>
         </ul>

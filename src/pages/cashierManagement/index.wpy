@@ -234,8 +234,9 @@
     <Cart 
       :isShow="showCart"
       :cartList="cartList"
+      @editCartItem="editCartItem"
       @emptyCart="emptyCart"
-      @click="cartBtn()"
+      @popupBox="cartBtn"
     />
     <div class="cashier_info">
       <div class="head_box">
@@ -287,12 +288,11 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div
-          v-if="cartNum > 0"
           class="cart_left"
-          @click="cartBtn()"
+          @click="cartBtn(showCart)"
         >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num" v-show="cartNum > 0">{{cartNum}}</div>  
+          <div class="cart_Num" v-if="cartNum > 0">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
           <text v-show="cartNum > 0">合计</text>
@@ -408,6 +408,11 @@
           presentMoney: this.totalPrice,
         };
       },
+      // 编辑购物车某一项
+      editCartItem(order){
+        console.log('item', order)
+        this.editCartFun(order)
+      },
       // 弹框按钮
       popupBtns({bool = false, Num = 0}){
         this.popupObj.isShow = false;
@@ -416,13 +421,16 @@
         }
       },
       // 清空购物车
-      emptyCart(){
-        this.cartList = [];
-        this.cartNum = 0;
+      emptyCart({arr = [], total = 0, price = 0}){
+        console.log('arr, total, price',arr, total, price)
+        console.log('arr, total, price',this.cartList, this.cartNum, this.totalPrice)
+        this.cartList = arr;
+        this.cartNum = total;
+        this.totalPrice = price;
       },
       // 显隐购物车
-      cartBtn(){
-        this.showCart = !this.showCart;
+      cartBtn(Bool){
+        this.showCart = !Bool;
       },
       // 点击导航选择列表
       navItem(data){
@@ -469,9 +477,6 @@
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
       const { cart:{ Num, List, total } } = this.cart;
       console.log('Num, List, total',Num, List, total)
       this.cartNum = Num;

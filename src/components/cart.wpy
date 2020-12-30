@@ -70,16 +70,14 @@
   <!-- 弹框 -->
   <div class="pop_up" 
     v-show="isShow"
+    @tap.stop="popupBox()"
   >
-    <div
-      class="pop_up_box"
-      @click="upBox()"
-    >
+    <div class="pop_up_box" @tap.stop="Box()">
       <ul class="pop_up_head">
         <li class="head_item">共{{cartList.length}}件商品</li>
         <li 
           class="head_item"
-          @click="emptyCart()"
+          @tap.stop="emptyCart()"
         >
           <image class="item_icon" src="./../image/delete.png" mode="widthFix" lazy-load="false" />
           <text class="item_text">清空购物车</text>
@@ -99,7 +97,11 @@
 
 <script>
   import wepy from '@wepy/core';
+  // import {  mapState, mapActions } from '@wepy/redux';
+  // import store from './../../store';
+  // import { SETCART } from './../../store/types';
   wepy.component({
+    // store,
     options: {
       addGlobalClass: true
     },
@@ -117,9 +119,12 @@
       
     },
     computed: {
-      
+      // ...mapState([ 'cart' ])
     },
     methods: {
+      // ...mapActions({
+      //   setCart: SETCART,
+      // }),
       // 添加购物车
       editCartFun(order){
         const Index = this.cartList.findIndex(item => item.id === order.id);
@@ -133,15 +138,24 @@
           }
         }
         let total = 0;
+        let price = 0;
         this.cartList.forEach((item)=>{
           total += item.num;
+          price += item.num * (item.sellPrice*1000);
         })
-        this.cartNum = total;
+        console.log('99-',this.cartList, total, price/1000)
+        this.$emit('emptyCart',{ arr: this.cartList, total:total, price: price/1000 })
+
+        // console.log('order---',order)
+        // this.$emit('editCartItem',order)
       },
       emptyCart(){
-        this.$emit('emptyCart',[])
+        this.$emit('emptyCart',{ arr:[], total:0, price:0 })
       },
-      upBox(){
+      popupBox(){
+        this.$emit('popupBox',true)
+      },
+      Box(){
 
       }
     },

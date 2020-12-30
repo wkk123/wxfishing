@@ -150,12 +150,11 @@
     <ul class="cashier_btn">
       <li class="shopping_Cart">
         <div
-          v-if="cartNum > 0"
           class="cart_left"
           @click="cartBtn()"
         >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num">{{cartNum}}</div>  
+          <div v-if="cartNum > 0" class="cart_Num">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
           <text>合计</text>
