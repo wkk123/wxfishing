@@ -333,7 +333,6 @@
         <div class="head_btn"></div>
       </div>
       <div class="member_search">
-        <!-- <Search /> -->
         <FocusSearch
           @funfocusBtn="funfocus"
         />
@@ -609,7 +608,6 @@
   navigationStyle: 'custom',
   disableScroll: true,
   usingComponents: {
-    // "Search": './../../components/searchInput',
     "FocusSearch": './../../components/focusSearchInput',
     "EditOrder": './../../components/editOrder',
     "PopUp": './../../components/popUp',
