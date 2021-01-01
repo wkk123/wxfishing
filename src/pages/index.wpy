@@ -18,7 +18,6 @@
   import store from '../store';
   import { mapState, mapActions } from '@wepy/redux';
   import { COMMIT } from '../store/types';
-  import { shopLogin } from '../request/api';
   wepy.page({
     options: {
       addGlobalClass: true

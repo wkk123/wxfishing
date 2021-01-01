@@ -87,21 +87,21 @@
 </style>
 <template>
   <div class="member_item">
-    <image class="item_img" src="{{}}" mode="widthFix" lazy-load="true" />
+    <image class="item_img" :src="info.user.headimgurl" mode="widthFix" lazy-load="true" />
     <div class="item_content">
       <div class="content_info">
         <div class="info_title">
-          <text class="title_text">张西西</text>
-          <div class="title_grade">会员等级</div>
+          <text class="title_text">{{info.user.name}}</text>
+          <div class="title_grade">{{info.vipLevel.name}}</div>
         </div>
-        <text class="info_item">手机号：15289030982</text>
-        <text class="info_item">微信账号：xe3jrc</text>  
+        <text class="info_item">手机号：{{info.user.phone}}</text>
+        <text class="info_item">微信账号：{{info.user.nickname}}</text>  
       </div>
       <div class="content_bottom">
         <ul>
-          <li class="bottom_item">总消费金额：¥6492</li>
-          <li class="bottom_item">上次购买金额：¥82</li>
-          <li class="bottom_item">上次购买时间：2020-10-08</li>
+          <li class="bottom_item">总消费金额：¥{{info.totalConsume}}</li>
+          <li class="bottom_item">上次购买金额：¥{{info.lastConsume}}</li>
+          <li class="bottom_item">上次购买时间：{{info.lastConsumeTime}}</li>
         </ul>
         <button class="bottom_btn" @click="renewBtn" plain="true">续费VIP</button>
       </div>
@@ -113,16 +113,41 @@
   import wepy from '@wepy/core';
   wepy.component({
     props: {
-      orderData: {
+      info: {
         type: Object,
         default () {
           return {
-            title:'',
-            Version:'',
-            time:'',
-            num:'',
-            status:'',
-            type: '',
+            id: 1,//会员id
+            userId: 8,//用户id
+            vipLevelId: 1,//会员等级id
+            startTime: "2020-01-01 00:00:00",//会员开始时间
+            endTime: "2021-01-01 00:00:00",//会员结束时间
+            user: {
+              id: 8,//用户id
+              shopId: 1,//商户id
+              openid: '',
+              nickname: '',//微信昵称
+              headimgurl: '',//头像
+              name: '',//姓名
+              phone: '',//电话
+              birthday: '',//生日
+              remark: "备注",//备注
+              unionid: null,//...
+              subscribe: 1,//...
+              createTime: '',//...
+              updateTime: ''//...
+            },
+            vipLevel: {
+              id: 1,//...
+              shopId: 1,//...
+              name: "会员等级1",//会员等级名称
+              price: 10.2,//...
+              discountRatio: 0.92,//...
+              rightsList: null//
+            },
+            totalConsume: 0,//总消费金额
+            lastConsume: 0,//上次消费金额
+            lastConsumeTime: "2020-12-01 00:00:00"//上次消费时间
           }
         }
       },
@@ -130,10 +155,7 @@
     methods: {
       // 进入会员续费
       renewBtn(){
-        this.$emit('renewVIPBtn', 123);
-        // wx.navigateTo({
-        //   url: '/pages/memberManagement/renewVIP'
-        // })
+        this.$emit('renewVIPBtn', this.info);
       }
     },
     onShow(){

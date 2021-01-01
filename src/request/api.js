@@ -90,6 +90,21 @@ export const orderWechatPaymentStatus = p => {
 }
 
 
+// 会员管理
+
+// 会员列表
+export const userVipList = p => {
+  return request.GET('/user/vipList', {...p, isLoading: true})
+}
+// 续费VIP
+export const userRenewVip = p => {
+  return request.GET('/user/renewVip', {...p, isLoading: true})
+}
+// 会员等级列表
+export const userNextVipLevel = p => {
+  return request.GET('/user/nextVipLevel', {...p, isLoading: true})
+}
+
 
 
 

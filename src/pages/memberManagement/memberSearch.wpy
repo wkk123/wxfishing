@@ -54,14 +54,14 @@
       typeList:[
         {
           text: '全部',
+          field: 'all',
         },
         {
           text: '姓名',
-        },
-        {
-          text: '账号',
+          field: 'name',
         },{
           text: '手机号',
+          field: 'phone',
         }
       ]
     },

@@ -34,35 +34,80 @@
         @funfocusBtn="funfocus"
       />
     </div>
-    <ul class="member_list">
-      <li class="list_item"
-        v-for="i in 10"
-        @click="ItemInfo()"
+    <scroll-view
+      class="member_list"
+      scroll-y="true"
+      bindscrolltolower="lowerList"
+    >
+      <view
+        class="list_item"
+        :key="'item'+index"
+        v-for="(item,index) in VIPList"
       >
-        <MemberItem  @renewVIPBtn="renewVIP"/>
-      </li>
-    </ul>
+        <MemberItem
+          :info="item"
+          @renewVIPBtn="renewVIP"
+        />
+      </view>
+    </scroll-view>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { userVipList } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      query:{
+        page: 1,
+        size: 10,
+      },
+      isUpload: true,
+      VIPList:[],
     },
     computed: {
 
     },
     methods: {
-      // 
-      renewVIP(data){
-        console.log(data);
+      // 上拉
+      lowerList(){
+        this.getUserList();
       },
-      // 
+      // 获取VIP列表
+      getUserList(){
+        if(!this.isUpload){
+          return;
+        }
+        userVipList({...this.query, keyword:'',field:'name'}).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.VIPList = [ ...this.VIPList, ...data ];
+            if(data.length === 10) {
+              this.query.page += 1;
+            } else {
+              this.isUpload = false;
+            }
+          }
+        }).catch(err=> {
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
+        })
+      },
+      // 续费VIP
+      renewVIP(data){
+        console.log('data',data)
+        const { id, userId, vipLevelId, endTime } = data;
+        wx.navigateTo({
+          url: `/pages/memberManagement/renewVIP?id=${id}&userId=${userId}&vipLevelId=${vipLevelId}&endTime=${endTime}`
+        })
+      },
+      // 搜索
       funfocus(data) {
         console.log(data);
         wx.navigateTo({
@@ -80,7 +125,7 @@
       // console.log('options',options)
     },
     onShow(){
-      
+      this.getUserList();
     },
     onReady(){
 

@@ -89,27 +89,49 @@
         </li>
       </ul>
     </div>
-    <button class="form_btn form_submit" >保存</button>  
+    <button class="form_btn form_submit" @click="onUserRenewVip()">保存</button>  
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { userNextVipLevel, userRenewVip } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      query: {
+        id: null,
+        userId: null,
+        vipLevelId: null,
+        endTime: ''
+      },
+      vipLevelList:[],
     },
     computed: {
 
     },
     methods: {
-
+      // 获取等级列表
+      onUserRenewVip(){
+        userRenewVip(this.query).then(res=>{
+          console.log(res)
+        })
+      },
+      // 获取等级列表
+      getList(){
+        const openid = wx.getStorageSync('openid');
+        userNextVipLevel({vipLevelId:this.query.vipLevelId,openid:openid}).then(res=>{
+          console.log(res)
+        })
+      }
     },
     onLoad(options){
-      // console.log('options',options)
+      console.log('options',options)
+      const { id, userId, vipLevelId, endTime } = options;
+      this.query = { id, userId, vipLevelId, endTime };
+      this.getList();
     },
     onShow(){
       // wx.navigateTo({

@@ -164,13 +164,7 @@
         <text>总消费金额￥{{4533}}</text>
       </div>
       <ul class="list_box">
-        <li class="list_item">
-          <RecordItem />
-        </li>
-        <li class="list_item">
-          <RecordItem />
-        </li>
-        <li class="list_item">
+        <li class="list_item" @click="goOrderItem()">
           <RecordItem />
         </li>
       </ul>
@@ -211,15 +205,19 @@
         wx.navigateTo({
           url: '/pages/memberManagement/renewVIP'
         })
+      },
+      // 进入订单详情
+      goOrderItem(){
+        wx.navigateTo({
+          url: '/pages/memberManagement/orderInfo'
+        })
       }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
 
