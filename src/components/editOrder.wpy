@@ -149,7 +149,6 @@
             quantity: '',
             unitPrice: '',
             imgs: '',
-            num: 0,
           }
         }
       },
@@ -174,6 +173,9 @@
         this.$emit('editCart',this.orderData)
       },
       addBtn(){
+        if(!this.orderData.num){
+          this.orderData.num = 0;
+        }
         this.orderData.num = this.orderData.num + 1;
         this.$emit('editCart',this.orderData)
       }

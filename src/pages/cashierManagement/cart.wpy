@@ -129,13 +129,6 @@
       @popupBtn="popupBtns"
       :popupObj="popupObj"
     />
-    <!-- 购物车 -->
-    <Cart 
-      :isShow="showCart"
-      :cartList="cartList"
-      @emptyCart="emptyCart"
-      @click="cartBtn()"
-    />
     <div class="cashier_content">
       <ul class="content_right">
         <li class="right_item" v-for="(item,index) in cartList" :key="'item'+index">
@@ -151,10 +144,10 @@
       <li class="shopping_Cart">
         <div
           class="cart_left"
-          @click="cartBtn()"
+          v-if="false"
         >
-          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div v-if="cartNum > 0" class="cart_Num">{{cartNum}}</div>  
+          <image v-if="false" class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
+          <div v-if="false" class="cart_Num">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
           <text>合计</text>
@@ -178,8 +171,7 @@
   import wepy from '@wepy/core';
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
-  import { SETCART } from './../../store/types';
-  import { orderCreate } from './../../request/api.js';
+  import { SETCART, SETORDER } from './../../store/types';
   wepy.page({
     store,
     options: {
@@ -190,15 +182,6 @@
       totalPrice: 0,//
       showCart: false,//购物车显隐
       cartList: [],
-      order:{
-        totalMoney: 20.3,
-        goodsList: [
-          {
-            id: 3,
-            quantity: 1
-          }
-        ]
-      },
       popupObj: {
         popupType: 1,
         presentMoney: 0,
@@ -211,23 +194,26 @@
     methods: {
       ...mapActions({
         setCart: SETCART,
+        setOrder: SETORDER,
       }),
       // 下单
       placeAnOrder(){
+        let goodsList = [];
+        this.cartList.forEach((item)=>{
+          goodsList.push({
+            id: item.id,
+            quantity: item.num
+          })
+        })
+        this.setOrder({
+          placeAnOrder: {
+            totalMoney: this.totalPrice,
+            goodsList: goodsList,
+          }
+        })
         wx.navigateTo({
           url: '/pages/cashierManagement/payWay'
         })
-        // orderCreate(this.order).then(res => {
-        //   const {code, data, message} = res;
-        //   if(res.code === 10000){
-        //     console.log('res',res)
-        //   }
-        // }).catch(err=> {
-        //   console.log(err)
-        //   wx.navigateTo({
-        //     url: '/pages/cashierManagement/payWay'
-        //   })
-        // })
       },
       // 添加购物车
       editCartFun(order){
@@ -257,15 +243,7 @@
           this.totalPrice = Num;
         }
       },
-      // 清空购物车
-      emptyCart(){
-        this.cartList = [];
-        this.cartNum = 0;
-      },
-      // 显隐购物车
-      cartBtn(){
-        this.showCart = !this.showCart;
-      },
+      // 修改价格
       changePrice(){
         this.popupObj = {
           popupType: 1,
@@ -304,7 +282,6 @@
   usingComponents: {
     "EditOrder": './../../components/editOrder',
     "PopUp": './../../components/popUp',
-    "Cart": './../../components/cart',
   }
 }
 </config>

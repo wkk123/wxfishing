@@ -90,9 +90,9 @@
   <div class="payWay_box">
     <div class="payWay_content">
       <div class="payWay_info">
-        <text class="info_title">12</text>
-        <text class="info_price">12</text>
-        <text class="info_time">支付剩余时间：14:57</text>
+        <text class="info_title">支付金额</text>
+        <text class="info_price">{{totalMoney}}</text>
+        <!-- <text class="info_time">支付剩余时间：14:57</text> -->
       </div>
       <ul class="payWay_list">
         <li class="payWay_item" @click="selectedBtn(item.type)" v-for="item in wayList">
@@ -113,16 +113,16 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { mapState } from '@wepy/redux';
+  import store from './../../store';
+  import { orderCreate, orderOfflinePay } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
-      codeData:{
-        id: 1,
-      },
-      outTradeNo:'',
-      checked: 1,
+      checked: null,
       checkedImg: '../../image/checked2.png',
       unchecked: '../../image/unchecked.png',
       wayList:[
@@ -137,35 +137,77 @@
           text: '线下支付',
         }
       ],
+      order: {}, //订单信息
+      totalMoney: 0,
     },
     computed: {
-
+      ...mapState([ 'cart' ])
     },
     methods: {
+      // 下单
+      orderFun(type){
+        orderCreate(this.order).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            const { orderId } = res.data;
+            if(type === 1){
+              wx.navigateTo({
+                url: `/pages/cashierManagement/clearingOrder?id=${orderId}`
+              })
+            } else {
+              this.offlinePayment(orderId)
+            }
+          }
+        }).catch(err=> {
+          console.log(err)
+          // wx.navigateTo({
+          //   url: '/pages/cashierManagement/payWay'
+          // })
+        })
+      },
       // 选择支付方式
       selectedBtn(type) {
         this.checked = type;
-        if(type === 1){
-          wx.navigateTo({
-            url: '/pages/cashierManagement/clearingOrder'
-          })
-        } else {
-          wx.navigateTo({
-            url: '/pages/cashierManagement/clearingOrder'
-          })
-        }
+        this.orderFun(type)
+      },
+      // 线下支付
+      offlinePayment(orderId){
+        const openid = wx.getStorageSync('openid');
+        orderOfflinePay({
+          id: orderId,
+          openid: openid
+        }).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            wx.navigateTo({
+              url: `/pages/cashierManagement/clearingOrder?id=${-1}`
+            })
+          }
+        }).catch(err=> {
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
+          }
+        })
       },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
-
+      const { placeAnOrder } = this.cart;
+      console.log('placeAnOrder',placeAnOrder)
+      this.order = placeAnOrder;
+      this.totalMoney = placeAnOrder.totalMoney;
     },
     onUnload(){
 

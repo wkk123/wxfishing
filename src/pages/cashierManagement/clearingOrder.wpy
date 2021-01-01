@@ -60,16 +60,20 @@
 </style>
 <template>
   <div class="clearing_box">
-    <div class="hint_box">
+    <div class="hint_box" v-if="orderId !== -1">
       <image class="hint_icon" src="./../../image/hint.png" mode="widthFix" lazy-load="false" />
       <text class="hint_text">请让用户公众号内使用支付功能扫码</text>
     </div>
     <div class="clearing_content">
-      <div class="clearing_img">
-        <image class="code_img" src="" mode="widthFix" lazy-load="false" />
+      <div class="clearing_img" v-if="orderId !== -1">
+        <image class="code_img" :src="codeImg" mode="widthFix" lazy-load="false" />
       </div>
       <div class="clearing_list">
-        <OrderList />
+        <OrderList
+          :List="List"
+          :price="price"
+          :total="total"
+        />
       </div>
     </div>
     <div class="member_btn">
@@ -80,68 +84,66 @@
 
 <script>
   import wepy from '@wepy/core';
-  import { orderQRCode, orderWechatPaymentStatus, orderOfflinePay } from './../../request/api.js';
+  import { mapState } from '@wepy/redux';
+  import store from './../../store';
+  import { orderQRCode, orderWechatPaymentStatus } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
-      codeData:{
-        id: 1,
-      },
+      orderId: null,
       outTradeNo:'',
-      payment:{
-        id: 1,
-        openid: "xxxx"
-      }
+      List: '',
+      price: '',
+      total: '',
+      codeImg:'',
     },
     computed: {
-
+      ...mapState([ 'cart' ])
     },
     methods: {
       // 获取二维码
       getCode(){
         orderQRCode(this.codeData).then(res => {
-          const {code, data, message} = res;
-          if(res.code === 10000){
-            console.log('res',res)
-          }
+          this.codeImg = res;
         }).catch(err=> {
-          console.log(err)
+          this.codeImg = err;
         })
       },
       // 获取支付结果
       getResults() {
-        orderWechatPaymentStatus({outTradeNo: this.outTradeNo}).then(res => {
+        orderWechatPaymentStatus({outTradeNo: this.orderId}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
           }
         }).catch(err=> {
-          console.log(err)
-          this.goToOrderInfo();
-        })
-      },
-      // 线下支付
-      offlinePayment(){
-        orderOfflinePay(this.payment).then(res => {
-          const {code, data, message} = res;
-          if(res.code === 10000){
-            console.log('res',res)
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
           }
-        }).catch(err=> {
-          console.log(err)
+          this.goToOrderInfo(this.orderId);
         })
       },
       // 进入订单详情
-      goToOrderInfo(){
+      goToOrderInfo(id){
         wx.navigateTo({
-          url: '/pages/cashierManagement/cashierOrder'
+          url: `/pages/cashierManagement/cashierOrder?id=${id}`
         })
       }
     },
     onLoad(options){
-      // console.log('options',options)
+      const { id } = options;
+      this.orderId = id;
+      if(id !== -1){
+        this.getCode();
+      }
     },
     onShow(){
       // wx.navigateTo({
@@ -149,7 +151,11 @@
       // })
     },
     onReady(){
-
+      console.log(this.cart)
+      const { cart:{ total, List }, placeAnOrder:{ totalMoney } } = this.cart;
+      this.List= List;
+      this.price= (total*1000 - totalMoney*1000)/1000;
+      this.total= total
     },
     onUnload(){
 
@@ -161,7 +167,7 @@
   navigationBarTitleText: '订单结算',
   disableScroll: true,
   usingComponents: {
-    'OrderList': './../../components/orderList',
+    'OrderList': './../../components/orderList2',
   }
 }
 </config>

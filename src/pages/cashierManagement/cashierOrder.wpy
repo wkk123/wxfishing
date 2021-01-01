@@ -193,7 +193,14 @@
             console.log('res',res)
           }
         }).catch(err=> {
-          console.log(err)
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
+          }
         })
       },
       // 撤销订单
@@ -204,7 +211,14 @@
             console.log('res',res)
           }
         }).catch(err=> {
-          console.log(err)
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
+          }
         })
       },
     },

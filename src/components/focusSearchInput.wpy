@@ -55,8 +55,7 @@
     },
     methods: {
       funfocus(){
-        // console.log('data')
-        this.$emit('funfocusBtn', 1234)
+        this.$emit('funfocusBtn', true)
       },
       fun(){
 

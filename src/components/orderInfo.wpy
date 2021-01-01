@@ -81,14 +81,14 @@
   <div class="content_item">
     <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true" />
     <div class="item_info">
-      <text class="info_title">{{'这里是商品名称这里是名称这里是商品名称这里是名称'}}</text>
+      <text class="info_title">{{orderData.name}}</text>
       <ul class="info_content">
-        <li class="info_item">型号：WHHHSI-3，sertlef; 23m[黑色]</li>
-        <li class="info_num">x{{99999}}</li>
+        <li class="info_item">型号：{{orderData.model}}</li>
+        <li class="info_num">x{{orderData.num}}</li>
       </ul>
       <div class="money_box">
         <text>¥</text>
-        <text>298</text>
+        <text>{{orderData.sellPrice}}</text>
       </div>
     </div>
   </div>
@@ -105,12 +105,10 @@
         type: Object,
         default () {
           return {
-            title:'',
-            Version:'',
-            time:'',
+            name:'',
+            model:'',
             num:'',
-            status:'',
-            type: '',
+            sellPrice:'',
           }
         }
       },

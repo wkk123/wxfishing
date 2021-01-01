@@ -62,7 +62,7 @@ export const goodsPropertiesAndTypes = p => {
 
 // 下单
 export const orderCreate = p => {
-  return request.POST('/order/create',  {...p, isLoading: false})
+  return request.POST('/order/create',  {...p, isLoading: true})
 }
 // 订单二维码
 export const orderQRCode = p => {
@@ -86,7 +86,7 @@ export const orderWechatPayment = p => {
 }
 // 微信查询支付结果
 export const orderWechatPaymentStatus = p => {
-  return request.GET('/order/wechatPaymentStatus', {...p, isLoading: false})
+  return request.GET('/order/wechatPaymentStatus', {...p, isLoading: true})
 }
 
 
