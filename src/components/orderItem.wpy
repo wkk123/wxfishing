@@ -63,7 +63,7 @@
   <div class="content_item">
     <div class="item_left">
       <div class="left_subtitle {{orderData.type===1?'active1':orderData.type===2?'active2':'active3'}}">{{orderData.status}}</div>
-      <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
+      <image class="left_icon" :src="orderData.imgs" mode="widthFix" lazy-load="true" />
     </div>
     <div class="item_info">
       <text class="info_title">{{orderData.name}}</text>
@@ -93,6 +93,7 @@
             quantity:'',
             status:'',
             type: '',
+            imgs: '',
           }
         }
       },
