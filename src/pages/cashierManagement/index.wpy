@@ -328,7 +328,7 @@
           @click="gotoBack()"
         >
           <image class="left_icon" src="./../../image/site.png" mode="widthFix" lazy-load="false" />
-          <div class="left_title">某某门店</div>  
+          <div class="left_title">{{detail.name}}</div>  
         </div>
         <div class="head_btn"></div>
       </div>
@@ -402,13 +402,14 @@
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCART } from './../../store/types';
-  import { goodsAllClasses, goodsGoodsList } from './../../request/api.js';
+  import { shopDetail, goodsAllClasses, goodsGoodsList } from './../../request/api.js';
   wepy.page({
     store,
     options: {
       addGlobalClass: true
     },
     data: {
+      detail: {},//门店信息
       navList:[],
       currentNav: 1,
       goodsClassList: [],
@@ -602,6 +603,15 @@
       })
     },
     onReady(){
+      // 获取门店信息
+      shopDetail().then( res => {
+        const {code, data, message} = res;
+        if (res.code === 10000) {
+          this.detail = data;
+        }
+      }).catch(err=> {
+        console.log(err)
+      })
       this.getGoodsAllClasses();
     },
     onUnload(){
