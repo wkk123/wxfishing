@@ -31,7 +31,10 @@
     }
     .merchant_state{
       font-size: 13px;
-      color: #00CEBE;
+      color: #F33C2E;
+      &.active{
+        color: #00CEBE;
+      }
     }
   }
   .merchandise_box{
@@ -138,6 +141,10 @@
       padding: 0;
       text-align:center;
       line-height: 25px;
+      &.active{
+        border-color: #666666;
+        color: #666666;
+      }
     }
   }
 }
@@ -149,26 +156,32 @@
         <image class="info_image" src="{{}}" mode="widthFix" lazy-load="true" />
         <text class="info_title">这里商家名称</text>
       </div>
-      <text class="merchant_state">已支付</text>
+      <text class="merchant_state {{orderData.status===1?'active':''}}">{{orderData.status === 1?'已支付':(orderData.status=== 0?'待支付':'已撤销')}}</text>
     </div>
     <div class="merchandise_box">
       <div class="merchandise_list">
-        <div class="merchandise_item" :key="'item'+index" v-for="(item,index) in 8">
-          <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true" />
+        <div class="merchandise_item" :key="'item'+id" v-for="item in orderData.orderGoodsSnapshotList">
+          <image class="item_image" :src="item.imgs" mode="widthFix" lazy-load="true" />
         </div>
       </div>
-      <text class="merchandise_text">{{8}}件商品</text>
+      <text class="merchandise_text">{{orderData.orderGoodsSnapshotList.length}}件商品</text>
     </div>
     <div class="buy_box">
-      <text>购买时间：2019-09-10 10：00</text>
-      <text>合计￥453</text>
+      <text>购买时间：{{orderData.createTime}}</text>
+      <text>合计￥{{orderData.totalMoney}}</text>
     </div>
     <div class="buyBtn_box">
       <div class="buy_left">
-        <image class="left_icon" src="{{}}" mode="widthFix" lazy-load="true" />
-        <text class="left_text">分享</text>
+        <image class="left_icon" src="../../src/image/share.png" mode="widthFix" lazy-load="true" />
+        <text
+          class="left_text"
+          @click="shareBtn"
+        >分享</text>
       </div>
-      <button class="buy_btn" @click="gotoInfo()">撤销订单</button>
+      <button
+        class="buy_btn {{orderData.status===1?'active':''}}"
+        @click="infoBtn"
+      >{{orderData.status === 1?'撤销订单':'查看详情'}}</button>
     </div>
   </div>
 </template>
@@ -182,16 +195,7 @@
     props: {
       orderData: {
         type: Object,
-        default () {
-          return {
-            title:'',
-            Version:'',
-            time:'',
-            num:'',
-            status:'',
-            type: '',
-          }
-        }
+        default:{},
       },
     },
     data: {
@@ -201,10 +205,39 @@
       
     },
     methods: {
-      gotoInfo(){
-        wx.navigateTo({
-          url: '/pages/memberManagement/orderInfo'
-        })
+      // 按钮文案
+      btnStatus(key){
+        console.log('key11',key)
+        switch (key) {
+          case -1:
+            return '查看详情';
+          case 0:
+            return '查看详情';
+          case 1:
+            return '撤销订单';
+        }
+      },
+      // 订单状态文案
+      orderState(key){
+        console.log('key',key)
+        switch (key) {
+          case -1:
+            return '已撤销';
+          case 0:
+            return '待支付';
+          case 1:
+            return '已支付';
+        }
+      },
+      // 分享
+      shareBtn(){
+        this.$emit('shareItem',1);
+      },
+      // 订单按钮
+      infoBtn(){
+        this.$emit('infoBtn',{
+          status: orderData.status
+        });
       }
     },
     onShow(){

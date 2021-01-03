@@ -148,6 +148,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { orderDetailShopView } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -159,7 +160,7 @@
 
     },
     methods: {
-
+      
     },
     onLoad(options){
       // console.log('options',options)

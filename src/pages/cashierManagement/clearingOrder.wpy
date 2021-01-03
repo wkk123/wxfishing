@@ -124,7 +124,7 @@
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
-            //待完成
+            //待支付
             if(res.data.order.status === 0){
               wx.showLoading({
                 title: '支付中...',

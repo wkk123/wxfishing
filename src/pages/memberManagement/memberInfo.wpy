@@ -52,9 +52,15 @@
         justify-content: flex-start;
         align-items: flex-start;
         .text_name{
-          font-size: 18px;
-          color: #FFFFFF;
-          font-weight: bold; 
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          .name{
+            font-size: 18px;
+            color: #FFFFFF;
+            font-weight: bold;   
+          }
         }
         .text_item{
           font-size: 12px;
@@ -146,14 +152,14 @@
         <div class="head_btn"></div>
       </div>
       <div class="info_content">
-        <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false" />
+        <image class="content_image" :src="userDetail.user.headimgurl" mode="widthFix" lazy-load="false" />
         <ul class="content_text">
           <li class="text_name">
-            <text class="name">戴蒙</text>
-            <div></div>
+            <text class="name">{{userDetail.user.name}}</text>
+            <div>{{userDetail.userVip.vipLevel}}</div>
           </li>
-          <li class="text_item">15268845321</li>
-          <li class="text_item">老顾客，可适当送些礼品</li>
+          <li class="text_item">{{userDetail.user.phone}}</li>
+          <li class="text_item">{{userDetail.user.remark}}</li>
         </ul>
         <div class="content_btn" @click="editInfoBtn()">编辑信息</div>
       </div>
@@ -161,13 +167,26 @@
     <div class="member_list">
       <div class="list_head">
         <text>购买记录</text>
-        <text>总消费金额￥{{4533}}</text>
+        <text v-show="userDetail.actualMoneySum !== 0">总消费金额￥{{userDetail.actualMoneySum}}</text>
       </div>
-      <ul class="list_box">
-        <li class="list_item" @click="goOrderItem()">
-          <RecordItem />
-        </li>
-      </ul>
+      <scroll-view
+        class="list_box"
+        scroll-y="true"
+        bindscrolltolower="lowerList"
+      >
+        <view
+          class="list_item"
+          :key="'item'+id"
+          v-for="item in orderList"
+          @click="goOrderItem(item)"
+        >
+          <RecordItem
+            :orderData="item"
+            @shareItem="shareItem"
+            @infoBtn="infoBtn"
+          />
+        </view>
+      </scroll-view>
     </div>
     <div class="member_btn">
       <button class="form_btn" @click="renewBtn()">续费VIP</button>
@@ -177,17 +196,76 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { userVipDetail, userVipDetailOrderList } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      userId:'',
+      userDetail:{},//用户信息集合
+      query:{
+        userId:'',
+        page: 1,
+        size: 10,
+      },
+      isUpload: true,
+      orderList:[],
     },
     computed: {
 
     },
     methods: {
+      // 点击分享
+      shareItem(data){
+        console.log('分享',data);
+      },
+      // 点击查看详情
+      infoBtn(data){
+        console.log('data',data);
+      },
+      // 获取会员信息
+      getUserVipDetail(){
+        userVipDetail({userId: this.userId}).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.userDetail =  data;
+          }
+        }).catch(err=> {
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
+        })
+      },
+      // 上拉
+      lowerList(){
+        this.getList();
+      },
+      // 获取订单列表
+      getList(){
+        if(!this.isUpload){
+          return;
+        }
+        userVipDetailOrderList(this.query).then((res)=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.orderList = [ ...this.orderList, ...data ];
+            if(data.length === 10) {
+              this.query.page += 1;
+            } else {
+              this.isUpload = false;
+            }
+          }
+        }).catch(err=> {
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
+        })
+      },
       // 后退
       gotoBack(){
         wx.navigateBack({
@@ -202,8 +280,9 @@
       },
       // 进入会员续费
       renewBtn(){
+        const { userVip:{ id, vipLevelId, endTime }, user } = userDetail;
         wx.navigateTo({
-          url: '/pages/memberManagement/renewVIP'
+          url: `/pages/memberManagement/renewVIP?id=${id}&userId=${user.id}&vipLevelId=${vipLevelId}&endTime=${endTime}`
         })
       },
       // 进入订单详情
@@ -214,10 +293,14 @@
       }
     },
     onLoad(options){
-      // console.log('options',options)
+      console.log('options',options)
+      const { userId } = options;
+      this.userId = userId;
+      this.query.userId = userId;
     },
     onShow(){
-      
+      this.getUserVipDetail();
+      this.getList();
     },
     onReady(){
 

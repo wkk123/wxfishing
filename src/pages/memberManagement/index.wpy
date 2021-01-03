@@ -13,7 +13,6 @@
   .member_list{
     width: 100%;
     height: calc(100% - 55px);
-    padding: 10px 0;
     overflow-y: auto;
     .list_item{
       width: calc(100% - 20px);
@@ -22,7 +21,10 @@
       margin: 0px 10px 10px;
       border-radius: 4px;
       background: #FFFFFF;
-      box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1); 
+      box-shadow: 0px 0px 6px 4px rgba(180, 180, 180, 0.1);
+      &:last-child{
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -43,6 +45,7 @@
         class="list_item"
         :key="'item'+index"
         v-for="(item,index) in VIPList"
+        @click="goInfo(item)"
       >
         <MemberItem
           :info="item"
@@ -99,9 +102,15 @@
           })
         })
       },
+      // 进入会员详情
+      goInfo(data){
+        const { userId } = data;
+        wx.navigateTo({
+          url: `/pages/memberManagement/memberInfo?userId=${userId}`
+        })
+      },
       // 续费VIP
       renewVIP(data){
-        console.log('data',data)
         const { id, userId, vipLevelId, endTime } = data;
         wx.navigateTo({
           url: `/pages/memberManagement/renewVIP?id=${id}&userId=${userId}&vipLevelId=${vipLevelId}&endTime=${endTime}`

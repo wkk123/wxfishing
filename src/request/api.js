@@ -85,7 +85,7 @@ export const orderRevoke = p => {
 export const orderOfflinePay = p => {
   return request.POST('/order/offlinePay',  {...p, isLoading: false})
 }
-// 微信查询支付结果
+// 微信查询支付结果 (订单详情)
 export const orderDetailShopView = p => {
   return request.GET('/order/detail/shopView', {...p, isLoading: true})
 }
@@ -105,7 +105,14 @@ export const userRenewVip = p => {
 export const userNextVipLevel = p => {
   return request.GET('/user/nextVipLevel', {...p, isLoading: true})
 }
-
+// 会员详情
+export const userVipDetail = p => {
+  return request.GET('/user/vipDetail', {...p, isLoading: true})
+}
+// 会员详情订单列表
+export const userVipDetailOrderList = p => {
+  return request.GET('/user/vipDetailOrderList', {...p, isLoading: true})
+}
 
 
 

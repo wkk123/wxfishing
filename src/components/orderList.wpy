@@ -167,9 +167,9 @@
           case -1:
             return "已撤销";
           case 0:
-            return '待完成';
+            return '待支付';
           default:
-            return '已完成';
+            return '已支付';
         }
       }
     },
