@@ -66,21 +66,21 @@
             }
           ]
         },
-        {
-          title:'运营管理',
-          itemList:[
-            {
-              icon:'./../image/icon7.png',
-              subTitle:'销售日报',
-              url:'/pages/dailyPaper/index',
-            },
-            {
-              icon:'./../image/icon8.png',
-              subTitle:'DIY定制产品',
-              url:'/pages/diy/index',
-            }
-          ]
-        }
+        // {
+        //   title:'运营管理',
+        //   itemList:[
+        //     {
+        //       icon:'./../image/icon7.png',
+        //       subTitle:'销售日报',
+        //       url:'/pages/dailyPaper/index',
+        //     },
+        //     {
+        //       icon:'./../image/icon8.png',
+        //       subTitle:'DIY定制产品',
+        //       url:'/pages/diy/index',
+        //     }
+        //   ]
+        // }
       ]
     },
     computed: {

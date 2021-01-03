@@ -121,7 +121,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png" mode="widthFix" />
       </movable-view>
     </movable-area>
     <!-- 弹框 -->
@@ -134,7 +134,7 @@
         <li class="right_item" v-for="(item,index) in cartList" :key="'item'+index">
           <EditOrder
             :editType="1"
-            :orderData="{...item}"
+            :orderData="item"
             @editCart="editCartFun"
           />
         </li>
@@ -172,6 +172,7 @@
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCART, SETORDER } from './../../store/types';
+  import { goodsAllGoodsList } from './../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -196,6 +197,38 @@
         setCart: SETCART,
         setOrder: SETORDER,
       }),
+      // 扫码添加
+      scanCodeAdd(){
+        const that = this;
+        wx.scanCode({
+          onlyFromCamera: true,
+          // scanType:['pdf417'],
+          success (res) {
+            console.log(res)
+            // that.searchCodeOrder(res)
+          }
+        })
+      },
+      // 通过条形码搜索商品并添加
+      searchCodeOrder(keyword){
+        goodsAllGoodsList({
+          field:'number',
+          keyword: keyword,
+        }).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            let order = data[0];
+            const Index = this.cartList.findIndex(item => item.id === order.id);
+            if(Index === -1){
+              order.num = 1;
+              this.editCartFun(order);
+            } else {
+              order.num += 1;
+              this.editCartFun(order);
+            }
+          }
+        })
+      },
       // 下单
       placeAnOrder(){
         let goodsList = [];

@@ -12,7 +12,7 @@ const defaultState = {
     secondClassId:'',//二级分类id
   },
   inventoryList: [],
-  checedList: [],
+  checedList: [],//库存变动选中
 }
 export default handleActions({
   [SETCHECKED] (state, action) {

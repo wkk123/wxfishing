@@ -125,7 +125,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="codeBtn()" src="./../../image/code.png" mode="widthFix" />
       </movable-view>
     </movable-area>
     <div class="myInventory_search">
@@ -219,6 +219,12 @@
       ...mapActions({
         sort: SORT,
       }),
+      // 进入扫码库存变动
+      codeBtn(){
+        wx.navigateTo({
+          url: '/pages/myInventory/codeInventory'
+        })
+      },
       // 搜索输入值
       searchInput(value) {
         this.query.keyword = value;

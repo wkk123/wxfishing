@@ -48,7 +48,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png" mode="widthFix" />
       </movable-view>
     </movable-area>
     <ul class="Inventory_list">
@@ -66,24 +66,16 @@
 
 <script>
   import wepy from '@wepy/core';
-  import {  mapState, mapActions } from '@wepy/redux';
+  import { mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCHECKED } from './../../store/types';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
-      orderList:[
-        {
-          title:'这里是商品名称这里这里是商名这里是商品名称这里这里是商名称',
-          Version:'WHHHSI-3，sertlef;',
-          time:'2020-12-12',
-          num:'3456',
-          status:'保质期60天',
-          type: 3,
-        }
-      ]
+      orderList:[],//选中的商品列表
     },
     computed: {
       ...mapState([ 'inventoryList' ])
@@ -92,7 +84,51 @@
       ...mapActions({
         setChecked: SETCHECKED,
       }),
+      // 扫码添加
+      scanCodeAdd(){
+        const that = this;
+        wx.scanCode({
+          onlyFromCamera: true,
+          // scanType:['pdf417'],
+          success (res) {
+            console.log(res)
+            // that.searchCodeOrder(res)
+          }
+        })
+      },
+      // 通过条形码搜索商品并添加
+      searchCodeOrder(keyword){
+        goodsAllGoodsList({
+          field:'number',
+          keyword: keyword,
+        }).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            let order = data[0];
+            this.addList(order);
+          }
+        })
+      },
+      // 将商品添加进列表
+      addList(order){
+        const Index = this.orderList.findIndex(item => item.id === order.id);
+        if(Index === -1){
+          order.num = 1;
+          this.orderList.push(order);  
+        } else {
+          order.num +=1;
+          this.cartList.splice(Index,1,order);
+        }
+      },
+      // 点击库存变动
       formBtn(){
+        if(this.orderList.length === 0){
+          wx.showModal({
+            title: '提示',
+            content: '请选择商品',
+          })
+          return;
+        }
         this.setChecked({
           checedList: this.orderList
         })

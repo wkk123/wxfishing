@@ -287,7 +287,11 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" 
+          src="./../../image/code.png" 
+          mode="widthFix"
+          @click="scanCodeAdd()"
+        />
       </movable-view>
     </movable-area>
     <!-- 弹框 -->
@@ -402,7 +406,7 @@
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCART } from './../../store/types';
-  import { shopDetail, goodsAllClasses, goodsGoodsList } from './../../request/api.js';
+  import { shopDetail, goodsAllClasses, goodsGoodsList, goodsAllGoodsList } from './../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -439,6 +443,38 @@
       ...mapActions({
         setCart: SETCART,
       }),
+      // 扫码添加
+      scanCodeAdd(){
+        const that = this;
+        wx.scanCode({
+          onlyFromCamera: true,
+          // scanType:['pdf417'],
+          success (res) {
+            console.log(res)
+            // that.searchCodeOrder(res)
+          }
+        })
+      },
+      // 通过条形码搜索商品并添加
+      searchCodeOrder(keyword){
+        goodsAllGoodsList({
+          field:'number',
+          keyword: keyword,
+        }).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            let order = data[0];
+            const Index = this.cartList.findIndex(item => item.id === order.id);
+            if(Index === -1){
+              order.num = 1;
+              this.editCartFun(order);
+            } else {
+              order.num += 1;
+              this.editCartFun(order);
+            }
+          }
+        })
+      },
       // 关闭购物车
       popupBox(){
         this.showCart = !this.showCart;

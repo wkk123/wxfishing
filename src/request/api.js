@@ -64,7 +64,7 @@ export const goodsPropertiesAndTypes = p => {
   return request.GET('/goods/propertiesAndTypes', {...p, isLoading: false})
 }
 
-// 商品列表（收银管理）查询
+// 商品列表（收银管理）条件查询
 export const goodsAllGoodsList = p => {
   return request.GET('/goods/allGoodsList', {...p, isLoading: false})
 }
