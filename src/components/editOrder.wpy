@@ -122,7 +122,16 @@
           <li @click.stop="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
             <image class="btn_icon" src="../image/minus.png" mode="widthFix" lazy-load="true" />
           </li>
-          <input class="num_input" v-if="orderData.num >= 1" :min="0" :value="orderData.num" type="text" />
+          <input 
+            class="num_input"
+            v-if="orderData.num >= 1"
+            :min="0"
+            :value="orderData.num"
+            type="number"
+            confirmType="done"
+            @confirm="confirmBtn"
+            @blur="confirmBtn"
+          />
           <li @click.stop="addBtn()" class="btn_item">
             <image class="btn_icon" src="../image/add.png" mode="widthFix" lazy-load="true" />
           </li>
@@ -160,6 +169,7 @@
       
     },
     methods: {
+      // 减
       minusBtn(){
         if(this.editType === 1 && this.orderData.num === 1){
           wx.showToast({
@@ -172,13 +182,22 @@
         this.orderData.num = this.orderData.num - 1;
         this.$emit('editCart',this.orderData)
       },
+      // 加
       addBtn(){
         if(!this.orderData.num){
           this.orderData.num = 0;
         }
         this.orderData.num = this.orderData.num + 1;
         this.$emit('editCart',this.orderData)
-      }
+      },
+      // 直接修改
+      confirmBtn(e){
+        if(!this.orderData.num){
+          this.orderData.num = 0;
+        }
+        this.orderData.num = Number(e.$wx.detail.value);
+        this.$emit('editCart',this.orderData)
+      },
     },
     onShow(){
 

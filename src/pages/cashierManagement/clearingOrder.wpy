@@ -84,9 +84,10 @@
 
 <script>
   import wepy from '@wepy/core';
-  import { mapState } from '@wepy/redux';
+  import { mapState, mapActions } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
   import store from './../../store';
-  import { orderQRCode, orderWechatPaymentStatus } from './../../request/api.js';
+  import { orderQRCode, orderDetailShopView } from './../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -104,6 +105,9 @@
       ...mapState([ 'cart' ])
     },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
       // 获取二维码
       getCode(){
         orderQRCode(this.codeData).then(res => {
@@ -114,10 +118,14 @@
       },
       // 获取支付结果
       getResults() {
-        orderWechatPaymentStatus({outTradeNo: this.orderId}).then(res => {
+        orderDetailShopView({id: this.orderId}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
+            this.commit({
+              orderDetail: res.data,
+            })
+            this.goToOrderInfo(this.orderId);
           }
         }).catch(err=> {
           const { message } = err;
@@ -128,7 +136,6 @@
               duration: 2000
             })  
           }
-          this.goToOrderInfo(this.orderId);
         })
       },
       // 进入订单详情

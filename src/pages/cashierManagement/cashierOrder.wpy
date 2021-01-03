@@ -167,40 +167,26 @@
 <script>
   import wepy from '@wepy/core';
   import { orderDetail, orderRevoke } from './../../request/api.js';
+  import { mapState } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
+  import store from './../../store';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
-      id: 14,
-      orderId: 13,
+      orderId: 13,//订单id
+      orderDetail: {},//订单详情
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
       // 后退
       gotoBack(){
         wx.navigateBack({
           delta: 1
-        })
-      },
-      // 获取订单详情
-      getDetail() {
-        orderDetail({id: this.id}).then(res => {
-          const {code, data, message} = res;
-          if(res.code === 10000){
-            console.log('res',res)
-          }
-        }).catch(err=> {
-          const { message } = err;
-          if( message ){
-            wx.showToast({
-              title: message,
-              icon: 'error',
-              duration: 2000
-            })  
-          }
         })
       },
       // 撤销订单
@@ -223,7 +209,10 @@
       },
     },
     onLoad(options){
-      // console.log('options',options)
+      const { id } = options;
+      this.orderId = id;
+      const { orderDetail } = this.publics;
+      this.orderDetail = orderDetail;
     },
     onShow(){
       // wx.navigateTo({

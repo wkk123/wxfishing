@@ -36,8 +36,8 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "appid": "wx65a61a32785ba420",
-  "projectname": "wy2test",
+  "appid": "wx6b163167c2c80e1a",
+  "projectname": "wxfishing",
   "miniprogramRoot": "weapp/",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},

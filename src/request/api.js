@@ -68,10 +68,6 @@ export const orderCreate = p => {
 export const orderQRCode = p => {
   return request.GET('/order/QRCode', {...p, isLoading: false})
 }
-// 订单详情
-export const orderDetail = p => {
-  return request.GET('/order/detail', {...p, isLoading: false})
-}
 // 撤销订单
 export const orderRevoke = p => {
   return request.POST('/order/revoke',  {...p, isLoading: false})
@@ -80,13 +76,9 @@ export const orderRevoke = p => {
 export const orderOfflinePay = p => {
   return request.POST('/order/offlinePay',  {...p, isLoading: false})
 }
-// 微信支付信息****
-export const orderWechatPayment = p => {
-  return request.GET('/order/wechatPayment', {...p, isLoading: false})
-}
 // 微信查询支付结果
-export const orderWechatPaymentStatus = p => {
-  return request.GET('/order/wechatPaymentStatus', {...p, isLoading: true})
+export const orderDetailShopView = p => {
+  return request.GET('/order/detail/shopView', {...p, isLoading: true})
 }
 
 

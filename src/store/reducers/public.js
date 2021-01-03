@@ -11,7 +11,9 @@ const defaultState = {
     name: '',
     firstClassId: '',// 一级分类id
     secondClassId: '',// 二级分类id
-  }
+  },
+  // 订单详情
+  orderDetail: {},
 }
 export default handleActions({
   [SETID] (state, action) {
@@ -20,18 +22,14 @@ export default handleActions({
   },
 
   [SORT] (state, action) {
-    console.log('state, action',state, action);
     state.checkedSort = action.payload.checkedSort
     return state
   },
 
   [COMMIT] (state, action) {
-    console.log('state, action',state, action)
     for(const key in action.payload){
-      console.log('action.payload***',key,action.payload)
       state[key] = action.payload[key]
     }
-    console.log('state--',state)
     return state
   }
 }, defaultState)

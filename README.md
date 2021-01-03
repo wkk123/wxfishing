@@ -1,4 +1,4 @@
-# wy2test
+# wxfishing
 渔boss小程序
 npm start 启动
 蓝湖
