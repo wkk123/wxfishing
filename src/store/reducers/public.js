@@ -12,6 +12,8 @@ const defaultState = {
     firstClassId: '',// 一级分类id
     secondClassId: '',// 二级分类id
   },
+  // 门店信息
+  shopInfo:{},
   // 订单详情
   orderDetail: {},
 }

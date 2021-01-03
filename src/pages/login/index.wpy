@@ -123,10 +123,10 @@
   <div class="container">
     <div class="login_box">
       <div class="login_info">
-        <image class="login_icon"  src="" />
+        <image class="login_icon"  :src="logoUrl" />
         <div class="login_head">
           <H3 class="head_text">您好</H3>
-          <text class="head_subText">欢迎来到**,感受不一样的体验吧!</text>
+          <text class="head_subText">欢迎来到渔Boss,感受不一样的体验吧!</text>
         </div>
       </div>
 
@@ -170,7 +170,7 @@
   import { mapActions } from '@wepy/redux';
   import store from './../../store';
   import { COMMIT } from './../../store/types';
-  import { shopLogin, getOpenId } from '../../request/api.js';
+  import { shopDetail, shopLogin } from '../../request/api.js';
   wepy.page({
     store,
     data: {
@@ -178,6 +178,7 @@
       account: "yujua",
       password: "123456",
       url:'',
+      logoUrl:'',
     },
     computed: {
 
@@ -222,6 +223,7 @@
               token: data.token,
               status: data.token?1:2,
             })
+            this.getDetail();
           } else {
             wx.showModal({
               title: '提示',
@@ -246,31 +248,32 @@
           })
         })  
       },
-      // 获取openid 
-      getOpenIds(){
-        wx.login({
-          success (res) {
-            const { code } = res;
-            getOpenId({code: code}).then(ress=>{
-              console.log('ress',ress)
-              if (ress.code === 10000) {
-                wx.setStorageSync('openid',data);
-              }
-            })
-          }}
-        )
-      },
       // 忘记密码
       forgetBtn(){
 
       },
+      // 获取门店信息
+      getDetail(){
+        shopDetail().then( res => {
+          const {code, data, message} = res;
+          if (res.code === 10000) {
+            this.commit({
+              shopInfo: data
+            })
+            wx.setStorageSync('logoUrl',data.logo);
+          }
+        })  
+      },
     },
     onLoad(options){
-      console.log('options',options)
       this.url = options.url;
     },
     onShow(){
-      // this.getOpenIds();
+      
+    },
+    onReady(){
+      const logoUrl = wx.getStorageSync('logoUrl');
+      this.logoUrl = logoUrl;
     },
     onUnload(){
 

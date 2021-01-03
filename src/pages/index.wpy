@@ -15,9 +15,7 @@
 <script>
   import wepy from '@wepy/core';
   import eventHub from '../common/eventHub';
-  import store from '../store';
-  import { mapState, mapActions } from '@wepy/redux';
-  import { COMMIT } from '../store/types';
+  import { getOpenid } from './../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -102,13 +100,17 @@
       },
     },
     onLoad(options){
-      // console.log('options',options)
+
     },
     onShow(){
       
     },
     onReady(){
-
+      // 获取openid 
+      const openid = wx.getStorageSync('openid');
+      if(!openid){
+        getOpenid()
+      }
     },
     onUnload(){
 

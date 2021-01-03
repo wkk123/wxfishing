@@ -437,7 +437,7 @@
       cartList: [],//购物车
     },
     computed: {
-      ...mapState([ 'cart' ])
+      ...mapState([ 'cart','publics' ])
     },
     methods: {
       ...mapActions({
@@ -648,6 +648,7 @@
       }).catch(err=> {
         console.log(err)
       })
+      console.log(this.publics)
       this.getGoodsAllClasses();
     },
     onUnload(){

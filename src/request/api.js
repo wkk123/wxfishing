@@ -1,7 +1,20 @@
 import request from './request';
 // 获取openid ------
-export const getOpenId = p => {
-  return request.GET('/shop/getOpenid', {...p, isLoading: false})
+export const getOpenid = () => {
+  wx.login({
+    success ({code}) {
+      wx.request({
+        url: 'https://h5.shitingjiankang.cn/yjapi/shop/getOpenid',
+        data:{code: code},
+        success:(res)=> {
+          const { code, data: { openid } } = res.data;
+          if ( code === 10000 ) {
+            wx.setStorageSync('openid',openid);
+          }
+        }
+      })
+    }}
+  )
 }
 // 商户登录 ------
 export const shopLogin = p => {

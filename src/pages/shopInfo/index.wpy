@@ -213,18 +213,26 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { COMMIT } from './../../store/types';
   import { shopDetail, shopUpdate } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
+    store,
     data: {
       detail: {},
     },
+    times: null,
     computed: {
-
+      
     },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
       // 上传图片
       upImageFile(path){
         this.detail.logo = path;
@@ -240,20 +248,35 @@
           }
         })
       },
+      // 获取门店信息
+      getDetail(){
+        shopDetail().then( res => {
+          const {code, data, message} = res;
+          if (res.code === 10000) {
+            this.detail = data;
+            this.commit({
+              shopInfo: data
+            })
+          }
+        })
+      },
       // 更新数据
       upDateFun(){
         shopUpdate({...this.detail }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
+            this.getDetail();
             wx.showToast({
               title: '保存成功',
               icon: 'success',
               duration: 2000,
               complete(){
-                wx.navigateBack({
-                  delta: 1
-                })
+                this.times = setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },2000)
               }
             })
           }
@@ -274,17 +297,10 @@
     },
     onReady(){
       // 获取门店信息
-      shopDetail().then( res => {
-        const {code, data, message} = res;
-        if (res.code === 10000) {
-          this.detail = data;
-        }
-      }).catch(err=> {
-        console.log(err)
-      })
+      this.getDetail();
     },
     onUnload(){
-
+      clearTimeout(this.times)
     },
   });
 </script>
