@@ -140,6 +140,7 @@
         console.log('path',path);
         this.info.headimgurl = path;
       },
+      // 选择生日
       birthday(e){
         this.info.produceTime = e.$wx.detail.value;
       },

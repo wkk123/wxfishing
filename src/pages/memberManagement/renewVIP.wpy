@@ -100,17 +100,24 @@
           </div>
         </li>
         <li class="list_item">
-          <SubInput title="续费等级" :Sign="true" />
+          <text class="item_title active">续费等级</text>
+          <picker
+            class="picker_box"
+            mode="date"
+            @change="vipLevelId"
+          >
+            <input class="picker" type="date" :start="startTime" value="{{query.vipLevelId?query.vipLevelId:'续费等级'}}" name="produceTime" id="produceTime">
+          </picker>
         </li>
         <li class="list_item">
           <text class="item_title active">续费时间</text>
-          <!-- <picker
+          <picker
             class="picker_box"
             mode="date"
-            @change="birthday"
+            @change="endTime"
           >
-            <input class="picker" type="date" value="{{info.birthday?info.birthday:'开始时间'}}" name="produceTime" id="produceTime">
-          </picker> -->
+            <input class="picker" type="date" value="{{query.endTime?query.endTime:'结束时间'}}" name="produceTime" id="produceTime">
+          </picker>
         </li>
       </ul>
     </div>
@@ -126,6 +133,7 @@
       addGlobalClass: true
     },
     data: {
+      startTime: new Date(),
       query: {
         id: null,
         userId: null,
@@ -138,10 +146,33 @@
 
     },
     methods: {
-      // 获取等级列表
+      // 续费等级
+      vipLevelId(e){
+        this.query.vipLevelId = e.$wx.detail.value;
+      },
+      // 选择结束时间
+      endTime(e){
+        this.query.endTime = e.$wx.detail.value;
+      },
+      // 点击保存
       onUserRenewVip(){
         userRenewVip(this.query).then(res=>{
-          console.log(res)
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000,
+              complete(){
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },2000)
+              }
+            })
+          }
         })
       },
       // 获取等级列表
@@ -155,7 +186,8 @@
     onLoad(options){
       console.log('options',options)
       const { id, userId, vipLevelId, endTime } = options;
-      this.query = { id, userId, vipLevelId, endTime };
+      this.query = { id, userId, vipLevelId };
+      this.query.endTime = endTime.split(' ')[0];
       this.getList();
     },
     onShow(){
