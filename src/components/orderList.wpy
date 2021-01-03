@@ -94,43 +94,39 @@
   <div class="order_box content_box">
     <div class="order_head">
       <text>订单信息</text>
-      <text class="{{false?'succeed':'error'}}">已撤销</text>
+      <text class="{{info.status === 1?'succeed':'error'}}">{{orderStatus(info.status)}}</text>
     </div>
     <ul class="order_list">
-      <li class="list_item">
-        <OrderInfo />
-      </li>
-      <li class="list_item">
-        <OrderInfo />
-      </li>
-      <li class="list_item">
-        <OrderInfo />
+      <li class="list_item" :key="'item'+item.id" v-for="item in info.orderGoodsSnapshotList">
+        <OrderInfo
+          :orderData="orderItem(item)"
+        />
       </li>
     </ul>
     <ul class="discount_list">
-      <li class="discount_item">
+      <li class="discount_item" v-if="info.coupon.parValue">
         <text>优惠券</text>
-        <text>-¥12</text>
+        <text>-¥{{info.coupon.parValue}}</text>
       </li>
-      <li class="discount_item">
+      <li class="discount_item" v-if="info.discountDetail.vipLevelDiscountRatio">
         <text>会员优惠</text>
-        <text>8折</text>
+        <text>{{Number(info.discountDetail.vipLevelDiscountRatio)*100}}折</text>
       </li>
-      <li class="discount_item">
+      <li class="discount_item" v-if="info.discountDetail.growthLevelDiscountRatio">
         <text>成长等级优惠</text>
-        <text>8折</text>
+        <text>{{Number(info.discountDetail.growthLevelDiscountRatio)*100}}折</text>
       </li>
     </ul>
     <ul class="total_box">
-      <li class="discount_num">
+      <li class="discount_num" v-if="info.preferentialMoney">
         <text>已优惠</text>
         <text class="num12">￥</text>
-        <text>58</text>
+        <text>{{info.preferentialMoney}}</text>
       </li>
-      <li class="num_box">
+      <li class="num_box" v-if="info.totalMoney">
         <text>合计</text>
         <text class="num12">￥</text>
-        <text>453</text>
+        <text>{{info.totalMoney}}</text>
       </li>
     </ul>
   </div>
@@ -143,7 +139,10 @@
       addGlobalClass: true
     },
     props: {
-
+      info:{
+        type: Object,
+        default: {},
+      }
     },
     data: {
       
@@ -152,12 +151,30 @@
       
     },
     methods: {
-      fun(){
-
+      // 订单信息
+      orderItem(item){
+        return {
+          imgs: item.imgs,
+          name: item.name,
+          model: item.model,
+          num: item.quantity,
+          sellPrice: item.price,
+        }
+      },
+      // 订单状态
+      orderStatus(key){
+        switch (key) {
+          case -1:
+            return "已撤销";
+          case 0:
+            return '待完成';
+          default:
+            return '已完成';
+        }
       }
     },
     onShow(){
-      console.log(this.props)
+      console.log(this.info)
     },
   });
 </script>

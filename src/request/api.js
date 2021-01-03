@@ -1,4 +1,8 @@
 import request from './request';
+// 获取openid ------
+export const getOpenId = p => {
+  return request.GET('/shop/getOpenid', {...p, isLoading: false})
+}
 // 商户登录 ------
 export const shopLogin = p => {
   return request.POST('/shop/login',  {...p, isLoading: false})
@@ -58,6 +62,11 @@ export const goodsBrands = p => {
 // 分类下商品属性及类别
 export const goodsPropertiesAndTypes = p => {
   return request.GET('/goods/propertiesAndTypes', {...p, isLoading: false})
+}
+
+// 商品列表（收银管理）查询
+export const goodsAllGoodsList = p => {
+  return request.GET('/goods/allGoodsList', {...p, isLoading: false})
 }
 
 // 下单

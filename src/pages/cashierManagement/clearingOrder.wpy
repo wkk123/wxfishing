@@ -101,6 +101,7 @@
       total: '',
       codeImg:'',
     },
+    times: null,
     computed: {
       ...mapState([ 'cart' ])
     },
@@ -118,14 +119,28 @@
       },
       // 获取支付结果
       getResults() {
+        const that = this;
         orderDetailShopView({id: this.orderId}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
-            this.commit({
-              orderDetail: res.data,
-            })
-            this.goToOrderInfo(this.orderId);
+            //待完成
+            if(res.data.order.status === 0){
+              wx.showLoading({
+                title: '支付中...',
+                complete(){
+                  that.times = setTimeout(()=>{
+                    that.getResults();
+                  },1500)
+                }
+              })
+            } else {
+              wx.hideLoading()
+              this.commit({
+                orderDetail: res.data,
+              })
+              this.goToOrderInfo(this.orderId);
+            }
           }
         }).catch(err=> {
           const { message } = err;
@@ -153,9 +168,7 @@
       }
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+
     },
     onReady(){
       console.log(this.cart)
@@ -164,8 +177,11 @@
       this.price= (total*1000 - totalMoney*1000)/1000;
       this.total= total
     },
+    onHide(){
+      
+    },
     onUnload(){
-
+      clearTimeout(this.times)
     },
   });
 </script>

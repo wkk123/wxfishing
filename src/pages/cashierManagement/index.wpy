@@ -381,7 +381,7 @@
         </div>
         <div class="cart_total">
           <text v-show="cartNum > 0">合计</text>
-          <text v-show="cartNum > 0" class="total_num">{{(totalPrice)}}</text>
+          <text v-show="cartNum > 0" class="total_num">{{totalPrice}}</text>
         </div>
       </li>
       <li class="btn_item">
@@ -427,8 +427,8 @@
         secondClassId:'',//二级分类id
       },
       showCart: false,//购物车显隐
-      cartNum: 0,
-      totalPrice: 0,//
+      cartNum: 0,//购物车数量
+      totalPrice: 0,//合计金额
       cartList: [],//购物车
     },
     computed: {
@@ -574,7 +574,15 @@
           console.log(err)
         })
       },
+      // 进入搜索
       funfocus(data) {
+        this.setCart({
+          cart:{
+            Num: this.cartNum,
+            List: this.cartList,
+            total: this.totalPrice,  
+          }
+        })
         wx.navigateTo({
           url: '/pages/cashierManagement/search'
         })

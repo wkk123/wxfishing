@@ -58,13 +58,14 @@
       width: calc(100% - 85px - 85px);
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       .cart_left{
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
         align-items: flex-start;
+        padding-right: 20px;
         .cart_img{
           width: 30px;
           height: 30px;
@@ -130,37 +131,138 @@
     }
   }
 }
+.pop_Cart{
+  z-index: 10; 
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(30, 30, 30, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  .pop_up_box{
+    width: 100%;
+    height: calc(300px + 10px + 60px);
+    overflow-y: auto; 
+    padding: 10px 10px 60px 10px;
+    border-radius: 28px 28px 0px 0px;
+    background: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    .pop_up_head{
+      width: 100%;
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .head_item{
+        color: #333333;
+        font-size: 15px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        .item_icon{
+          width: 15px;
+          height: 15px;
+          margin-right: 5px;
+        }
+        .item_text{
+          font-size: 12px;
+          color: #999999;
+          font-weight: 400; 
+        }
+      }
+    }
+    .pop_up_content{
+      width: 100%;
+      height: calc(100% - 50px);
+      overflow-y: auto; 
+      .content_item{
+        width: 100%;
+        height: 108px;
+        padding: 10px;
+        box-shadow: 0px 1px 6px 2px rgba(180, 180, 180, 0.1);
+        border-radius: 4px;
+      }
+    }
+  }
+}
 </style>
 <template>
   <div class="cashier_container">
+    <!-- 购物车 -->
+    <div class="pop_Cart"
+      v-show="showCart"
+      @tap.stop="popupBox()"
+    >
+      <div class="pop_up_box" @tap.stop="Box()">
+        <ul class="pop_up_head">
+          <li class="head_item">共{{cartList.length}}件商品</li>
+          <li 
+            class="head_item"
+            @tap.stop="emptyCart()"
+          >
+            <image class="item_icon" src="./../../image/delete.png" mode="widthFix" lazy-load="false" />
+            <text class="item_text">清空购物车</text>
+          </li>
+        </ul>
+        <ul class="pop_up_content">
+          <li class="content_item" :key="'order'+item.id" v-for="item in cartList">
+            <EditOrder 
+              :orderData="item"
+              @editCart="editCartFun"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>
     <!-- 搜索 -->
     <div class="member_search">
-      <Search />
+      <Search @searchBtn="searchInput" />
     </div>
     <!-- 导航 -->
     <ul class="cashier_nav">
-      <li class="nav_item {{currentNav === index &&'active'}}" :key="'item'+index" v-for="(item,index) in navList">{{item.title}}</li>
+      <li
+        class="nav_item {{currentNav === index &&'active'}}"
+        :key="'item'+index" 
+        v-for="(item,index) in navList"
+        @click="navItem(item.field,index)"
+      >{{item.title}}</li>
     </ul>
     <div class="cashier_content">
       <ul class="content_right">
-        <li class="right_item" :key="'right'+index" v-for="(item,index) in 9">
-          <EditOrder />
+        <li class="right_item" :key="'right'+item.id" v-for="item in orderList">
+          <EditOrder
+            :orderData="item"
+            @editCart="editCartFun"
+          />
         </li>
       </ul>
     </div>
     <ul class="cashier_btn">
       <li class="shopping_Cart">
-        <div class="cart_left">
+        <div
+          class="cart_left"
+          @click="cartBtn(showCart)"
+        >
           <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
-          <div class="cart_Num">55</div>  
+          <div class="cart_Num" v-if="cartNum > 0">{{cartNum}}</div>  
         </div>
         <div class="cart_total">
-          <text>合计</text>
-          <text class="total_num">453</text>
+          <text v-show="cartNum > 0">合计</text>
+          <text v-show="cartNum > 0" class="total_num">{{totalPrice}}</text>
         </div>
       </li>
       <li class="btn_item">
-        <button class="btn">改价</button>
+        <button v-if="false" class="btn">改价</button>
       </li>
       <li class="btn_item">
         <button
@@ -174,26 +276,138 @@
 
 <script>
   import wepy from '@wepy/core';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import store from './../../store';
+  import { SETCART } from './../../store/types';
+  import { goodsAllGoodsList } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
       navList:[
-        { title:'全部' },
-        { title:'商品名称' },
-        { title:'商品型号' },
-        { title:'条形码号' },
+        { title:'全部', field: '' },
+        { title:'商品名称', field: 'name' },
+        { title:'商品型号', field: 'model' },
+        { title:'条形码号', field: 'number' },
       ],
-      currentNav: 0,
-      currentItem: 0,
+      // 请求信息
+      query:{
+        field:'',
+        keyword:'',
+      },
+      currentNav: 0,//当前导航
+      showCart: false,//购物车显隐
+      cartNum: 0,//购物车数量
+      totalPrice: 0,//合计金额
+      orderList: [],//商品列表
+      cartList: [],//购物车
     },
     computed: {
-
+      ...mapState([ 'cart' ])
     },
     methods: {
+      ...mapActions({
+        setCart: SETCART,
+      }),
+      // 关闭购物车
+      popupBox(){
+        this.showCart = !this.showCart;
+      },
+      // 无关紧要
+      Box(){
+        return;
+      },
+      // 清空购物车
+      emptyCart(){
+        this.cartList = [];
+        this.cartNum = 0;
+        this.totalPrice = 0;
+        this.orderList.forEach((item,index)=>{
+          const orderItem = item;
+          if(item.num&&item.num>0){
+            orderItem.num = 0;
+            this.orderList.splice(index,1,orderItem);
+          }
+        })
+      },
+      // 显隐购物车
+      cartBtn(Bool){
+        this.showCart = !Bool;
+      },
+      // 切换搜索类型
+      navItem(field,index){
+        this.query.field = field;
+        this.currentNav = index;
+        this.getList();
+      },
+      // 搜索返回
+      searchInput(value){
+        this.query.keyword = value;
+        this.getList();
+      },
+      // 获取列表
+      getList(){
+        goodsAllGoodsList(this.query).then(res=>{
+          console.log('res',res);
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.orderList = data;
+            if(this.cartList.length !== 0){
+              this.cartList.forEach(item=>{
+                this.changedListGoods(item);
+              })  
+            }
+          }
+        })
+      },
+      // 修改商品列表
+      changedListGoods(order){
+        const Index = this.orderList.findIndex(item => item.id === order.id);
+        if(Index === -1){
+          return;
+        }
+        this.orderList.splice(Index,1,order);
+      },
+      // 添加购物车
+      editCartFun(order){
+        this.changedListGoods(order);
+        const Index = this.cartList.findIndex(item => item.id === order.id);
+        if (Index === -1) {
+          this.cartList.push(order);
+        } else {
+          if( order.num > 0){
+            this.cartList.splice(Index,1,order);
+          } else {
+            this.cartList.splice(Index, 1);
+          }
+        }
+        let total = 0;
+        let price = 0;
+        this.cartList.forEach((item)=>{
+          total += item.num;
+          price += item.num * (item.sellPrice*1000);
+        })
+        this.cartNum = total;
+        this.totalPrice = price/1000; 
+      },
       // 去购物车
       goToCart(){
+        this.setCart({
+          cart:{
+            Num: this.cartNum,
+            List: this.cartList,
+            total: this.totalPrice,  
+          }
+        })
+        if(this.cartList.length === 0){
+          wx.showModal({
+            title: '提示',
+            content: '请选择商品',
+          })
+          return;
+        }
         wx.navigateTo({
           url: '/pages/cashierManagement/cart'
         })
@@ -203,12 +417,18 @@
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      const { cart:{ Num, List, total } } = this.cart;
+      console.log('Num, List, total',Num, List, total)
+      // this.getList();
+      this.cartNum = Num;
+      this.totalPrice = total;
+      this.cartList = List;
+      this.cartList.forEach(item=>{
+        this.changedListGoods(item);
+      })
     },
     onReady(){
-
+      
     },
     onUnload(){
 

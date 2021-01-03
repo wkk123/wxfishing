@@ -170,7 +170,7 @@
   import { mapActions } from '@wepy/redux';
   import store from './../../store';
   import { COMMIT } from './../../store/types';
-  import { shopLogin } from '../../request/api.js';
+  import { shopLogin, getOpenId } from '../../request/api.js';
   wepy.page({
     store,
     data: {
@@ -246,11 +246,23 @@
           })
         })  
       },
+      // 获取openid 
+      getOpenIds(){
+        wx.login({
+          success (res) {
+            const { code } = res;
+            getOpenId({code: code}).then(ress=>{
+              console.log('ress',ress)
+              if (ress.code === 10000) {
+                wx.setStorageSync('openid',data);
+              }
+            })
+          }}
+        )
+      },
       // 忘记密码
       forgetBtn(){
-        // wx.navigateTo({
-        //   url: '/pages/password/forgetPassword'
-        // })
+
       },
     },
     onLoad(options){
@@ -258,7 +270,7 @@
       this.url = options.url;
     },
     onShow(){
-
+      // this.getOpenIds();
     },
     onUnload(){
 

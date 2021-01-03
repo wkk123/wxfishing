@@ -137,20 +137,25 @@
       <div class="member_content">
         <!-- info -->
         <div class="member_info_content">
-          <image class="content_image" src="{{}}" mode="widthFix" lazy-load="false" />
+          <image class="content_image" src="{{orderDetail.shop.logo}}" mode="widthFix" lazy-load="false" />
           <ul class="content_text">
             <li class="text_name">
-              <text class="name">戴蒙</text>
+              <text class="name">{{orderDetail.shop.contactName}}</text>
               <div></div>
             </li>
-            <li class="text_item">15268845321</li>
+            <li class="text_item">{{orderDetail.shop.mobilePhone}}</li>
             <!-- <li class="text_item">老顾客，可适当送些礼品</li> -->
           </ul>
-          <div class="content_btn">查看更多</div>
+          <div
+            class="content_btn"
+            @click="gotoMore()"
+          >查看更多</div>
         </div>
         <!-- orderList -->
         <div class="member_list">
-          <OrderList />
+          <OrderList
+            :info="orderDetail.order"
+          />
         </div>
         <!-- btn -->
         <div class="member_btn">
@@ -166,7 +171,7 @@
 
 <script>
   import wepy from '@wepy/core';
-  import { orderDetail, orderRevoke } from './../../request/api.js';
+  import { orderRevoke } from './../../request/api.js';
   import { mapState } from '@wepy/redux';
   import { COMMIT } from './../../store/types';
   import store from './../../store';
@@ -183,6 +188,12 @@
       ...mapState([ 'publics' ])
     },
     methods: {
+      // 看看更多
+      gotoMore(){
+        wx.navigateTo({
+          url: '/pages/shopInfo/index'
+        })
+      },
       // 后退
       gotoBack(){
         wx.navigateBack({

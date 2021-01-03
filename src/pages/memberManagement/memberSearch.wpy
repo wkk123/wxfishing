@@ -30,7 +30,7 @@
 <template>
   <div class="member_container">
     <div class="member_search">
-      <Search />
+      <Search @searchBtn="searchInput" />
     </div>
     <TypeList 
       :list="typeList"
@@ -69,6 +69,10 @@
 
     },
     methods: {
+      // 搜索返回
+      searchInput(e){
+        console.log('e',e)
+      },
       // 切换类型
       typeFun(index) {
         console.log('typeList',this.typeList[index].text);

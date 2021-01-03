@@ -79,7 +79,7 @@
 </style>
 <template>
   <div class="content_item">
-    <image class="item_image" src="{{}}" mode="widthFix" lazy-load="true" />
+    <image class="item_image" :src="orderData.imgs" mode="widthFix" lazy-load="true" />
     <div class="item_info">
       <text class="info_title">{{orderData.name}}</text>
       <ul class="info_content">
@@ -105,6 +105,7 @@
         type: Object,
         default () {
           return {
+            imgs:'',
             name:'',
             model:'',
             num:'',
