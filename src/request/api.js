@@ -126,6 +126,10 @@ export const userVipDetail = p => {
 export const userVipDetailOrderList = p => {
   return request.GET('/user/vipDetailOrderList', {...p, isLoading: true})
 }
+// 编辑会员信息
+export const userEdit = p => {
+  return request.POST('/user/edit',  {...p, isLoading: false})
+}
 
 
 

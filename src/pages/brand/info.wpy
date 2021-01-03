@@ -157,9 +157,11 @@
               icon: 'success',
               duration: 2000,
               complete(){
-                wx.navigateBack({
-                  delta: 1
-                })
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })  
+                },2000)
               }
             })
           }

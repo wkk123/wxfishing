@@ -19,8 +19,8 @@
       justify-content: space-between;
       align-items: center;
       .head_btn{
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
         margin: 0 15px;
       }
       .head_title{
@@ -178,12 +178,12 @@
           class="list_item"
           :key="'item'+id"
           v-for="item in orderList"
-          @click="goOrderItem(item)"
         >
           <RecordItem
+            :info="shopInfo"
             :orderData="item"
             @shareItem="shareItem"
-            @infoBtn="infoBtn"
+            @infoBtn="infoRecord"
           />
         </view>
       </scroll-view>
@@ -196,8 +196,12 @@
 
 <script>
   import wepy from '@wepy/core';
-  import { userVipDetail, userVipDetailOrderList } from '../../request/api.js';
+  import store from './../../store';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
+  import { shopDetail, userVipDetail, userVipDetailOrderList, orderRevoke } from '../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
@@ -210,19 +214,63 @@
         size: 10,
       },
       isUpload: true,
+      shopInfo: {},//门店信息
       orderList:[],
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
       // 点击分享
       shareItem(data){
         console.log('分享',data);
       },
-      // 点击查看详情
-      infoBtn(data){
-        console.log('data',data);
+      // 点击查看详情  或者撤销订单
+      infoRecord(data){
+        const { status, id } = data;
+        if( status === 1){//撤销订单
+          this.repealBtn(id)
+        } else {//进入详情
+          this.goOrderItem(id);
+        }
+      },
+      // 撤销订单
+      repealBtn(orderId) {
+        const that = this;
+        this.query= {
+          userId: this.userId,
+          page: 1,
+          size: 10,
+        }
+        orderRevoke({id: orderId}).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000,
+              // complete(){
+              //   setTimeout(()=>{
+                  
+              //   },2000)
+              // }
+            })
+            that.getList()
+          }
+        }).catch(err=> {
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
+          }
+        })
       },
       // 获取会员信息
       getUserVipDetail(){
@@ -230,6 +278,9 @@
           const {code, data, message} = res;
           if(res.code === 10000){
             this.userDetail =  data;
+            this.commit({
+              userDetail: data
+            })
           }
         }).catch(err=> {
           const { message } = err;
@@ -280,17 +331,26 @@
       },
       // 进入会员续费
       renewBtn(){
-        const { userVip:{ id, vipLevelId, endTime }, user } = userDetail;
+        const { userVip:{ id, vipLevelId, endTime }, user } = this.userDetail;
         wx.navigateTo({
           url: `/pages/memberManagement/renewVIP?id=${id}&userId=${user.id}&vipLevelId=${vipLevelId}&endTime=${endTime}`
         })
       },
       // 进入订单详情
-      goOrderItem(){
+      goOrderItem(id){
         wx.navigateTo({
-          url: '/pages/memberManagement/orderInfo'
+          url: `/pages/memberManagement/orderInfo?id=${id}`
         })
-      }
+      },
+      // 获取门店信息
+      getDetail(){
+        shopDetail().then( res => {
+          const {code, data, message} = res;
+          if (res.code === 10000) {
+              this.shopInfo = data
+          }
+        })
+      },
     },
     onLoad(options){
       console.log('options',options)
@@ -303,7 +363,7 @@
       this.getList();
     },
     onReady(){
-
+      this.getDetail();
     },
     onUnload(){
 

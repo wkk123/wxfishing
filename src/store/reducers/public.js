@@ -14,6 +14,7 @@ const defaultState = {
   },
   // 门店信息
   shopInfo:{},
+  userDetail:{},//会员信息
   // 订单详情
   orderDetail: {},
 }

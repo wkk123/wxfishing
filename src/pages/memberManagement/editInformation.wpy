@@ -19,6 +19,24 @@
       border-bottom: 1px solid rgba(25, 31, 37, 0.08);
     }
   }
+  .picker_box{
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    overflow: hidden;
+  }
+  .picker{
+    width: 360px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    color: #333333;
+  }
   .form_submit{
     margin: 15px 0;
   }
@@ -29,43 +47,127 @@
     <div class="form_content">
       <ul class="form_list">
         <li class="list_item">
-          <UpImage title="头像" @upImagePath="upImageFile" />
+          <UpImage title="头像" :imageFile="info.headimgurl" @upImagePath="upImageFile" />
         </li>
         <li class="list_item">
-          <SubInput title="姓名" />
+          <div class="item_box">
+            <text class="item_title">姓名</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="info.name"
+                type="text"
+                placeholder="请输入姓名" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <SubInput title="电话" />
+          <div class="item_box">
+            <text class="item_title">电话</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="info.phone"
+                type="text"
+                placeholder="请输入电话" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
         <li class="list_item">
-          <SubInput title="生日" />
+          <text class="item_title">生日</text>
+          <picker
+            class="picker_box"
+            mode="date"
+            @change="birthday"
+          >
+            <input class="picker" type="date" value="{{info.birthday?info.birthday:'请输入生日'}}" name="produceTime" id="produceTime">
+          </picker>
         </li>
         <li class="list_item">
-          <SubInput title="备注" />
+          <div class="item_box">
+            <text class="item_title">备注</text>
+            <div class="input_box">
+              <input 
+                class="item_input"
+                v-model="info.remark"
+                type="text"
+                placeholder="请输入备注" 
+                placeholder-class="input_placeholder"
+              />   
+            </div>
+          </div>
         </li>
       </ul>
     </div>
-    <button class="form_btn form_submit" >保存</button>  
+    <button
+      class="form_btn form_submit"
+      @click="submitBtn()"
+    >保存</button>  
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import store from './../../store';
+  import {  mapState, mapActions } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
+  import { userEdit } from '../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
     data: {
-
+      info:{
+        id: null,
+        headimgurl: '',
+        name: '',
+        phone: '',
+        birthday: '',
+        remark: ''
+      },
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
       // 上传图片
       upImageFile(path){
         console.log('path',path);
+        this.info.headimgurl = path;
       },
+      birthday(e){
+        this.info.produceTime = e.$wx.detail.value;
+      },
+      // 修改input
+      inputBtn(data){
+        this.info[data.key] = data.value;
+      },
+      // 点击保存
+      submitBtn(){
+        userEdit(this.info).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000,
+              complete(){
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },2000)
+              }
+            })
+          }
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)
@@ -76,7 +178,9 @@
       // })
     },
     onReady(){
-
+      const { userDetail:{ user } } = this.publics;
+      this.info = user;
+      this.info.birthday = user.birthday.split('T')[0];
     },
     onUnload(){
 

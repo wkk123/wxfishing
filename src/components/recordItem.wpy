@@ -133,17 +133,17 @@
       width: 64px;
       height: 25px;
       border-radius: 23px;
-      border: 1px solid #00CEBE;
+      border: 1px solid #666666;
       font-size: 12px;
-      color: #00CEBE;
+      color: #666666;
       font-weight: 400;
       margin: 0;
       padding: 0;
       text-align:center;
       line-height: 25px;
       &.active{
-        border-color: #666666;
-        color: #666666;
+        border-color: #00CEBE;
+        color: #00CEBE;
       }
     }
   }
@@ -153,8 +153,8 @@
   <div class="content_box">
     <div class="merchant_box">
       <div class="merchant_info">
-        <image class="info_image" src="{{}}" mode="widthFix" lazy-load="true" />
-        <text class="info_title">这里商家名称</text>
+        <image class="info_image" :src="info.logo" mode="widthFix" lazy-load="true" />
+        <text class="info_title">{{info.name}}</text>
       </div>
       <text class="merchant_state {{orderData.status===1?'active':''}}">{{orderData.status === 1?'已支付':(orderData.status=== 0?'待支付':'已撤销')}}</text>
     </div>
@@ -197,6 +197,10 @@
         type: Object,
         default:{},
       },
+      info: {
+        type: Object,
+        default:{},
+      }
     },
     data: {
       
@@ -236,7 +240,8 @@
       // 订单按钮
       infoBtn(){
         this.$emit('infoBtn',{
-          status: orderData.status
+          status: this.orderData.status,
+          id: this.orderData.id
         });
       }
     },

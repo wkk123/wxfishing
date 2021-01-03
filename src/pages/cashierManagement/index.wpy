@@ -17,8 +17,8 @@
       justify-content: space-between;
       align-items: center;
       .head_btn{
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
         margin: 0 15px;
       }
       .head_left{
@@ -451,7 +451,7 @@
           // scanType:['pdf417'],
           success (res) {
             console.log(res)
-            // that.searchCodeOrder(res)
+            that.searchCodeOrder(res)
           }
         })
       },

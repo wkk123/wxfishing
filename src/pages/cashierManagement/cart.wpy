@@ -205,7 +205,7 @@
           // scanType:['pdf417'],
           success (res) {
             console.log(res)
-            // that.searchCodeOrder(res)
+            that.searchCodeOrder(res)
           }
         })
       },

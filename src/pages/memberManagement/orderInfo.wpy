@@ -117,58 +117,112 @@
   <div class="member_container">
     <div class="store_box content_box">
       <div class="store_info">
-        <text class="info_title">戴蒙上个人头官方旗舰店</text>
-        <text class="info_subtitle">这里是一些门店标语这里是</text>
+        <text class="info_title">{{detailInfo.shop.name}}</text>
+        <text class="info_subtitle">{{detailInfo.shop.slogan}}</text>
         <div class="store_site">
-          <image class="site_img" src="{{}}" mode="widthFix" lazy-load="false" />
-          <text class="site_text">绿汀路21号-28号西溪堂商务中心2幢</text>
+          <image class="site_img" src="./../../image/location.png" mode="widthFix" lazy-load="false" />
+          <text class="site_text">{{detailInfo.shop.address}}</text>
         </div>
       </div>
-      <image class="store_img" src="{{}}" mode="widthFix" lazy-load="false" />
+      <image class="store_img" src="{{detailInfo.shop.logo}}" mode="widthFix" lazy-load="false" />
     </div>
-
-    <OrderList />
+    <!-- 订单信息+ -->
+    <OrderList
+      :info="detailInfo"
+    />
 
     <ul class="order_time content_box">
-      <li class="time_item">
+      <li class="time_item" v-if="detailInfo.order.createTime">
         <text>购买时间</text>
-        <text>2019-09-10 10：00</text>
+        <text>{{detailInfo.order.createTime}}</text>
       </li>
-      <li class="time_item">
+      <li class="time_item" v-if="detailInfo.order.revokeTime">
         <text>撤销时间</text>
-        <text>2019-09-10 10：00</text>
+        <text>{{detailInfo.order.revokeTime}}</text>
       </li>
     </ul>
     <div class="member_btn">
-      <button class="btn_item">分享</button>
-      <button class="btn_item active">撤销订单</button>
+      <button class="btn_item" @click="shareItem()">分享</button>
+      <button
+        class="btn_item active"
+        @click="repealBtn()"
+        v-if="detailInfo.order.status=== 1"
+      >撤销订单</button>
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
-  import { orderDetailShopView } from '../../request/api.js';
+  import { orderRevoke, orderDetailShopView } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-
+      orderId: '',//订单id
+      detailInfo:{},//订单信息
     },
     computed: {
 
     },
     methods: {
-      
+      // 获取订单详情
+      getDetail(){
+        orderDetailShopView({id:this.orderId}).then(res=>{
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.detailInfo =  data;
+          }
+        }).catch(err=> {
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
+        })
+      },
+      // 分享订单
+      shareItem(){
+        console.log('分享')
+      },
+      // 撤销订单
+      repealBtn() {
+        orderRevoke({id: this.orderId}).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            console.log('res',res)
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000,
+              complete(){
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })  
+                },2000)
+              }
+            })
+          }
+        }).catch(err=> {
+          const { message } = err;
+          if( message ){
+            wx.showToast({
+              title: message,
+              icon: 'error',
+              duration: 2000
+            })  
+          }
+        })
+      },
     },
     onLoad(options){
-      // console.log('options',options)
+      const { id } = options;
+      this.orderId = id;
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      this.getDetail()
     },
     onReady(){
 

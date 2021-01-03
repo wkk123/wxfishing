@@ -94,12 +94,12 @@
   <div class="order_box content_box">
     <div class="order_head">
       <text>订单信息</text>
-      <text class="{{info.status === 1?'succeed':'error'}}">{{orderStatus(info.status)}}</text>
+      <text class="{{info.status === 1?'succeed':'error'}}">{{info.status === 1?'已支付':(info.status=== 0?'待支付':'已撤销')}}</text>
     </div>
     <ul class="order_list">
-      <li class="list_item" :key="'item'+item.id" v-for="item in info.orderGoodsSnapshotList">
+      <li class="list_item" :key="'item'+item.id" v-for="item in info.order.orderGoodsSnapshotList">
         <OrderInfo
-          :orderData="orderItem(item)"
+          :orderData="{ ...item, sellPrice:item.price, num:item.quantity }"
         />
       </li>
     </ul>
@@ -110,23 +110,23 @@
       </li>
       <li class="discount_item" v-if="info.discountDetail.vipLevelDiscountRatio">
         <text>会员优惠</text>
-        <text>{{Number(info.discountDetail.vipLevelDiscountRatio)*100}}折</text>
+        <text>{{info.discountDetail.vipLevelDiscountRatio*100}}折</text>
       </li>
       <li class="discount_item" v-if="info.discountDetail.growthLevelDiscountRatio">
         <text>成长等级优惠</text>
-        <text>{{Number(info.discountDetail.growthLevelDiscountRatio)*100}}折</text>
+        <text>{{info.discountDetail.growthLevelDiscountRatio*100}}折</text>
       </li>
     </ul>
     <ul class="total_box">
-      <li class="discount_num" v-if="info.preferentialMoney">
+      <li class="discount_num" v-if="info.order.preferentialMoney">
         <text>已优惠</text>
         <text class="num12">￥</text>
-        <text>{{info.preferentialMoney}}</text>
+        <text>{{info.order.preferentialMoney}}</text>
       </li>
-      <li class="num_box" v-if="info.totalMoney">
+      <li class="num_box" v-if="info.order.totalMoney">
         <text>合计</text>
         <text class="num12">￥</text>
-        <text>{{info.totalMoney}}</text>
+        <text>{{info.order.totalMoney}}</text>
       </li>
     </ul>
   </div>
@@ -151,27 +151,7 @@
       
     },
     methods: {
-      // 订单信息
-      orderItem(item){
-        return {
-          imgs: item.imgs,
-          name: item.name,
-          model: item.model,
-          num: item.quantity,
-          sellPrice: item.price,
-        }
-      },
-      // 订单状态
-      orderStatus(key){
-        switch (key) {
-          case -1:
-            return "已撤销";
-          case 0:
-            return '待支付';
-          default:
-            return '已支付';
-        }
-      }
+      
     },
     onShow(){
       console.log(this.info)
