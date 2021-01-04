@@ -34,18 +34,34 @@
     </div>
     <TypeList 
       :list="typeList"
-      @typeFun="typeFun"
+      @typeFun="typeFunBtn"
     />
-    <ul class="member_list">
-      <li class="list_item" v-for="i in 10">
-        <MemberItem />
-      </li>
-    </ul>
+    <scroll-view
+      class="member_list"
+      scroll-y="true"
+      bindscrolltolower="lowerList"
+    >
+      <view
+        class="list_item"
+        :key="'item'+index"
+        v-for="(item,index) in VIPList"
+        @click="goInfo(item)"
+      >
+        <MemberItem
+          :info="item"
+          @renewVIPBtn="renewVIP"
+        />
+      </view>
+    </scroll-view>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import store from './../../store';
+  import { mapActions } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
+  import { userVipList } from '../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
@@ -63,28 +79,91 @@
           text: '手机号',
           field: 'phone',
         }
-      ]
+      ],
+      page: 1,
+      size: 10,
+      keyword: '',
+      field: 'all',
+      isUpload: true,
+      VIPList:[],
     },
     computed: {
 
     },
     methods: {
+      ...mapActions({
+        commit: COMMIT
+      }),
       // 搜索返回
-      searchInput(e){
-        console.log('e',e)
+      searchInput( keyword ){
+        console.log('keyword',keyword);
+        this.isUpload = true;
+        this.keyword = keyword;
+        this.VIPList = [];
+        this.page = 1;
+        this.getUserList();
       },
       // 切换类型
-      typeFun(index) {
-        console.log('typeList',this.typeList[index].text);
-      }
+      typeFunBtn(index) {
+        this.isUpload = true;
+        this.field = this.typeList[index].field;
+        this.VIPList = [];
+        this.page = 1;
+        // this.getUserList();
+      },
+      // 上拉
+      lowerList(){
+        this.getUserList();
+      },
+      // 获取VIP列表
+      getUserList(){
+        if(!this.isUpload){
+          return;
+        }
+        userVipList({ page: this.page, size: 10, keyword: this.keyword, field: this.field }).then(res => {
+          const {code, data, message} = res;
+          if(res.code === 10000){
+            this.VIPList = [ ...this.VIPList, ...data ];
+            if(data.length === 10) {
+              this.page += 1;
+            } else {
+              this.isUpload = false;
+            }
+          }
+        }).catch(err=> {
+          const { message } = err;
+          wx.showModal({
+            title: '提示',
+            content: message,
+          })
+        })
+      },
+      // 进入会员详情
+      goInfo(data){
+        const { userId, vipLevel } = data;
+        this.commit({
+          VIPLevel: vipLevel
+        })
+        wx.navigateTo({
+          url: `/pages/memberManagement/memberInfo?userId=${userId}`
+        })
+      },
+      // 续费VIP
+      renewVIP(data){
+        const { id, userId, vipLevelId, endTime, vipLevel } = data;
+        this.commit({
+          VIPLevel: vipLevel
+        })
+        wx.navigateTo({
+          url: `/pages/memberManagement/renewVIP?id=${id}&userId=${userId}&vipLevelId=${vipLevelId}&endTime=${endTime}`
+        })
+      },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      this.getUserList();
     },
     onReady(){
 

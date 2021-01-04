@@ -138,7 +138,7 @@
       },
     },
     onLoad(options){
-      // console.log('options',options)
+      
     },
     onShow(){
       this.getUserList();
