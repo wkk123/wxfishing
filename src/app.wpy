@@ -78,7 +78,6 @@ wepy.app({
     'pages/password/forgetPassword',
     'pages/password/setPassword',
     'pages/shopInfo/index',
-    'pages/diy/index',
     'pages/dailyPaper/index',
     'pages/brand/index',
     'pages/brand/info',

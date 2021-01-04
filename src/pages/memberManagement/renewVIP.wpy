@@ -88,36 +88,38 @@
           <div class="item_box">
             <text class="item_title">当前等级</text>
             <div class="input_box">
-              <input 
-                class="item_input"
-                value="{{''}}"
-                type="text"
-                placeholder="请输入" 
-                placeholder-class="input_placeholder"
-                :bindfocus="funfocus()"
-                @blur="fun()"/>   
+              <div class="picker_box">{{currentLevel}}</div>   
             </div>
           </div>
         </li>
         <li class="list_item">
-          <text class="item_title active">续费等级</text>
-          <picker
-            class="picker_box"
-            mode="date"
-            @change="vipLevelId"
-          >
-            <input class="picker" type="date" :start="startTime" value="{{query.vipLevelId?query.vipLevelId:'续费等级'}}" name="produceTime" id="produceTime">
-          </picker>
+          <div class="item_box">
+            <text class="item_title active">续费等级</text>
+            <picker
+              class="picker_box"
+              value="{{index}}"
+              range="{{vipLevelList}}"
+              @change="vipLevelId"
+              range-key="name"
+            >
+              <view class="picker">
+                {{vipLevelList[index].name}}
+              </view>
+            </picker>
+          </div>
         </li>
         <li class="list_item">
-          <text class="item_title active">续费时间</text>
-          <picker
-            class="picker_box"
-            mode="date"
-            @change="endTime"
-          >
-            <input class="picker" type="date" value="{{query.endTime?query.endTime:'结束时间'}}" name="produceTime" id="produceTime">
-          </picker>
+          <div class="item_box">
+            <text class="item_title active">续费时间</text>
+            <picker
+              class="picker_box"
+              mode="date"
+              start="2021-01-03"
+              @change="endTimeFun"
+            >
+              <view class="picker">{{endTime}}</view>
+            </picker>
+          </div>
         </li>
       </ul>
     </div>
@@ -127,8 +129,12 @@
 
 <script>
   import wepy from '@wepy/core';
+  import store from './../../store';
+  import { mapState } from '@wepy/redux';
+  import { COMMIT } from './../../store/types';
   import { userNextVipLevel, userRenewVip } from '../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
@@ -140,23 +146,47 @@
         vipLevelId: null,
         endTime: ''
       },
-      vipLevelList:[],
+      currentLevel:'',//当前等级
+      index: 0,//续费等级
+      endTime: '',//结束日期
+      vipLevelList: [
+        {
+          id: 0,
+          name: '无脊柱动物'
+        },
+        {
+          id: 1,
+          name: '脊柱动物'
+        },
+        {
+          id: 2,
+          name: '软体动物'
+        },
+        {
+          id: 3,
+          name: '节肢动物'
+        }
+      ],
     },
     computed: {
-
+      ...mapState([ 'publics' ])
     },
     methods: {
-      // 续费等级
+      // 选择续费等级
       vipLevelId(e){
-        this.query.vipLevelId = e.$wx.detail.value;
+        this.index = e.$wx.detail.value;
       },
       // 选择结束时间
-      endTime(e){
-        this.query.endTime = e.$wx.detail.value;
+      endTimeFun(e){
+        this.endTime = e.$wx.detail.value;
       },
       // 点击保存
       onUserRenewVip(){
-        userRenewVip(this.query).then(res=>{
+        userRenewVip({
+          ...this.query,
+          endTime: this.endTime,
+          vipLevelId: this.index
+        }).then(res=>{
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
@@ -188,12 +218,12 @@
       const { id, userId, vipLevelId, endTime } = options;
       this.query = { id, userId, vipLevelId };
       this.query.endTime = endTime.split(' ')[0];
+      this.endTime = endTime.split(' ')[0];
       this.getList();
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      const { VIPLevel:{ name }} = this.publics;
+      this.currentLevel = name;
     },
     onReady(){
 

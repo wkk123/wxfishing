@@ -40,7 +40,7 @@
   <div class="container">
     <div class="dailyPaper_box">
       <div class="picker_box">
-        <picker class="picker_date" mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
+        <picker class="picker_date" mode="date" value="{{date}}" bindchange="bindDateChange">
           <view class="picker">{{date}}</view>
         </picker>
         <image class="picker_icon" src="./../../image/calendar.png" mode="widthFix" lazy-load="false" />
@@ -56,26 +56,22 @@
       addGlobalClass: true
     },
     data: {
-      date: '2016-09-01',
+      date: '',
     },
     computed: {
 
     },
     methods: {
+      // 选择日期
       bindDateChange: function(e) {
-        console.log('picker发送选择改变，携带值为', e.detail.value)
-        // this.setData({
-        //   date: e.detail.value
-        // })
+        this.date = e.$wx.detail.value;
       },
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      this.date = new Date().toLocaleDateString().replace(/\//g,'-');
     },
     onReady(){
 
