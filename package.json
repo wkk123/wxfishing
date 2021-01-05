@@ -17,6 +17,7 @@
   "dependencies": {
     "@wepy/core": "^2.0.0-alpha.14",
     "@wepy/redux": "^2.0.2",
+    "cnchar": "^3.0.1",
     "miniprogram-slide-view": "0.0.3",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",

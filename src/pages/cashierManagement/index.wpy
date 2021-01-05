@@ -92,7 +92,6 @@
         .item_icon{
           width: 25px;
           height: 25px;
-          background-color: #999999;
         }
         .item_text{
           font-size: 12px;
@@ -357,7 +356,7 @@
           v-for="(item,index) in goodsClassList"
           @click="leftItem(item,index)"
         >
-          <image class="item_icon" src="{{}}" mode="widthFix" lazy-load="false" />
+          <image class="item_icon" src="{{item.icon}}" mode="widthFix" lazy-load="false" />
           <text class="item_text">{{item.name}}</text>
         </li>
       </ul>
@@ -403,6 +402,7 @@
 
 <script>
   import wepy from '@wepy/core';
+  import cnchar from 'cnchar';
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCART } from './../../store/types';
@@ -573,6 +573,10 @@
         this.currentNav = data.id;
         this.goodsClassList = data.goodsClassSeconds;
         this.currentItem = 0;
+        if(data.goodsClassSeconds.length === 0){
+          this.orderList = [];
+          return;
+        };
         let firstClassId = this.goodsClassList[this.currentItem].firstClassId;
         let secondClassId = this.goodsClassList[this.currentItem].id;
         this.getGoodsGoodsList({firstClassId: firstClassId,secondClassId: secondClassId});
@@ -589,6 +593,11 @@
         goodsAllClasses().then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
+            data.forEach((item=>{
+              item.goodsClassSeconds.forEach((it)=>{
+                it.icon = this.imgIcon(it.name);
+              })
+            }))
             this.navList = data;
             this.goodsClassList = data[0].goodsClassSeconds;
             const list = data[0].goodsClassSeconds
@@ -624,6 +633,23 @@
           url: '/pages/cashierManagement/search'
         })
       },
+      // icon 
+      imgIcon(name){
+        if(name === '钩'){
+          return `./../../image/${this.pinyin(name)}1.png`;
+        } else {
+          return `./../../image/${this.pinyin(name)}.png`;
+        }
+      },
+      // 拼音
+      pinyin(words){
+        const Arr = cnchar.spell(words,'array', 'first', 'low');
+        let str = '';
+        Arr.forEach(item=>{
+          str+= item;
+        })
+        return str;
+      }
     },
     onLoad(options){
       // console.log('options',options)

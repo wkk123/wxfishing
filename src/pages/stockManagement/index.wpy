@@ -51,14 +51,14 @@
   <div class="stock_container">
     <div class="grid_list">
       <div class="list_item" v-for="(item, index) in gridList" :key="'item-'+index">
-        <text class="item_title">{{item.name}}</text>
-        <ul class="item_list">
+        <text class="item_title" v-if="item.goodsClassSeconds.length !== 0">{{item.name}}</text>
+        <ul class="item_list" v-if="item.goodsClassSeconds.length !== 0">
           <li class="sub_item"
             v-for="(it,i) in item.goodsClassSeconds"
             :key="'i-'+i"
             @tap="subItem(it)"
           >
-            <image class="sub_icon" :src="'./../../image/icon'+item.id+'.png'" mode="widthFix" lazy-load="false" />
+            <image class="sub_icon" src="{{it.icon}}" mode="widthFix" lazy-load="false" />
             <text class="sub_title">{{it.name}}</text>
           </li>
         </ul>
@@ -69,23 +69,14 @@
 
 <script>
   import wepy from '@wepy/core';
+  import cnchar from 'cnchar';
   import { goodsAllClasses } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-      gridList:[
-        {
-          title:'基础产品',
-          itemList:[
-            {
-              icon:'./../image/icon1.png',
-              subTitle:'竿',
-            },
-          ]
-        },
-      ]
+      gridList:[],
     },
     computed: {
 
@@ -104,11 +95,33 @@
           if(res.code === 10000){
             console.log('res',res)
             this.gridList = data;
+            this.gridList.forEach((item=>{
+              item.goodsClassSeconds.forEach((it)=>{
+                it.icon = this.imgIcon(it.name);
+              })
+            }))
           }
         }).catch(err=> {
           console.log(err)
         })
       },
+      // icon
+      imgIcon(name){
+        if(name === '钩'){
+          return `./../../image/${this.pinyin(name)}1.png`;
+        } else {
+          return `./../../image/${this.pinyin(name)}.png`;
+        }
+      },
+      // 拼音
+      pinyin(words){
+        const Arr = cnchar.spell(words,'array', 'first', 'low');
+        let str = '';
+        Arr.forEach(item=>{
+          str+= item;
+        })
+        return str;
+      }
     },
     onLoad(options){
       // console.log('options',options)

@@ -44,12 +44,12 @@
               url:'/pages/cashierManagement/index',
             },
             {
-              icon:'./../image/icon3.png',
+              icon:'./../image/icon4.png',
               subTitle:'入库管理',
               url:'/pages/stockManagement/index',
             },
             {
-              icon:'./../image/icon4.png',
+              icon:'./../image/icon3.png',
               subTitle:'我的库存',
               url:'/pages/myInventory/index',
             },
@@ -93,12 +93,13 @@
           })
         }
       },
+      
     },
     onLoad(options){
 
     },
     onShow(){
-      
+
     },
     onReady(){
       // 获取openid 
