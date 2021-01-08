@@ -1,14 +1,23 @@
 import request from './request';
 // 获取openid ------
 export const getOpenid = () => {
+  let token = wx.getStorageSync('token');
+  if(!token){
+    return;
+  }
   wx.login({
     success ({code}) {
       wx.request({
         url: 'https://h5.shitingjiankang.cn/yjapi/shop/getOpenid',
+        header:{
+          Authorization:`Bearer ${token}`
+        },
         data:{code: code},
         success:(res)=> {
-          const { code, data: { openid } } = res.data;
+          console.log('res',res);
+          const { code, data } = res.data;
           if ( code === 10000 ) {
+            const { openid } = data;
             wx.setStorageSync('openid',openid);
           }
         }

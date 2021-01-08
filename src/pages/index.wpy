@@ -99,14 +99,14 @@
 
     },
     onShow(){
-
-    },
-    onReady(){
-      // 获取openid 
+      // 获取openid
       const openid = wx.getStorageSync('openid');
       if(!openid){
         getOpenid()
       }
+    },
+    onReady(){
+      
     },
     onUnload(){
 
