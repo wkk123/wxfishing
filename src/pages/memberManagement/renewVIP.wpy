@@ -169,7 +169,7 @@
       onUserRenewVip(){
         userRenewVip({
           ...this.query,
-          endTime: this.endTime,
+          endTime: this.endTime+' 00:00:00',
         }).then(res=>{
           const {code, data, message} = res;
           if(res.code === 10000){
@@ -202,7 +202,7 @@
     onLoad(options){
       const { id, userId, vipLevelId, endTime } = options;
       this.query = { id, userId, vipLevelId };
-      this.query.endTime = endTime.split(' ')[0];
+      this.query.endTime = endTime;
       this.endTime = endTime.split(' ')[0];
       this.getList();
     },

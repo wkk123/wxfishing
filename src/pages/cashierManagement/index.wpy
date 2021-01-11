@@ -595,7 +595,11 @@
           if(res.code === 10000){
             data.forEach((item=>{
               item.goodsClassSeconds.forEach((it)=>{
-                it.icon = this.imgIcon(it.name);
+                if(it.name === '钩'){
+                  it.icon = `./../../image/icon/${item.id}_${this.imgIcon(it.name)}1.png`;
+                } else {
+                  it.icon = `./../../image/icon/${item.id}_${this.imgIcon(it.name)}.png`;
+                }
               })
             }))
             this.navList = data;
@@ -636,9 +640,9 @@
       // icon 
       imgIcon(name){
         if(name === '钩'){
-          return `./../../image/${this.pinyin(name)}1.png`;
+          return this.pinyin(name);
         } else {
-          return `./../../image/${this.pinyin(name)}.png`;
+          return this.pinyin(name);
         }
       },
       // 拼音
