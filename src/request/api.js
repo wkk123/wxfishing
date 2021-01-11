@@ -139,7 +139,10 @@ export const userVipDetailOrderList = p => {
 export const userEdit = p => {
   return request.POST('/user/edit',  {...p, isLoading: false})
 }
-
+// 销售日报
+export const shopSalesReport = p => {
+  return request.GET('/shop/salesReport', {...p, isLoading: true})
+}
 
 
 export const postDome = p => {

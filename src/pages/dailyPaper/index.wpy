@@ -21,7 +21,6 @@
     font-size: 18px;
     color: #333333; 
     .picker_date{
-      width: calc(100% - 36px);
       height: 100%;
       line-height: 50px; 
       .picker{
@@ -40,23 +39,33 @@
   <div class="container">
     <div class="dailyPaper_box">
       <div class="picker_box">
-        <picker class="picker_date" mode="date" value="{{date}}" bindchange="bindDateChange">
-          <view class="picker">{{date}}</view>
+        <picker class="picker_date" mode="date" value="{{startDate}}" bindchange="bindDateChange">
+          <view class="picker">{{startDate}}</view>
+        </picker>
+        <span>-</span>
+        <picker class="picker_date" mode="date" value="{{endDate}}" bindchange="bindDateChange2">
+          <view class="picker">{{endDate}}</view>
         </picker>
         <image class="picker_icon" src="./../../image/calendar.png" mode="widthFix" lazy-load="false" />
       </div>
+    </div>
+    <div>
+
     </div>
   </div>
 </template>
 
 <script>
   import wepy from '@wepy/core';
+  import { shopSalesReport } from './../../request/api.js';
   wepy.page({
     options: {
       addGlobalClass: true
     },
     data: {
-      date: '',
+      startDate: '',
+      endDate: '',
+      dataInfo: {},
     },
     computed: {
 
@@ -64,14 +73,45 @@
     methods: {
       // 选择日期
       bindDateChange: function(e) {
-        this.date = e.$wx.detail.value;
+        this.startDate = e.$wx.detail.value;
+        this.getData();
       },
+      // 选择日期
+      bindDateChange2: function(e) {
+        this.endDate = e.$wx.detail.value;
+        this.getData();
+      },
+      // 获取数据
+      getData(){
+        const a = new Date(this.endDate).getTime() - new Date(this.startDate).getTime();
+        if((a/1000/60/60/24) < 1){
+          wx.showModal({
+            title: '提示',
+            content: '开始时间不能大于等于结束时间!',
+          })
+          return;
+        }
+        shopSalesReport({
+          startDate: this.startDate,
+          endDate: this.endDate
+        }).then((res)=>{
+          if(res.code === 1000){
+            this.dataInfo = res.data;
+          } else if(res.code === 20000){
+            wx.showModal({
+            title: '提示',
+            content: '暂无数据!',
+          })
+          }
+        })
+      }
     },
     onLoad(options){
       // console.log('options',options)
     },
     onShow(){
-      this.date = new Date().toLocaleDateString().replace(/\//g,'-');
+      this.startDate = new Date().toLocaleDateString().replace(/\//g,'-');
+      this.endDate = new Date().toLocaleDateString().replace(/\//g,'-');
     },
     onReady(){
 
