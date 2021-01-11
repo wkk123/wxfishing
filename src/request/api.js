@@ -121,11 +121,11 @@ export const userVipList = p => {
 }
 // 续费VIP
 export const userRenewVip = p => {
-  return request.GET('/user/renewVip', {...p, isLoading: true})
+  return request.POST('/user/renewVip', {...p, isLoading: true})
 }
 // 会员等级列表
-export const userNextVipLevel = p => {
-  return request.GET('/user/nextVipLevel', {...p, isLoading: true})
+export const VipLevelList = p => {
+  return request.GET('/vipLevel/listShopVipLevels', {...p, isLoading: true})
 }
 // 会员详情
 export const userVipDetail = p => {

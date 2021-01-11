@@ -52,7 +52,7 @@
       </movable-view>
     </movable-area>
     <ul class="Inventory_list">
-      <li class="list_item" v-for="item in orderList" :key="'item'+index">
+      <li class="list_item" v-for="item in orderList" :key="'item'+item.id">
         <div class="content_item">
           <orderItem :orderData="item" />
         </div>

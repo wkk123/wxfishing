@@ -132,7 +132,7 @@
   import store from './../../store';
   import { mapState } from '@wepy/redux';
   import { COMMIT } from './../../store/types';
-  import { userNextVipLevel, userRenewVip } from '../../request/api.js';
+  import { VipLevelList, userRenewVip } from '../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -149,24 +149,7 @@
       currentLevel:'',//当前等级
       index: 0,//续费等级
       endTime: '',//结束日期
-      vipLevelList: [
-        {
-          id: 0,
-          name: '无脊柱动物'
-        },
-        {
-          id: 1,
-          name: '脊柱动物'
-        },
-        {
-          id: 2,
-          name: '软体动物'
-        },
-        {
-          id: 3,
-          name: '节肢动物'
-        }
-      ],
+      vipLevelList: [],
     },
     computed: {
       ...mapState([ 'publics' ])
@@ -175,17 +158,18 @@
       // 选择续费等级
       vipLevelId(e){
         this.index = e.$wx.detail.value;
+        const vip = this.vipLevelList[this.index];
+        this.query.vipLevelId = vip.id;
       },
       // 选择结束时间
       endTimeFun(e){
         this.endTime = e.$wx.detail.value;
       },
-      // 点击保存
+      // 点击保存  续费
       onUserRenewVip(){
         userRenewVip({
           ...this.query,
           endTime: this.endTime,
-          vipLevelId: this.index
         }).then(res=>{
           const {code, data, message} = res;
           if(res.code === 10000){
@@ -208,13 +192,14 @@
       // 获取等级列表
       getList(){
         const openid = wx.getStorageSync('openid');
-        userNextVipLevel({vipLevelId:this.query.vipLevelId,openid:openid}).then(res=>{
-          console.log(res)
+        VipLevelList().then(res=>{
+          if(res.code === 10000){
+            this.vipLevelList = res.data;
+          }
         })
       }
     },
     onLoad(options){
-      console.log('options',options)
       const { id, userId, vipLevelId, endTime } = options;
       this.query = { id, userId, vipLevelId };
       this.query.endTime = endTime.split(' ')[0];
