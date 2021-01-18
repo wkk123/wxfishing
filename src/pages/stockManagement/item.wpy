@@ -167,7 +167,7 @@
           </li>
         </ul>
       </div>
-      <div class="content_item">
+      <div class="content_item" v-if="isShow">
         <div class="form_head">
           <text class="head_text">商品信息</text>
           <div class="head_icon" @click="headIcon(2)">
@@ -373,6 +373,7 @@
         secondClassId: 1,//二级分类id
       },
       parameter:{},//参数
+      isShow: false,// 是否显示其他信息
     },
     computed: {
 
@@ -419,16 +420,19 @@
       bindPickerChange(e){
         this.brandIndex = e.$wx.detail.value;
         this.brandObj = this.brandArray[this.brandIndex];
+        this.info.brandId = this.brandArray[this.brandIndex].id;
       },
       //选择商品属性
       propertyPickerChange(e){
         this.propertyIndex = e.$wx.detail.value;
         this.propertyObj = this.propertyArray[this.propertyIndex];
+        this.info.propertyId = this.propertyArray[this.propertyIndex].id;
       },
       //选择商品类型
       moldPickerChange(e){
         this.moldIndex = e.$wx.detail.value;
         this.moldObj = this.moldArray[this.moldIndex];
+        this.info.typeId = this.moldArray[this.moldIndex].id;
       },
       // inputBtn
       inputBtn(data){
@@ -449,7 +453,7 @@
       },
       // 更新商品
       goodsUpdate(){
-        goodsUpdate(...this.info).then(res => {
+        goodsUpdate({...this.info,...this.parameter}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
@@ -460,7 +464,8 @@
       },
       // 商品入库
       goodsSave(){
-        goodsSave({...this.info}).then(res => {
+        delete this.info.id;
+        goodsSave({...this.info,...this.parameter}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
@@ -476,6 +481,7 @@
           if(res.code === 10000){
             console.log('res',res)
             this.brandArray = data;
+            this.info.brandId = this.brandArray[this.brandIndex].id;
           }
         }).catch(err=> {
           console.log(err)
@@ -492,8 +498,10 @@
           if(res.code === 10000){
             this.propertyArray = data.goodsClassPropertyList;
             this.propertyObj = this.propertyArray[this.propertyIndex];
+            this.info.propertyId = this.propertyArray[this.propertyIndex].id;
             this.moldArray = data.goodsClassTypeList;
             this.moldObj = this.moldArray[this.moldIndex];
+            this.info.typeId = this.moldArray[this.moldIndex].id;
           }
         }).catch(err=> {
           console.log(err)
@@ -502,6 +510,10 @@
     },
     onLoad(options){
       console.log('options',options)
+      const { firstClassId, secondClassId } = options;
+      if(firstClassId === '1' && secondClassId === '1'){
+        this.isShow = true;
+      }
       this.parameter = options;
       wx.setNavigationBarTitle({
         title: options.title
