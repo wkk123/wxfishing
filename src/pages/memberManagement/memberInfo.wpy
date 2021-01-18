@@ -61,6 +61,25 @@
             color: #FFFFFF;
             font-weight: bold;   
           }
+          .title_grade{
+            margin-left: 10px;
+            width: 100px;
+            height: 24px;
+            .grade_img{
+              width: 100px;
+              height: 24px;
+            }
+            .grade_text{
+              color: #ffffff;
+              width: 100px;
+              height: 24px;
+              padding-right: 5px;
+              text-align: right; 
+              line-height:24px; 
+              padding-left: 24px;
+              margin-top: -24px;
+            }
+          }
         }
         .text_item{
           font-size: 12px;
@@ -156,7 +175,11 @@
         <ul class="content_text">
           <li class="text_name">
             <text class="name">{{userDetail.user.name}}</text>
-            <div>{{userDetail.userVip.vipLevel}}</div>
+            <!-- <div>{{userDetail.userVip.vipLevel}}</div> -->
+            <div class="title_grade">
+              <img class="grade_img" src="../../image/member.png" alt="">
+              <div class="grade_text">{{userDetail.userVip.vipLevel}}</div>
+            </div>
           </li>
           <li class="text_item">{{userDetail.user.phone}}</li>
           <li class="text_item">{{userDetail.user.remark}}</li>

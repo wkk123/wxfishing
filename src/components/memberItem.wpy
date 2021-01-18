@@ -41,9 +41,22 @@
         }
         .title_grade{
           margin-left: 10px;
-          width: auto;
-          min-width: 60px; 
+          width: 100px;
           height: 24px;
+          .grade_img{
+            width: 100px;
+            height: 24px;
+          }
+          .grade_text{
+            color: #ffffff;
+            width: 100px;
+            height: 24px;
+            padding-right: 5px;
+            text-align: right; 
+            line-height:24px; 
+            padding-left: 24px;
+            margin-top: -24px;
+          }
         }
       }
       .info_item{
@@ -93,7 +106,10 @@
       <div class="content_info">
         <div class="info_title">
           <text class="title_text">{{info.user.name}}</text>
-          <div class="title_grade">{{info.vipLevel.name}}</div>
+          <div class="title_grade">
+            <img class="grade_img" src="./../image/member.png" alt="">
+            <div class="grade_text">{{info.vipLevel.name}}</div>
+          </div>
         </div>
         <text class="info_item">手机号：{{info.user.phone}}</text>
         <text class="info_item">微信账号：{{info.user.nickname}}</text>  
