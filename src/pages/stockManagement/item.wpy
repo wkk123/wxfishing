@@ -453,7 +453,14 @@
       },
       // 更新商品
       goodsUpdate(){
-        goodsUpdate({...this.info,...this.parameter}).then(res => {
+        goodsUpdate({
+          ...this.info,
+          produceTime: this.info.produceTime + ' 00:00:00',
+          stockTime: this.info.stockTime + ' 00:00:00',
+          expireTime: this.info.expireTime + ' 00:00:00',
+          safeTime: this.info.safeTime + ' 00:00:00',
+          ...this.parameter
+        }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
@@ -465,7 +472,14 @@
       // 商品入库
       goodsSave(){
         delete this.info.id;
-        goodsSave({...this.info,...this.parameter}).then(res => {
+        goodsSave({
+          ...this.info,
+          produceTime: this.info.produceTime + ' 00:00:00',
+          stockTime: this.info.stockTime + ' 00:00:00',
+          expireTime: this.info.expireTime + ' 00:00:00',
+          safeTime: this.info.safeTime + ' 00:00:00',
+          ...this.parameter
+        }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             console.log('res',res)
