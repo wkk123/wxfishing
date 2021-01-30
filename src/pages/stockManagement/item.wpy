@@ -2,10 +2,9 @@
 <style lang="stylus">
 @import "./../../css/public.styl";
 .form_box{
-  width: 100%;
-  height: 100%;
+  width: calc(100% - 20px);
   padding: 0 10px 15px;
-  overflow-y: auto; 
+  overflow-y: auto;
   .form_content{
     width: 100%;
     min-height: calc(100% - 50px);
@@ -52,6 +51,7 @@
   }
   .form_submit{
     margin-top: 15px;
+    margin-bottom: 25px;
   }
 }
 .item_box{
@@ -90,6 +90,10 @@
     justify-content: flex-start;
     align-items: center;
     color: #333333;
+    font-size: 18px;
+    &.active{
+      color: #D6D6D6; 
+    }
   }
 }
 .input_code{
@@ -99,13 +103,23 @@
 }
 </style>
 <template>
-  <div class="form_box">
+  <scroll-view 
+    class="form_box"
+    scrollY="{{true}}"
+    scrollWithAnimation="{{true}}"
+    style="height:{{windowHeight}}px"
+  >
+    <Toptips msg="{{error}}" show="{{error}}"></Toptips>
     <div class="form_content">
+      <!-- 基础信息 -->
       <div class="content_item">
-        <div class="form_head">
+        <div class="form_head" @click="headIcon(1)">
           <text class="head_text active">基础信息</text>
-          <div class="head_icon" @click="headIcon(1)">
-            <image class="icon_img" src="{{one ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          <div class="head_icon">
+            <image class="icon_img"
+              src="{{one ?'../../image/top.png':'../../image/bottom.png'}}"
+              mode="widthFix" 
+            />
           </div>
         </div>
         <ul class="form_list" v-show="one">
@@ -125,7 +139,7 @@
               </picker>
             </div>
           </li>
-          <li class="list_item">
+          <li class="list_item" v-if="isShow">
             <view class="item_box">
               <text class="item_title active">商品属性</text>
               <picker
@@ -167,16 +181,25 @@
           </li>
         </ul>
       </div>
-      <div class="content_item" v-if="isShow">
-        <div class="form_head">
+      <!-- 商品信息 -->
+      <div class="content_item">
+        <div class="form_head" @click="headIcon(2)">
           <text class="head_text">商品信息</text>
-          <div class="head_icon" @click="headIcon(2)">
-            <image class="icon_img" src="{{two ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          <div class="head_icon">
+            <image class="icon_img"
+              src="{{two ?'../../image/top.png':'../../image/bottom.png'}}"
+              mode="widthFix"
+            />
           </div>
         </div>
         <ul class="form_list" v-show="two">
           <li class="list_item">
-            <UpImage title="图片" :imageFile="info.imgs" @upImagePath="upImageFile" />
+            <UpImage
+              title="图片"
+              :imageFile="info.imgs"
+              :Num="3"
+              @upImagePath="upImageFile"
+            />
           </li>
           <li class="list_item">
             <div class="item_box">
@@ -189,7 +212,12 @@
                   placeholder="请输入编号" 
                   placeholder-class="input_placeholder"
                 />
-                <image @click="scanCode()" class="input_code" src="./../../image/codeIcon.png" mode="widthFiX" />
+                <image 
+                  @click="scanCode()"
+                  class="input_code"
+                  src="./../../image/codeIcon.png"
+                  mode="widthFiX"
+                />
               </div>
             </div>
           </li>
@@ -207,15 +235,23 @@
                 mode="date"
                 @change="DateProduceTime"
               >
-                <input class="picker" type="date" value="{{info.produceTime?info.produceTime:'请输入生产日期'}}" name="produceTime" id="produceTime">
+                <view class="picker {{info.produceTime ?'':'active'}}">
+                  {{info.produceTime?info.produceTime:'选择生产日期'}}
+                </view>
               </picker>
             </view>
           </li>
           <li class="list_item">
             <view class="item_box">
               <text class="item_title active">进货日期</text>
-              <picker class="picker_box" mode="date" @change="DateStockTime" >
-                <input class="picker" type="date" value="{{info.stockTime?info.stockTime:'请输入进货日期'}}" name="stockTime" id="stockTime">
+              <picker
+                class="picker_box"
+                mode="date"
+                @change="DateStockTime"
+              >
+                <view class="picker {{info.stockTime?'':'active'}}">
+                  {{info.stockTime?info.stockTime:'选择进货日期'}}
+                </view>
               </picker>
             </view>
           </li>
@@ -227,68 +263,148 @@
                 mode="date"
                 @change="DateExpireTime"
               >
-                <input class="picker" type="date" value="{{info.expireTime?info.expireTime:'请输入保质期'}}" name="expireTime" id="expireTime">
+                <view class="picker {{info.expireTime?'':'active'}}">
+                  {{info.expireTime?info.expireTime:'选择保质期'}}
+                </view>
               </picker>
             </view>
           </li>
           <li class="list_item">
-            <view class="item_box">
-              <text class="item_title active">质保时间</text>
-              <picker
-                class="picker_box"
-                mode="date"
-                :value="info.safeTime"
-                @change="DateSafeTime"
-              >
-                <input class="picker" placeholder-class="pickerTime" type="date" :value="info.safeTime?info.safeTime:'请输入质保时间'" name="safeTime" id="safeTime">
-              </picker>
-            </view>
+            <SubInput
+              :obj="form.safeTime"
+              @inputBtn="inputBtn"
+            />
           </li>
         </ul>
       </div>
+      <!-- 入库参数 -->
       <div class="content_item">
-        <div class="form_head">
+        <div class="form_head" @click="headIcon(3)">
           <text class="head_text">入库参数</text>
-          <div class="head_icon" @click="headIcon(3)">
-            <image class="icon_img" src="{{three ?'../../image/top.png':'../../image/bottom.png'}}" mode="widthFix" />
+          <div class="head_icon">
+            <image
+              class="icon_img"
+              src="{{three ?'../../image/top.png':'../../image/bottom.png'}}"
+              mode="widthFix"
+            />
           </div>
         </div>
         <ul class="form_list" v-show="three">
-          <li class="list_item">
+          <li 
+            class="list_item"
+            :key="key"
+            v-for="(item,key) in storage"
+          >
             <SubInput
-              :obj="form.model"
+              :obj="item"
               @inputBtn="inputBtn"
             />
           </li>
-          <li class="list_item">
-            <SubInput
-              :obj="form.quantity"
-              @inputBtn="inputBtn"
-            />
-          </li>
-          <li class="list_item">
-            <SubInput
-              :obj="form.unitPrice"
-              @inputBtn="inputBtn"
-            />
-          </li>
-          <li class="list_item">
-            <SubInput
-              :obj="form.sellPrice"
-              @inputBtn="inputBtn"
-            />
-          </li>
-          <!-- <li class="list_item">
-            <SubInput title="商品参数" />
-          </li> -->
         </ul>
       </div>
-    </div>
+      <!-- 商品参数 -->
+      <div class="content_item">
+        <div class="form_head" @click="headIcon(4)">
+          <text class="head_text">商品参数</text>
+          <div class="head_icon">
+            <image
+              class="icon_img"
+              src="{{four ?'../../image/top.png':'../../image/bottom.png'}}"
+              mode="widthFix"
+            />
+          </div>
+        </div>
+        <!-- 竿 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '1' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspGan"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 钩 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '2' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspGou"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 漂 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '3' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspPiao"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 线 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '4' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspXian"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 轮 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '5' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspLun"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 饵料 -->
+        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '6' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in jcspErliao"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+        <!-- 配置 -->
+        <ul class="form_list" v-show="info.firstClassId === '2' && four">
+          <li class="list_item"
+            :key="key"
+            v-for="(item,key) in ptzb"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+      </div>
+    </div>  
     <button
       class="form_btn form_submit"
       @click="formSubmit()"
     >提交</button>  
-  </div>
+  </scroll-view>
 </template>
 
 <script>
@@ -299,9 +415,12 @@
       addGlobalClass: true
     },
     data: {
+      error: '',//提示
+      windowHeight: 0,
       one: true,
       two: true,
       three: true,
+      four: true,
       brandIndex: 0,
       brandArray: [],
       brandObj: {},
@@ -311,6 +430,258 @@
       moldIndex: 0,
       moldArray: [],
       moldObj: {},
+      jcspGan:{
+        jcspGanJieshu:{
+          title: '节数',
+          placeholder: '请输入节数',
+          Sign: false,
+          key: 'jcspGanJieshu'
+        },
+        jcspGanZizhong:{
+          title: '自重',
+          placeholder: '请输入自重',
+          Sign: false,
+          key: 'jcspGanZizhong'
+        },
+        jcspGanXianjing:{
+          title: '先经',
+          placeholder: '请输入先经',
+          Sign: false,
+          key: 'jcspGanXianjing'
+        },
+        jcspGanYuanjing:{
+          title: '元经',
+          placeholder: '请输入元经',
+          Sign: false,
+          key: 'jcspGanYuanjing'
+        },
+        jcspGanShousuochang:{
+          title: '收缩长',
+          placeholder: '请输入收缩长',
+          Sign: false,
+          key: 'jcspGanShousuochang'
+        },
+        jcspGanShijichang:{
+          title: '实际长',
+          placeholder: '请输入实际长',
+          Sign: false,
+          key: 'jcspGanShijichang'
+        },
+        jcspGanCaizhi:{
+          title: '材质',
+          placeholder: '请输入材质',
+          Sign: false,
+          key: 'jcspGanCaizhi'
+        },
+        jcspGanDiaolizhi:{
+          title: '钓力值',
+          placeholder: '请输入钓力值',
+          Sign: false,
+          key: 'jcspGanDiaolizhi'
+        },
+        jcspGanJiesh:{
+          title: '其他',
+          placeholder: '请输入其他',
+          Sign: false,
+          key: 'jcspGanJiesh'
+        },
+      },
+      jcspGou:{
+        jcspGouZizhong:{
+          title: '自重',
+          placeholder: '请输入自重',
+          Sign: false,
+          key: 'jcspGouZizhong'
+        },
+        jcspGouZhouchengshu:{
+          title: '轴承数',
+          placeholder: '请输入轴承数',
+          Sign: false,
+          key: 'jcspGouZhouchengshu'
+        },
+        jcspGouZhuansubi:{
+          title: '转速比',
+          placeholder: '请输入转速比',
+          Sign: false,
+          key: 'jcspGouZhuansubi'
+        },
+        jcspGouXianrongliang:{
+          title: '线容量',
+          placeholder: '请输入线容量',
+          Sign: false,
+          key: 'jcspGouXianrongliang'
+        },
+        jcspGouChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'jcspGouChicun'
+        },
+        jcspGouQita:{
+          title: '其他',
+          placeholder: '请输入其他',
+          Sign: false,
+          key: 'jcspGouQita'
+        },
+      },
+      jcspPiao:{
+        jcspPiaoCaizhi:{
+          title: '材质',
+          placeholder: '请输入材质',
+          Sign: false,
+          key: 'jcspPiaoCaizhi'
+        },
+        jcspPiaoMushu:{
+          title: '目数',
+          placeholder: '请输入目数',
+          Sign: false,
+          key: 'jcspPiaoMushu',
+          type: 'digit'
+        },
+        jcspPiaoXingzhuang:{
+          title: '形状',
+          placeholder: '请输入形状',
+          Sign: false,
+          key: 'jcspPiaoXingzhuang'
+        },
+        jcspPiaoShenchang:{
+          title: '身长',
+          placeholder: '请输入身长',
+          Sign: false,
+          key: 'jcspPiaoShenchang',
+          type: 'digit'
+        },
+        jcspPiaoWeichang:{
+          title: '尾长',
+          placeholder: '请输入尾长',
+          Sign: false,
+          key: 'jcspPiaoWeichang',
+          type: 'digit'
+        },
+        jcspPiaoJiaochang:{
+          title: '脚长',
+          placeholder: '请输入脚长',
+          Sign: false,
+          key: 'jcspPiaoJiaochang',
+          type: 'digit'
+        },
+        jcspPiaoZongchang:{
+          title: '总长',
+          placeholder: '请输入总长',
+          Sign: false,
+          key: 'jcspPiaoZongchang',
+          type: 'digit'
+        },
+        jcspPiaoPiaoshenzhijing:{
+          title: '票身直径',
+          placeholder: '请输入票身直径',
+          Sign: false,
+          key: 'jcspPiaoPiaoshenzhijing'
+        },
+        jcspPiaoPiaojiaoyuanjing:{
+          title: '票角元经',
+          placeholder: '请输入票角元经',
+          Sign: false,
+          key: 'jcspPiaoPiaojiaoyuanjing'
+        },
+        jcspPiaoShiheshuishen:{
+          title: '适合水深',
+          placeholder: '请输入适合水深',
+          Sign: false,
+          key: 'jcspPiaoShiheshuishen'
+        },
+        jcspPiaoYaogoubianse:{
+          title: '咬钩变色',
+          placeholder: '请输入咬钩变色',
+          Sign: false,
+          key: 'jcspPiaoYaogoubianse'
+        },
+      },
+      jcspXian:{
+        jcspXianXianjing:{
+          title: '线径',
+          placeholder: '请输入线径',
+          Sign: false,
+          key: 'jcspXianXianjing'
+        },
+        jcspXianLali:{
+          title: '拉力',
+          placeholder: '请输入拉力',
+          Sign: false,
+          key: 'jcspXianLali'
+        },
+        jcspXianCaizhi:{
+          title: '材质',
+          placeholder: '请输入材质',
+          Sign: false,
+          key: 'jcspXianCaizhi'
+        },
+      },
+      jcspLun:{
+        jcspLunZizhong:{
+          title: '自重',
+          placeholder: '请输入自重',
+          Sign: false,
+          key: 'jcspLunZizhong',
+          type: 'digit'
+        },
+        jcspLunZhouchengshu:{
+          title: '轴承数',
+          placeholder: '请输入轴承数',
+          Sign: false,
+          key: 'jcspLunZhouchengshu',
+          type: 'digit'
+        },
+        jcspLunZhuansubi:{
+          title: '转速比',
+          placeholder: '请输入转速比',
+          Sign: false,
+          key: 'jcspLunZhuansubi',
+          type: 'digit'
+        },
+        jcspLunXianrongliang:{
+          title: '线容量',
+          placeholder: '请输入线容量',
+          Sign: false,
+          key: 'jcspLunXianrongliang'
+        },
+        jcspLunChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'jcspLunChicun',
+          type: 'digit'
+        },
+        jcspLunQita:{
+          title: '其他',
+          placeholder: '请输入其他',
+          Sign: false,
+          key: 'jcspLunQita'
+        },
+      },
+      jcspErliao:{
+        jcspErliaoErliaoleixing:{
+          title: '饵料类型',
+          placeholder: '请输入饵料类型',
+          Sign: false,
+          key: 'jcspErliaoErliaoleixing'
+        },
+      },
+      ptzb:{
+        ptzbChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbChicun',
+          type: 'digit'
+        },
+        ptzbBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbBeizhu'
+        },
+      },
       form:{
         remark:{
           title: '备注',
@@ -324,6 +695,16 @@
           Sign: true,
           key: 'name'
         },
+        safeTime:{
+          title: '质保时间(月)',
+          placeholder: '请输入质保时间',
+          Sign: true,
+          key: 'safeTime',
+          type: 'number'
+        },
+      },
+      // 入库参数
+      storage:{
         model:{
           title: '型号',
           placeholder: '请输入型号',
@@ -334,19 +715,22 @@
           title: '数量',
           placeholder: '请输入数量',
           Sign: true,
-          key: 'quantity'
+          key: 'quantity',
+          type: 'number'
         },
         unitPrice:{
           title: '单价 (进货价)',
           placeholder: '请输入单价',
           Sign: true,
-          key: 'unitPrice'
+          key: 'unitPrice',
+          type: 'digit'
         },
         sellPrice:{
           title: '售卖价格',
           placeholder: '请输入售卖价格',
           Sign: true,
-          key: 'sellPrice'
+          key: 'sellPrice',
+          type: 'digit'
         },
       },
       info:{
@@ -372,7 +756,6 @@
         firstClassId: 1,//一级分类id
         secondClassId: 1,//二级分类id
       },
-      parameter:{},//参数
       isShow: false,// 是否显示其他信息
     },
     computed: {
@@ -389,9 +772,6 @@
       DateExpireTime(e){
         this.info.expireTime = e.$wx.detail.value;
       },
-      DateSafeTime(e){
-        this.info.safeTime = e.$wx.detail.value;
-      },
       // 上拉列表
       headIcon(key) {
         switch (key) {
@@ -401,8 +781,11 @@
           case 2:
             this.two = !this.two;
             break;
-          default:
+          case 3:
             this.three = !this.three;
+            break;
+          case 4:
+            this.four = !this.four;
             break;
         }
       },
@@ -459,7 +842,6 @@
           stockTime: this.info.stockTime + ' 00:00:00',
           expireTime: this.info.expireTime + ' 00:00:00',
           safeTime: this.info.safeTime + ' 00:00:00',
-          ...this.parameter
         }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
@@ -478,7 +860,6 @@
           stockTime: this.info.stockTime + ' 00:00:00',
           expireTime: this.info.expireTime + ' 00:00:00',
           safeTime: this.info.safeTime + ' 00:00:00',
-          ...this.parameter
         }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
@@ -504,8 +885,8 @@
       // 分类下商品属性及类别
       getGoodsTypes(){
         this.classQuery = {
-          firstClassId: this.parameter.firstClassId,//一级分类id
-          secondClassId: this.parameter.secondClassId,//二级分类id
+          firstClassId: this.info.firstClassId,//一级分类id
+          secondClassId: this.info.secondClassId,//二级分类id
         };
         goodsPropertiesAndTypes(this.classQuery).then(res => {
           const {code, data, message} = res;
@@ -528,10 +909,13 @@
       if(firstClassId === '1' && secondClassId === '1'){
         this.isShow = true;
       }
-      this.parameter = options;
+      this.info.firstClassId = firstClassId;
+      this.info.secondClassId = secondClassId;
       wx.setNavigationBarTitle({
         title: options.title
       })
+      const { windowHeight } = wx.getSystemInfoSync();
+      this.windowHeight = windowHeight;
     },
     onShow(){
       
@@ -552,6 +936,7 @@
   usingComponents: {
     "SubInput": './../../components/subInput',
     "UpImage": './../../components/upImage',
+    "Toptips": './../../components/toptips',
   }
 }
 </config>

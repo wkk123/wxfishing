@@ -161,7 +161,12 @@
     <div class="merchandise_box">
       <div class="merchandise_list">
         <div class="merchandise_item" :key="'item'+id" v-for="item in orderData.orderGoodsSnapshotList">
-          <image class="item_image" :src="item.imgs" mode="widthFix" lazy-load="true" />
+          <image
+            class="item_image"
+            src="{{JSON.parse(item.imgs)[0]}}"
+            mode="widthFix"
+            lazy-load="true"
+          />
         </div>
       </div>
       <text class="merchandise_text">{{orderData.orderGoodsSnapshotList.length}}件商品</text>
@@ -246,7 +251,7 @@
       }
     },
     onShow(){
-      console.log(this.props)
+      
     },
   });
 </script>

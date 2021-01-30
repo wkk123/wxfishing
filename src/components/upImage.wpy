@@ -25,13 +25,13 @@
     height: auto;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
-    &:after{
-      content: '>';
-      font-size: 18px;
-      color: #999999;
-    }
+    // &:after{
+    //   content: '>';
+    //   font-size: 18px;
+    //   color: #999999;
+    // }
     .upImage_icon{
       width: 50px;
       height: 50px;
@@ -49,29 +49,45 @@
     .upImage_img{
       width: 50px;
       height: 50px;
-      margin: 10px 0;
+      margin: 10px 5px;
     }
   }
 }
 </style>
 <template>
   <div class="upImage_container">
-    <text class="item_titles {{Sign &&'active'}}">{{title}}</text>
-    <div class="upImage_box">
+    <text class="item_titles {{Sign &&'active'}}">{{title }}</text>
+    <div class="upImage_box" v-if="Num === 1">
+      <image
+        v-if="conditions"
+        class="upImage_img"
+        src="{{imageUrl[0]}}"
+        mode="widthFix"
+        @click="upImageBtn()"
+      />
       <div
-        v-if="!(imageFile?imageFile:image)"
+        v-else
         class="upImage_icon"
         @click="upImageBtn()"
       >
         <text class="img_icon">+</text>
       </div>
+    </div>
+    <div class="upImage_box" v-if="Num === 3">
       <image
-        v-else
         class="upImage_img"
-        :src="image?image:imageFile"
+        :src="item"
+        v-for="item in imageUrl"
         mode="widthFix"
         @click="upImageBtn()"
       />
+      <div
+        v-if="conditions"
+        class="upImage_icon"
+        @click="upImageBtn()"
+      >
+        <text class="img_icon">+</text>
+      </div>
     </div>
   </div>
 </template>
@@ -94,16 +110,39 @@
       Sign: {
         type: Boolean,
         default: false
+      },
+      Num: {
+        type: Number,
+        default: 1
       }
     },
     data: {
-      image:'',
+      image: [],
     },
     computed: {
-
+      // 图片地址
+      imageUrl(){
+        return this.image?this.image:JSON.parse(this.imageFile);
+      },
+      // 判断条件
+      conditions(){
+        if(this.Num === 3){
+          if(this.imageFile){
+            return JSON.parse(this.imageFile).length !== 3;
+          } else {
+            return this.image.length !== 3;
+          }
+        } else {
+          if(this.imageFile){
+            return this.imageFile;
+          } else {
+            return this.image.length === 0;
+          }
+        }
+      },
     },
     methods: {
-      // 
+      // 上传图片
       upImageBtn(){
         const that = this;
         wx.chooseImage({
@@ -111,8 +150,8 @@
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
           success (res) {
-            that.image = res.tempFilePaths[0];
-            that.$emit('upImagePath', res.tempFilePaths[0]);
+            that.image.push(res.tempFilePaths[0]);
+            that.$emit('upImagePath', JSON.stringify(that.image));
           }
         })
       },

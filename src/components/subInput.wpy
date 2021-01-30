@@ -26,16 +26,17 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    align-items: center; 
-    &:after{
-      content: '>';
-      font-size: 18px;
-      color: #999999;
-    } 
+    align-items: center;
+    // &:after{
+    //   content: '>';
+    //   font-size: 18px;
+    //   color: #999999;
+    // } 
   }
   .item_input{
     width: 100%;
     height: 100%;
+    font-size: 18px;
   }
   .input_placeholder{
     width: 100%;
@@ -49,13 +50,16 @@
   <div class="item_box">
     <text class="item_title {{obj.Sign ?'active':''}}">{{obj.title}}</text>
     <div class="input_box">
-      <input 
+      <input
         class="item_input"
-        type="text"
+        type="{{obj.type}}"
         v-model="value"
         :placeholder="obj.placeholder" 
         placeholder-class="input_placeholder"
-        @input="bindinput()"/> 
+        @input="bindinput()"
+        adjustPosition="{{true}}"
+        cursorSpacing="{{50}}"
+      />
     </div>
   </div>
 </template>
@@ -87,6 +91,10 @@
               type: String,
               default: ''
             },
+            type: {
+              type: String,
+              default: 'number'
+            }
           }
         }
       },

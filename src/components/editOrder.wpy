@@ -107,7 +107,12 @@
 <template>
   <div class="editOrder_info">
     <div class="item_left">
-      <image class="left_icon" src="{{orderData.imgs}}" mode="widthFix" lazy-load="true" />
+      <image
+        class="left_icon"
+        src="{{JSON.parse(orderData.imgs)[0]}}"
+        mode="widthFix"
+        lazy-load="true"
+      />
     </div>
     <div class="item_info">
       <div class="info_text">

@@ -84,7 +84,7 @@
       },
     },
     onShow(){
-      console.log(this.props)
+      
     },
   });
 </script>

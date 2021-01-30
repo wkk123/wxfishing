@@ -262,6 +262,7 @@
       },
       // 更新数据
       upDateFun(){
+        const that = this;
         shopUpdate({...this.detail }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
@@ -272,7 +273,7 @@
               icon: 'success',
               duration: 2000,
               complete(){
-                this.times = setTimeout(()=>{
+                that.times = setTimeout(()=>{
                   wx.navigateBack({
                     delta: 1
                   })
