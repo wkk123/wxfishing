@@ -44,12 +44,42 @@
     color: #D6D6D6;
     font-size: 18px;
   }
+  .radio_group{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 40px;
+  }
+  .radio_label{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-right: 20px;
+  }
 } 
 </style>
 <template>
   <div class="item_box">
     <text class="item_title {{obj.Sign ?'active':''}}">{{obj.title}}</text>
-    <div class="input_box">
+    <div v-if="obj.mold === 'radio'">
+      <radio-group
+        class="radio_group"
+        bindchange="radioChange"
+      >
+        <label 
+          class="weui-cell weui-check__label radio_label"
+          v-for="item in obj.items"
+        >
+          <view class="weui-cell__hd">
+            <radio value="{{item.value}}" checked="{{item.checked}}"/>
+          </view>
+          <view class="weui-cell__bd">{{item.name}}</view>
+        </label>
+      </radio-group>
+    </div>
+    <div class="input_box" v-else>
       <input
         class="item_input"
         type="{{obj.type}}"
@@ -94,7 +124,11 @@
             type: {
               type: String,
               default: 'number'
-            }
+            },
+            mold: {
+              type: String,
+              default: 'input'
+            },
           }
         }
       },

@@ -20,7 +20,7 @@
 <template>
   <!-- 弹框 -->
   <div 
-    class="toptips" 
+    class="toptips {{showFun()}}" 
     v-show="show"
   >{{msg}}</div>
 </template>
@@ -49,10 +49,16 @@
       
     },
     computed: {
-      
+      showFun(){
+        if(this.show){
+          console.log('this.show',this.show)
+          this.times();
+          return this.show;
+        }
+      }
     },
     created(){
-      this.times();
+      
     },
     methods: {
       times(){
@@ -60,6 +66,7 @@
         this.time = setInterval(() => {
           that.show = false;
           clearInterval(that.time);
+          that.$emit('MsgFun','');
         }, that.delay);
       }
     },

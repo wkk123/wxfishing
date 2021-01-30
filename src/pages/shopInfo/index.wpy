@@ -103,7 +103,7 @@
         mode="widthFix"
         lazy-load="false" 
       />
-      <text class="hint_text">以下三项填写后付款用户会看到，请准确填写</text>
+      <text class="hint_text">以下项目填写后付款用户会看到，请准确填写</text>
     </div>
     <div class="list_content">
       <ul class="list_box">
@@ -136,7 +136,11 @@
           </div>
         </li>
         <li class="list_item">
-          <UpImage title="店面logo" :imageFile="detail.logo" @upImagePath="upImageFile" />
+          <UpImage 
+            title="店面logo"
+            :imageFile="detail.logo"
+            @upImagePath="upImageFile"
+          />
         </li>
         <li class="list_item">
           <div class="item_box">

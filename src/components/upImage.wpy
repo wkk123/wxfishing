@@ -56,12 +56,12 @@
 </style>
 <template>
   <div class="upImage_container">
-    <text class="item_titles {{Sign &&'active'}}">{{title }}</text>
+    <text class="item_titles {{Sign ?'active':''}}">{{title}}{{Num}}</text>
     <div class="upImage_box" v-if="Num === 1">
       <image
         v-if="conditions"
         class="upImage_img"
-        src="{{imageUrl[0]}}"
+        :src="imageUrl[0]"
         mode="widthFix"
         @click="upImageBtn()"
       />
@@ -122,18 +122,24 @@
     computed: {
       // 图片地址
       imageUrl(){
-        return this.image?this.image:JSON.parse(this.imageFile);
+        let url = [];
+        if(this.image.length > 0){
+          url = this.image;
+        } else {
+          url = this.imageTrim(this.imageFile)
+        }
+        return url;
       },
       // 判断条件
       conditions(){
         if(this.Num === 3){
           if(this.imageFile){
-            return JSON.parse(this.imageFile).length !== 3;
+            return this.imageTrim(this.imageFile).length !== 3;
           } else {
             return this.image.length !== 3;
           }
         } else {
-          if(this.imageFile){
+          if(this.imageFile !== ''){
             return this.imageFile;
           } else {
             return this.image.length === 0;
@@ -142,6 +148,14 @@
       },
     },
     methods: {
+      // 修剪数据
+      imageTrim(str){
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
       // 上传图片
       upImageBtn(){
         const that = this;
@@ -150,7 +164,12 @@
           sizeType: ['original', 'compressed'],
           sourceType: ['album', 'camera'],
           success (res) {
-            that.image.push(res.tempFilePaths[0]);
+            let arr = [];
+            if(that.Num === 3){
+              arr = that.imageTrim(that.imageFile); 
+            }
+            arr.push(res.tempFilePaths[0]);
+            that.image = arr;
             that.$emit('upImagePath', JSON.stringify(that.image));
           }
         })

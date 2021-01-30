@@ -7,7 +7,7 @@
   overflow-y: auto;
   .form_content{
     width: 100%;
-    min-height: calc(100% - 50px);
+    min-height: calc(100% - 50px - 15px - 25px);
   }
   .form_head{
     width: 100%;
@@ -109,7 +109,11 @@
     scrollWithAnimation="{{true}}"
     style="height:{{windowHeight}}px"
   >
-    <Toptips msg="{{error}}" show="{{error}}"></Toptips>
+    <Toptips 
+      msg="{{error}}" 
+      show="{{error !== ''}}"
+      @MsgFun="msgErrorFun"
+    />
     <div class="form_content">
       <!-- 基础信息 -->
       <div class="content_item">
@@ -139,7 +143,7 @@
               </picker>
             </div>
           </li>
-          <li class="list_item" v-if="isShow">
+          <li class="list_item" v-if="propertyArray.length !== 0">
             <view class="item_box">
               <text class="item_title active">商品属性</text>
               <picker
@@ -156,7 +160,7 @@
               </picker>
             </view>
           </li>
-          <li class="list_item">
+          <li class="list_item" v-if="moldArray.length !== 0">
             <div class="item_box">
               <text class="item_title active">商品类型</text>
               <picker
@@ -172,12 +176,6 @@
                 </view>
               </picker>
             </div>
-          </li>
-          <li class="list_item">
-            <SubInput
-              :obj="form.remark"
-              @inputBtn="inputBtn"
-            />
           </li>
         </ul>
       </div>
@@ -229,7 +227,7 @@
           </li>
           <li class="list_item">
             <view class="item_box">
-              <text class="item_title active">生产日期</text>
+              <text class="item_title">生产日期</text>
               <picker
                 class="picker_box"
                 mode="date"
@@ -243,7 +241,7 @@
           </li>
           <li class="list_item">
             <view class="item_box">
-              <text class="item_title active">进货日期</text>
+              <text class="item_title">进货日期</text>
               <picker
                 class="picker_box"
                 mode="date"
@@ -257,7 +255,7 @@
           </li>
           <li class="list_item">
             <view class="item_box">
-              <text class="item_title active">保质期</text>
+              <text class="item_title">保质期</text>
               <picker
                 class="picker_box"
                 mode="date"
@@ -303,7 +301,7 @@
         </ul>
       </div>
       <!-- 商品参数 -->
-      <div class="content_item">
+      <div class="content_item" v-show="Object.keys(goodsParam).length > 0">
         <div class="form_head" @click="headIcon(4)">
           <text class="head_text">商品参数</text>
           <div class="head_icon">
@@ -314,83 +312,10 @@
             />
           </div>
         </div>
-        <!-- 竿 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '1' && four">
+        <ul class="form_list" v-show="four">
           <li class="list_item"
             :key="key"
-            v-for="(item,key) in jcspGan"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 钩 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '2' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in jcspGou"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 漂 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '3' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in jcspPiao"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 线 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '4' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in jcspXian"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 轮 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '5' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in jcspLun"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 饵料 -->
-        <ul class="form_list" v-show="info.firstClassId === '1' && info.secondClassId === '6' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in jcspErliao"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
-            />
-          </li>
-        </ul>
-        <!-- 配置 -->
-        <ul class="form_list" v-show="info.firstClassId === '2' && four">
-          <li class="list_item"
-            :key="key"
-            v-for="(item,key) in ptzb"
+            v-for="(item,key) in goodsParam"
           >
             <SubInput
               :obj="item"
@@ -417,10 +342,10 @@
     data: {
       error: '',//提示
       windowHeight: 0,
-      one: true,
-      two: true,
-      three: true,
-      four: true,
+      one: false,
+      two: false,
+      three: false,
+      four: false,
       brandIndex: 0,
       brandArray: [],
       brandObj: {},
@@ -429,7 +354,8 @@
       propertyObj: {},
       moldIndex: 0,
       moldArray: [],
-      moldObj: {},
+      moldObj: {},//商品类型
+      goodsParam: { },//商品参数
       jcspGan:{
         jcspGanJieshu:{
           title: '节数',
@@ -594,7 +520,12 @@
           title: '咬钩变色',
           placeholder: '请输入咬钩变色',
           Sign: false,
-          key: 'jcspPiaoYaogoubianse'
+          key: 'jcspPiaoYaogoubianse',
+          mold: 'radio',
+          items: [
+            {value: '1', name: '是', checked: 'true'},
+            {value: '2', name: '否'},
+          ]
         },
       },
       jcspXian:{
@@ -683,12 +614,6 @@
         },
       },
       form:{
-        remark:{
-          title: '备注',
-          placeholder: '请输入备注',
-          Sign: true,
-          key: 'remark'
-        },
         name:{
           title: '商品名称',
           placeholder: '请输入商品名称',
@@ -698,7 +623,7 @@
         safeTime:{
           title: '质保时间(月)',
           placeholder: '请输入质保时间',
-          Sign: true,
+          Sign: false,
           key: 'safeTime',
           type: 'number'
         },
@@ -756,19 +681,24 @@
         firstClassId: 1,//一级分类id
         secondClassId: 1,//二级分类id
       },
-      isShow: false,// 是否显示其他信息
     },
     computed: {
 
     },
     methods: {
       // 
+      msgErrorFun(e){
+        this.error = e;
+      },
+      // 生产日期
       DateProduceTime(e){
         this.info.produceTime = e.$wx.detail.value;
       },
+      // 进货日期
       DateStockTime(e){
         this.info.stockTime = e.$wx.detail.value;
       },
+      // 质保期
       DateExpireTime(e){
         this.info.expireTime = e.$wx.detail.value;
       },
@@ -827,43 +757,87 @@
       },
       // 提交
       formSubmit(){
-        console.log(this.info);
+        const formObj = Object.assign(this.form, this.storage, this.goodsParam);
+        for (const key in formObj) {
+          if (Object.hasOwnProperty.call(formObj, key)) {
+            const element = formObj[key];
+            const { placeholder, Sign } = element;
+            if(Sign && !this.info[key] && this.info[key] === ''){
+              this.error = placeholder;
+              return;
+            }
+          }
+        }
         if(this.info.id !== ''){
           this.goodsUpdate();
         } else {
-          this.goodsSave();
+          this.goodsSaveFun();
         }
       },
       // 更新商品
       goodsUpdate(){
         goodsUpdate({
           ...this.info,
-          produceTime: this.info.produceTime + ' 00:00:00',
-          stockTime: this.info.stockTime + ' 00:00:00',
-          expireTime: this.info.expireTime + ' 00:00:00',
-          safeTime: this.info.safeTime + ' 00:00:00',
+          produceTime: this.info.produceTime? this.info.produceTime + ' 00:00:00':'',
+          stockTime: this.info.stockTime? this.info.stockTime+ ' 00:00:00':'',
+          expireTime: this.info.expireTime? this.info.expireTime + ' 00:00:00':'',
+          safeTime: this.info.safeTime,
         }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            console.log('res',res)
+            wx.showToast({
+              title: '提交成功',
+              icon: 'success',
+              duration: 2000,
+              complete(){
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },2000)
+              }
+            })
+          } else {
+            wx.showToast({
+              title: '提交失败',
+              icon: 'error',
+              duration: 2000
+            })
           }
         }).catch(err=> {
           console.log(err)
         })
       },
       // 商品入库
-      goodsSave(){
+      goodsSaveFun(){
         delete this.info.id;
         goodsSave({
           ...this.info,
-          produceTime: this.info.produceTime + ' 00:00:00',
-          stockTime: this.info.stockTime + ' 00:00:00',
-          expireTime: this.info.expireTime + ' 00:00:00',
-          safeTime: this.info.safeTime + ' 00:00:00',
+          produceTime: this.info.produceTime? this.info.produceTime + ' 00:00:00':'',
+          stockTime: this.info.stockTime? this.info.stockTime+ ' 00:00:00':'',
+          expireTime: this.info.expireTime? this.info.expireTime + ' 00:00:00':'',
+          safeTime: this.info.safeTime,
         }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            console.log('res',res)
+            wx.showToast({
+              title: '提交成功',
+              icon: 'success',
+              duration: 2000,
+              complete(){
+                setTimeout(()=>{
+                  wx.navigateBack({
+                    delta: 1
+                  })
+                },2000)
+              }
+            })
+          } else {
+            wx.showToast({
+              title: '提交失败',
+              icon: 'error',
+              duration: 2000
+            })
           }
         }).catch(err=> {
           console.log(err)
@@ -891,12 +865,16 @@
         goodsPropertiesAndTypes(this.classQuery).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            this.propertyArray = data.goodsClassPropertyList;
-            this.propertyObj = this.propertyArray[this.propertyIndex];
-            this.info.propertyId = this.propertyArray[this.propertyIndex].id;
-            this.moldArray = data.goodsClassTypeList;
-            this.moldObj = this.moldArray[this.moldIndex];
-            this.info.typeId = this.moldArray[this.moldIndex].id;
+            if(data.goodsClassPropertyList.length !== 0){
+              this.propertyArray = data.goodsClassPropertyList;
+              this.propertyObj = this.propertyArray[this.propertyIndex];
+              this.info.propertyId = this.propertyArray[this.propertyIndex].id;
+            }
+            if(data.goodsClassTypeList.length !== 0){
+              this.moldArray = data.goodsClassTypeList;
+              this.moldObj = this.moldArray[this.moldIndex];
+              this.info.typeId = this.moldArray[this.moldIndex].id;  
+            }
           }
         }).catch(err=> {
           console.log(err)
@@ -906,9 +884,6 @@
     onLoad(options){
       console.log('options',options)
       const { firstClassId, secondClassId } = options;
-      if(firstClassId === '1' && secondClassId === '1'){
-        this.isShow = true;
-      }
       this.info.firstClassId = firstClassId;
       this.info.secondClassId = secondClassId;
       wx.setNavigationBarTitle({
@@ -916,6 +891,22 @@
       })
       const { windowHeight } = wx.getSystemInfoSync();
       this.windowHeight = windowHeight;
+      if(firstClassId === '1' && secondClassId === '1'){
+        this.goodsParam = this.jcspGan;
+      } else if(firstClassId === '1' && secondClassId === '2'){
+        this.goodsParam = this.jcspGou;
+      } else if(firstClassId === '1' && secondClassId === '3'){
+        this.goodsParam = this.jcspPiao;
+      } else if(firstClassId === '1' && secondClassId === '4'){
+        this.goodsParam = this.jcspXian;
+      } else if(firstClassId === '1' && secondClassId === '5'){
+        this.goodsParam = this.jcspLun;
+      } else if(firstClassId === '1' && secondClassId === '6'){
+        this.goodsParam = this.jcspErliao;
+      } else if(firstClassId === '2'){
+        this.goodsParam = this.ptzb;
+      }
+      console.log(Object.keys(this.goodsParam).length)
     },
     onShow(){
       
