@@ -79,6 +79,19 @@
         </label>
       </radio-group>
     </div>
+    <div v-else-if="obj.mold === 'picker'">
+      <picker
+        class="picker_box"
+        mode="selector"
+        @change="moldPickerChange"
+        range="{{obj.items}}"
+        range-key="name"
+      >
+        <view class="picker">
+          {{obj.items[Index].name}}
+        </view>
+      </picker>
+    </div>
     <div class="input_box" v-else>
       <input
         class="item_input"
@@ -135,6 +148,7 @@
     },
     data: {
       value:'',
+      Index: 0,
     },
     computed: {
 
@@ -144,6 +158,19 @@
         this.$emit('inputBtn', {
           key: this.obj.key,
           value: this.value,
+        });
+      },
+      moldPickerChange(e){
+        this.Index = e.$wx.detail.value;
+        this.$emit('inputBtn', {
+          key: this.obj.key,
+          value: this.obj.items[e.$wx.detail.value].name,
+        });
+      },
+      radioChange(e){
+        this.$emit('inputBtn', {
+          key: this.obj.key,
+          value: e.$wx.detail.value,
         });
       },
     },

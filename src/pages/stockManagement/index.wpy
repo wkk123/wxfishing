@@ -85,7 +85,7 @@
       // 点击某一个列
       subItem(data){
         wx.navigateTo({
-          url: `/pages/stockManagement/item?title=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}`
+          url: `/pages/commodity/index?title=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.id}&type=${1}`
         })
       },
       // 查询所有分类

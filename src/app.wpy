@@ -82,7 +82,6 @@ wepy.app({
     'pages/brand/index',
     'pages/brand/info',
     'pages/stockManagement/index',
-    'pages/stockManagement/item',
     'pages/memberManagement/index',
     'pages/memberManagement/memberSearch',
     'pages/memberManagement/editInformation',
@@ -100,6 +99,7 @@ wepy.app({
     'pages/cashierManagement/payWay',
     'pages/cashierManagement/search',
     'pages/cashierManagement/cart',
+    'pages/commodity/index',
   ],
   // permission: {
   //   "scope.userLocation": {

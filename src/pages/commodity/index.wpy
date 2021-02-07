@@ -160,7 +160,7 @@
               </picker>
             </view>
           </li>
-          <li class="list_item" v-if="moldArray.length !== 0">
+          <li class="list_item" v-if="showArray.length !== 0">
             <div class="item_box">
               <text class="item_title active">商品类型</text>
               <picker
@@ -168,14 +168,20 @@
                 mode="selector"
                 @change="moldPickerChange"
                 value="{{moldIndex}}"
-                range="{{moldArray}}"
+                range="{{showArray}}"
                 range-key="name"
               >
                 <view class="picker">
-                  {{moldArray[moldIndex].name}}
+                  {{showArray[moldIndex].name}}
                 </view>
               </picker>
             </div>
+          </li>
+          <li class="list_item" v-if="info.firstClassId === '1'&&info.secondClassId==='4'">
+            <SubInput
+              :obj="form.xian"
+              @inputBtn="inputBtn"
+            />
           </li>
         </ul>
       </div>
@@ -191,34 +197,6 @@
           </div>
         </div>
         <ul class="form_list" v-show="two">
-          <li class="list_item">
-            <UpImage
-              title="图片"
-              :imageFile="info.imgs"
-              :Num="3"
-              @upImagePath="upImageFile"
-            />
-          </li>
-          <li class="list_item">
-            <div class="item_box">
-              <text class="item_title active">编号</text>
-              <div class="input_box">
-                <input 
-                  class="item_input"
-                  type="text"
-                  v-model="info.number"
-                  placeholder="请输入编号" 
-                  placeholder-class="input_placeholder"
-                />
-                <image 
-                  @click="scanCode()"
-                  class="input_code"
-                  src="./../../image/codeIcon.png"
-                  mode="widthFiX"
-                />
-              </div>
-            </div>
-          </li>
           <li class="list_item">
             <SubInput
               :obj="form.name"
@@ -273,35 +251,18 @@
               @inputBtn="inputBtn"
             />
           </li>
-        </ul>
-      </div>
-      <!-- 入库参数 -->
-      <div class="content_item">
-        <div class="form_head" @click="headIcon(3)">
-          <text class="head_text">入库参数</text>
-          <div class="head_icon">
-            <image
-              class="icon_img"
-              src="{{three ?'../../image/top.png':'../../image/bottom.png'}}"
-              mode="widthFix"
-            />
-          </div>
-        </div>
-        <ul class="form_list" v-show="three">
-          <li 
-            class="list_item"
-            :key="key"
-            v-for="(item,key) in storage"
-          >
-            <SubInput
-              :obj="item"
-              @inputBtn="inputBtn"
+          <li class="list_item">
+            <UpImage
+              title="图片"
+              :imageFile="info.imgs"
+              :Num="3"
+              @upImagePath="upImageFile"
             />
           </li>
         </ul>
       </div>
       <!-- 商品参数 -->
-      <div class="content_item" v-show="Object.keys(goodsParam).length > 0">
+      <div class="content_item" v-show="isGoods">
         <div class="form_head" @click="headIcon(4)">
           <text class="head_text">商品参数</text>
           <div class="head_icon">
@@ -324,11 +285,56 @@
           </li>
         </ul>
       </div>
+      <!-- 商品规格 -->
+      <div class="content_item">
+        <div class="form_head" @click="headIcon(3)">
+          <text class="head_text">商品规格</text>
+          <div class="head_icon">
+            <image
+              class="icon_img"
+              src="{{three ?'../../image/top.png':'../../image/bottom.png'}}"
+              mode="widthFix"
+            />
+          </div>
+        </div>
+        <ul class="form_list" v-show="three">
+          <li class="list_item">
+            <div class="item_box">
+              <text class="item_title active">编号</text>
+              <div class="input_box">
+                <input 
+                  class="item_input"
+                  type="text"
+                  v-model="info.number"
+                  placeholder="请输入编号" 
+                  placeholder-class="input_placeholder"
+                />
+                <image 
+                  @click="scanCode()"
+                  class="input_code"
+                  src="./../../image/codeIcon.png"
+                  mode="widthFiX"
+                />
+              </div>
+            </div>
+          </li>
+          <li 
+            class="list_item"
+            :key="key"
+            v-for="(item,key) in storage"
+          >
+            <SubInput
+              :obj="item"
+              @inputBtn="inputBtn"
+            />
+          </li>
+        </ul>
+      </div>
     </div>  
     <button
       class="form_btn form_submit"
       @click="formSubmit()"
-    >提交</button>  
+    >{{formType === '1'? '提交':'保存'}}</button>  
   </scroll-view>
 </template>
 
@@ -340,6 +346,7 @@
       addGlobalClass: true
     },
     data: {
+      formType: '1',//1 提交 2 修改保存
       error: '',//提示
       windowHeight: 0,
       one: false,
@@ -353,9 +360,11 @@
       propertyArray: [],
       propertyObj: {},
       moldIndex: 0,
-      moldArray: [],
+      moldArray: [],//所有商品类型
+      showArray:[],// 需要显示的商品类型
       moldObj: {},//商品类型
       goodsParam: { },//商品参数
+      isGoods: false,
       jcspGan:{
         jcspGanJieshu:{
           title: '节数',
@@ -499,14 +508,14 @@
           type: 'digit'
         },
         jcspPiaoPiaoshenzhijing:{
-          title: '票身直径',
-          placeholder: '请输入票身直径',
+          title: '漂身直径',
+          placeholder: '请输入漂身直径',
           Sign: false,
           key: 'jcspPiaoPiaoshenzhijing'
         },
         jcspPiaoPiaojiaoyuanjing:{
-          title: '票角元经',
-          placeholder: '请输入票角元经',
+          title: '漂角元经',
+          placeholder: '请输入漂角元经',
           Sign: false,
           key: 'jcspPiaoPiaojiaoyuanjing'
         },
@@ -518,7 +527,6 @@
         },
         jcspPiaoYaogoubianse:{
           title: '咬钩变色',
-          placeholder: '请输入咬钩变色',
           Sign: false,
           key: 'jcspPiaoYaogoubianse',
           mold: 'radio',
@@ -595,7 +603,13 @@
           title: '饵料类型',
           placeholder: '请输入饵料类型',
           Sign: false,
-          key: 'jcspErliaoErliaoleixing'
+          key: 'jcspErliaoErliaoleixing',
+          mold: 'picker',
+          items:[
+            {name:"鲤鱼"},
+            {name:"鲫鱼"},
+            {name:"其他"},
+          ]
         },
       },
       ptzb:{
@@ -627,8 +641,18 @@
           key: 'safeTime',
           type: 'number'
         },
+        xian:{
+          title: '线系',
+          Sign: false,
+          key: 'xianxi',
+          mold: 'radio',
+          items: [
+            {value: '道系', name: '道系', checked: 'true'},
+            {value: '子系', name: '子系'},
+          ]
+        }
       },
-      // 入库参数
+      // 商品规格
       storage:{
         model:{
           title: '型号',
@@ -685,6 +709,9 @@
     computed: {
 
     },
+    filters: {
+      
+    },
     methods: {
       // 
       msgErrorFun(e){
@@ -740,12 +767,15 @@
         this.propertyIndex = e.$wx.detail.value;
         this.propertyObj = this.propertyArray[this.propertyIndex];
         this.info.propertyId = this.propertyArray[this.propertyIndex].id;
+        if(this.moldArray.length > 0&&this.info.propertyId){
+          this.showArray = this.arrayFilter();
+        }
       },
       //选择商品类型
       moldPickerChange(e){
         this.moldIndex = e.$wx.detail.value;
-        this.moldObj = this.moldArray[this.moldIndex];
-        this.info.typeId = this.moldArray[this.moldIndex].id;
+        this.moldObj = this.showArray[this.moldIndex];
+        this.info.typeId = this.showArray[this.moldIndex].id;
       },
       // inputBtn
       inputBtn(data){
@@ -768,7 +798,7 @@
             }
           }
         }
-        if(this.info.id !== ''){
+        if(this.formType === '2'){
           this.goodsUpdate();
         } else {
           this.goodsSaveFun();
@@ -872,18 +902,29 @@
             }
             if(data.goodsClassTypeList.length !== 0){
               this.moldArray = data.goodsClassTypeList;
-              this.moldObj = this.moldArray[this.moldIndex];
-              this.info.typeId = this.moldArray[this.moldIndex].id;  
+              if(this.moldArray.length > 0 &&this.info.propertyId){
+                this.showArray = this.arrayFilter();
+                this.moldObj = this.showArray[this.moldIndex];
+                this.info.typeId = this.showArray[this.moldIndex].id;  
+              } else {
+                this.showArray = this.moldArray;
+              }
             }
           }
         }).catch(err=> {
           console.log(err)
         })
-      }
+      },
+      // 过滤只显示当前的商品类型
+      arrayFilter() {
+        let arr = this.moldArray.filter(item => item.propertyId === this.info.propertyId)
+        return arr;
+      },
     },
     onLoad(options){
       console.log('options',options)
-      const { firstClassId, secondClassId } = options;
+      const { firstClassId, secondClassId, type } = options;
+      this.formType = type;
       this.info.firstClassId = firstClassId;
       this.info.secondClassId = secondClassId;
       wx.setNavigationBarTitle({
@@ -891,6 +932,7 @@
       })
       const { windowHeight } = wx.getSystemInfoSync();
       this.windowHeight = windowHeight;
+      this.goodsParam = {};
       if(firstClassId === '1' && secondClassId === '1'){
         this.goodsParam = this.jcspGan;
       } else if(firstClassId === '1' && secondClassId === '2'){
@@ -905,8 +947,10 @@
         this.goodsParam = this.jcspErliao;
       } else if(firstClassId === '2'){
         this.goodsParam = this.ptzb;
+      } else if(firstClassId === '3'){
+        Object.assign()
       }
-      console.log(Object.keys(this.goodsParam).length)
+      this.isGoods = Object.keys(this.goodsParam).length >0;
     },
     onShow(){
       

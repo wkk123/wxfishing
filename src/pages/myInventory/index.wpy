@@ -154,7 +154,11 @@
       </li>
     </ul>
     <ul class="myInventory_content">
-      <li class="content_item" :key="'item'+index" v-for="(item,index) in orderList">
+      <li class="content_item"
+        @tap="subItem(item)"
+        :key="'item'+index"
+        v-for="(item,index) in orderList"
+      >
         <orderItem :orderData="item"/>
       </li>
     </ul>
@@ -219,6 +223,13 @@
       ...mapActions({
         sort: SORT,
       }),
+      // 点击某一个列
+      subItem(data){
+        console.log(data)
+        wx.navigateTo({
+          url: `/pages/commodity/index?title=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.secondClassId}&type=${2}`
+        })
+      },
       // 进入扫码库存变动
       codeBtn(){
         wx.navigateTo({
