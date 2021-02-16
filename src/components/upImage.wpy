@@ -56,19 +56,19 @@
 </style>
 <template>
   <div class="upImage_container">
-    <text class="item_titles {{Sign ?'active':''}}">{{title}}</text>
+    <text class="item_titles {{Sign ?'active':''}}">{{title}}{{Num}}</text>
     <div class="upImage_box" v-if="Num === 1">
       <image
         v-if="conditions"
         class="upImage_img"
         :src="imageUrl[0]"
         mode="widthFix"
-        @click="upImageBtn()"
+        @click="upImageBtn(0)"
       />
       <div
         v-else
         class="upImage_icon"
-        @click="upImageBtn()"
+        @click="upImageBtn(0)"
       >
         <text class="img_icon">+</text>
       </div>
@@ -78,15 +78,15 @@
         <image
           class="upImage_img"
           :src="item"
-          v-for="item in imageUrl"
+          v-for="(item,index) in imageUrl"
           mode="widthFix"
-          @click="upImageBtn()"
+          @click="upImageBtn(index)"
         />  
       </div>
       <div
         v-if="conditions"
         class="upImage_icon"
-        @click="upImageBtn()"
+        @click="upImageBtn(imageUrl.length)"
       >
         <text class="img_icon">+</text>
       </div>
@@ -136,9 +136,9 @@
       conditions(){
         if(this.Num === 3){
           if(this.imageFile){
-            return this.imageTrim(this.imageFile).length !== 3;
+            return this.imageTrim(this.imageFile).length < 3;
           } else {
-            return this.image.length !== 3;
+            return this.image.length < 3;
           }
         } else {
           if(this.imageFile !== ''){
@@ -152,6 +152,9 @@
     methods: {
       // 修剪数据
       imageTrim(str){
+        if(!str){
+          return [];
+        }
         let url = [];
         str.slice(1, str.length - 1).split(',').forEach((item)=>{
           url.push(item.replace(/^\"|\"$/g,''))
@@ -159,7 +162,7 @@
         return url;
       },
       // 上传图片
-      upImageBtn(){
+      upImageBtn(index){
         const that = this;
         wx.chooseImage({
           count: 1,
@@ -167,10 +170,21 @@
           sourceType: ['album', 'camera'],
           success (res) {
             let arr = [];
-            if(that.Num === 3){
-              arr = that.imageTrim(that.imageFile); 
+            arr = that.imageTrim(that.imageFile);
+            const current = res.tempFilePaths[0];
+            if(that.Num === 1){
+              if(arr.length === 0){
+                arr.push(current);
+              } else {
+                arr.splice(index,1,current)
+              }
+            } else {
+              if(index === arr.length && arr.length < 3){
+                arr.push(current);
+              } else {
+                arr.splice(index,1,current)
+              }
             }
-            arr.push(res.tempFilePaths[0]);
             that.image = arr;
             that.$emit('upImagePath', JSON.stringify(that.image));
           }
