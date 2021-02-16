@@ -356,8 +356,11 @@
 
 <script>
   import wepy from '@wepy/core';
+  import { mapState } from '@wepy/redux';
+  import store from './../../store';
   import { goodsUpdate, goodsSave, goodsBrands, goodsPropertiesAndTypes  } from './../../request/api.js';
   wepy.page({
+    store,
     options: {
       addGlobalClass: true
     },
@@ -1107,7 +1110,7 @@
       },
     },
     computed: {
-
+      ...mapState([ 'inventoryList' ])
     },
     filters: {
       
@@ -1355,6 +1358,15 @@
         let arr = this.moldArray.filter(item => item.propertyId === this.info.propertyId)
         return arr;
       },
+      // 回填数据
+      BackfillData(){
+        const { currentInventory } = this.inventoryList;
+        console.log('currentInventory',currentInventory);
+        const { name } = currentInventory;
+        this.info = {
+          name: name,
+        }
+      },
     },
     onLoad(options){
       console.log('options',options)
@@ -1362,6 +1374,9 @@
       this.formType = type;
       this.info.firstClassId = firstClassId;
       this.info.secondClassId = secondClassId;
+      if(this.formType === '2'){
+        this.BackfillData()
+      }
       wx.setNavigationBarTitle({
         title: options.title
       })

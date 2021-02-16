@@ -21,15 +21,24 @@
       height: 24px;
       border-top-left-radius: 12px;
       border-bottom-left-radius: 12px;
-      background: #FCD402;  
       position: absolute;
       top: 5px;
       right: 0; 
       font-size: 10px;
-      color: #333333;
+      color: #FFFFFF;
       font-weight: 500; 
       line-height: 24px; 
-      text-align:center; 
+      text-align:center;
+      &.active1{
+        background-color: #FCD402;
+        color: #333333;
+      }
+      &.active2{
+        background-color: #F33C2E;
+      }
+      &.active3{
+        background-color: #CDCDCD;
+      }
     }
     .left_icon{
       width: 100%;
@@ -62,7 +71,9 @@
 <template>
   <div class="content_item">
     <div class="item_left">
-      <div class="left_subtitle {{orderData.type===1?'active1':orderData.type===2?'active2':'active3'}}">{{orderData.status}}</div>
+      <div
+        class="left_subtitle {{classObj}}"
+      >{{statusName}}</div>
       <image 
         class="left_icon"
         :src="imageUrl"
@@ -73,7 +84,7 @@
       <text class="info_title">{{orderData.name}}</text>
       <ul class="info_content">
         <li class="info_item">型号：{{orderData.model}}</li>
-        <li class="info_item">到期时间：{{orderData.expireTime}}</li>
+        <li class="info_item">到期时间：{{orderData.expireTime?orderData.expireTime:''}}</li>
         <li class="info_item">库存量：{{orderData.quantity}}</li>
       </ul>
     </div>
@@ -91,12 +102,11 @@
         type: Object,
         default () {
           return {
+            id:'',
             name:'',
             model:'',
             expireTime:'',
             quantity:'',
-            status:'',
-            type: '',
             imgs: '',
           }
         }
@@ -106,14 +116,62 @@
       
     },
     computed: {
+      // 商品状态 类名
+      classObj(){
+        if(this.orderData.id === ''){
+          return;
+        }
+        return this.classFunObj();
+      },
+      // 商品状态 内容
+      statusName(){
+        if(this.orderData.id === ''){
+          return;
+        }
+        return this.statusFunName();
+      },
       // 图片地址
       imageUrl(){
+        if(this.orderData.id === ''){
+          return;
+        }
         let url = [];
         url = this.imageTrim(this.orderData.imgs)
         return url[0];
       },
     },
     methods: {
+      // 判断类名
+      classFunObj(){
+        const { heat, expireTime, quantity } = this.orderData;
+        if(heat > 0){
+          return 'active3';
+        } else if(this.expireTimeFun(expireTime)&&this.expireTimeFun(expireTime) < 60){
+          return 'active1';
+        } else if( quantity <= 3){
+          return 'active2';
+        }
+      },
+      // 判断内容
+      statusFunName(){
+        const { heat, expireTime, quantity } = this.orderData;
+        if(heat > 0){
+          return '滞销品';
+        } else if(this.expireTimeFun(expireTime)&&this.expireTimeFun(expireTime) < 60){
+          return `保质期${this.expireTimeFun(expireTime)}天`;
+        } else if( quantity <= 3){
+          return '库存不足';
+        }
+      },
+      expireTimeFun(expireTime){
+        if(!expireTime){
+          return;
+        }
+        let s1 = new Date(expireTime).getTime()/1000;
+        let s2 = parseInt(new Date().getTime()/1000);
+        let days = s2 - s1;
+        return parseInt(days / (60 * 60 * 24));
+      },
       // 修剪数据
       imageTrim(str){
         if(!str){

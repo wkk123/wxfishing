@@ -176,7 +176,7 @@
   import wepy from '@wepy/core';
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
-  import { SETINVENTORY, SORT } from './../../store/types';
+  import { SORT, SETINVENTORYITEM } from './../../store/types';
   import { goodsGoodsList } from './../../request/api.js';
   wepy.page({
     store,
@@ -222,12 +222,18 @@
     methods: {
       ...mapActions({
         sort: SORT,
+        currentInventory: SETINVENTORYITEM,
       }),
       // 点击某一个列
       subItem(data){
         console.log(data)
         wx.navigateTo({
           url: `/pages/commodity/index?title=${data.name}&firstClassId=${data.firstClassId}&secondClassId=${data.secondClassId}&type=${2}`
+        })
+        this.currentInventory({
+          currentInventory:{
+            ...data
+          }
         })
       },
       // 进入扫码库存变动

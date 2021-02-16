@@ -23,3 +23,5 @@ export const SETCHECKED = 'SETCHECKED';
 export const SETCART = 'SETCART';
 
 export const SETORDER = 'SETORDER';
+
+export const SETINVENTORYITEM = 'SETINVENTORYITEM';

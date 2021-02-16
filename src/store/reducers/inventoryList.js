@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
 //这里把types里的函数名引入 注意相对路径
-import { SETQUERY, SETINVENTORY, SETCHECKED } from '../types/public';
+import { SETQUERY, SETINVENTORY, SETCHECKED, SETINVENTORYITEM } from '../types/public';
 //通过handleActions函数导出
 //这里函数接收2个函数 第一个函数为触发方法修改状态,第二个函数为状态里的默认值
 const defaultState = {
@@ -13,6 +13,7 @@ const defaultState = {
   },
   inventoryList: [],
   checedList: [],//库存变动选中
+  currentInventory: {},//选中 修改当前库存
 }
 export default handleActions({
   [SETCHECKED] (state, action) {
@@ -27,6 +28,10 @@ export default handleActions({
 
   [SETINVENTORY] (state, action) {
     state.inventoryList = action.payload.inventoryList
+    return state
+  },
+  [SETINVENTORYITEM] (state, action) {
+    state.currentInventory = action.payload.currentInventory
     return state
   },
 
