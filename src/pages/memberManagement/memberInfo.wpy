@@ -19,9 +19,9 @@
       justify-content: space-between;
       align-items: center;
       .head_btn{
-        width: 12px;
-        height: 12px;
-        margin: 0 15px;
+        width: 20px;
+        height: 20px;
+        margin: 0 5px;
       }
       .head_title{
         font-size: 18px;
@@ -163,21 +163,24 @@
         <image 
           class="head_btn"
           src="../../image/right1.png"
-          
+          mode="aspectFit"
           @click="gotoBack()"
         />
         <div class="head_title">会员详情</div>
         <div class="head_btn"></div>
       </div>
       <div class="info_content">
-        <image class="content_image" :src="userDetail.user.headimgurl"  lazy-load="false" />
+        <image 
+          class="content_image"
+          :src="userDetail.user.headimgurl"
+          lazy-load="false" 
+        />
         <ul class="content_text">
           <li class="text_name">
             <text class="name">{{userDetail.user.name}}</text>
-            <!-- <div>{{userDetail.userVip.vipLevel}}</div> -->
             <div class="title_grade">
               <img class="grade_img" src="../../image/member.png" alt="">
-              <div class="grade_text">{{userDetail.userVip.vipLevel}}</div>
+              <div class="grade_text">{{currentVipLeveName}}</div>
             </div>
           </li>
           <li class="text_item">{{userDetail.user.phone}}</li>
@@ -221,7 +224,7 @@
   import store from './../../store';
   import { mapState, mapActions } from '@wepy/redux';
   import { COMMIT } from './../../store/types';
-  import { shopDetail, userVipDetail, userVipDetailOrderList, orderRevoke } from '../../request/api.js';
+  import { shopDetail, userVipDetail, userVipDetailOrderList, orderRevoke, VipLevelList } from '../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -238,6 +241,8 @@
       isUpload: true,
       shopInfo: {},//门店信息
       orderList:[],
+      vipLevelList: [],
+      currentVipLeveName: '',
     },
     computed: {
       ...mapState([ 'publics' ])
@@ -262,7 +267,7 @@
       // 撤销订单
       repealBtn(orderId) {
         const that = this;
-        this.query= {
+        this.query = {
           userId: this.userId,
           page: 1,
           size: 10,
@@ -270,17 +275,13 @@
         orderRevoke({id: orderId}).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            console.log('res',res)
             wx.showToast({
               title: message,
               icon: 'error',
               duration: 2000,
-              // complete(){
-              //   setTimeout(()=>{
-                  
-              //   },2000)
-              // }
             })
+            this.isUpload = true;
+            this.query.page = 1;
             that.getList()
           }
         }).catch(err=> {
@@ -369,10 +370,24 @@
         shopDetail().then( res => {
           const {code, data, message} = res;
           if (res.code === 10000) {
-              this.shopInfo = data
+            this.shopInfo = data
           }
         })
       },
+      // 获取等级列表
+      getVipList(){
+        const openid = wx.getStorageSync('openid');
+        VipLevelList().then(res=>{
+          if(res.code === 10000){
+            this.vipLevelList = res.data;
+            this.vipLevelList.forEach(item => {
+              if(item.id === this.userDetail.userVip.vipLevelId){
+                this.currentVipLeveName = item.name;
+              }
+            })
+          }
+        })
+      }
     },
     onLoad(options){
       console.log('options',options)
@@ -382,7 +397,10 @@
     },
     onShow(){
       this.getUserVipDetail();
+      this.isUpload = true;
+      this.orderList = [];
       this.getList();
+      this.getVipList();
     },
     onReady(){
       this.getDetail();

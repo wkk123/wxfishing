@@ -55,7 +55,7 @@
     },
     methods: {
       blurFun(){
-        this.$emit('searchBtn', this.searchValue);
+        // this.$emit('searchBtn', this.searchValue);
       },
       confirmBtn(){
         this.$emit('searchBtn', this.searchValue);
