@@ -101,7 +101,7 @@
 </style>
 <template>
   <div class="member_item">
-    <image class="item_img" :src="info.user.headimgurl" mode="widthFix" lazy-load="true" />
+    <image class="item_img" :src="info.user.headimgurl"  lazy-load="true" />
     <div class="item_content">
       <div class="content_info">
         <div class="info_title">

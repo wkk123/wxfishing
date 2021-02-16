@@ -48,7 +48,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png"  />
       </movable-view>
     </movable-area>
     <ul class="Inventory_list">

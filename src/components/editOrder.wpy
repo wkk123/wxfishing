@@ -109,7 +109,7 @@
       <image
         class="left_icon"
         :src="imageUrl"
-        mode="widthFix"
+        
         lazy-load="true"
       />
     </div>
@@ -124,7 +124,7 @@
         <text class="num_text">{{orderData.sellPrice}}</text>
         <ul class="num_btn">
           <li @click.stop="minusBtn()" v-if="orderData.num >= 1" class="btn_item">
-            <image class="btn_icon" src="../image/minus.png" mode="widthFix" lazy-load="true" />
+            <image class="btn_icon" src="../image/minus.png"  lazy-load="true" />
           </li>
           <input 
             class="num_input"
@@ -137,7 +137,7 @@
             @blur="confirmBtn"
           />
           <li @click.stop="addBtn()" class="btn_item">
-            <image class="btn_icon" src="../image/add.png" mode="widthFix" lazy-load="true" />
+            <image class="btn_icon" src="../image/add.png"  lazy-load="true" />
           </li>
         </ul>
       </div>

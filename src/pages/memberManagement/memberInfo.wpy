@@ -163,14 +163,14 @@
         <image 
           class="head_btn"
           src="../../image/right1.png"
-          mode="widthFix"
+          
           @click="gotoBack()"
         />
         <div class="head_title">会员详情</div>
         <div class="head_btn"></div>
       </div>
       <div class="info_content">
-        <image class="content_image" :src="userDetail.user.headimgurl" mode="widthFix" lazy-load="false" />
+        <image class="content_image" :src="userDetail.user.headimgurl"  lazy-load="false" />
         <ul class="content_text">
           <li class="text_name">
             <text class="name">{{userDetail.user.name}}</text>

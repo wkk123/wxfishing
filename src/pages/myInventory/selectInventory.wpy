@@ -156,7 +156,7 @@
         <image
           class="item_img"
           :src="currentKey === item.key?defaultImage:image1"
-          mode="widthFix"
+          
           lazy-load="false"
         />
         <text class="item_text">{{item.text}}</text>
@@ -165,7 +165,7 @@
     <ul class="myInventory_content">
       <li class="content_item" @click="selectItem(item,index)" :key="'order'+item.id" v-for="(item,index) in orderList">
         <div class="select_item">
-          <image class="item_checked" :src="item.image" mode="widthFix" />
+          <image class="item_checked" :src="item.image"  />
         </div>
         <div class="select_info">
           <orderItem :orderData="item"/>  

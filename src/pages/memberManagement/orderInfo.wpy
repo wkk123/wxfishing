@@ -120,11 +120,15 @@
         <text class="info_title">{{detailInfo.shop.name}}</text>
         <text class="info_subtitle">{{detailInfo.shop.slogan}}</text>
         <div class="store_site">
-          <image class="site_img" src="./../../image/location.png" mode="widthFix" lazy-load="false" />
+          <image class="site_img" src="./../../image/location.png"  lazy-load="false" />
           <text class="site_text">{{detailInfo.shop.address}}</text>
         </div>
       </div>
-      <image class="store_img" src="{{detailInfo.shop.logo}}" mode="widthFix" lazy-load="false" />
+      <image
+        class="store_img"
+        :src="imageUrl"
+        lazy-load="false"
+      />
     </div>
     <!-- 订单信息+ -->
     <OrderList
@@ -164,9 +168,28 @@
       detailInfo:{},//订单信息
     },
     computed: {
-
+      // 图片地址
+      imageUrl(){
+        if( Object.keys(this.detailInfo).length === 0 ) {
+          return;
+        }
+        let url = [];
+        url = this.imageTrim(this.detailInfo.shop.logo)
+        return url[0];
+      },
     },
     methods: {
+      // 修剪数据
+      imageTrim(str){
+        if(!str){
+          return [];
+        }
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
       // 获取订单详情
       getDetail(){
         orderDetailShopView({id:this.orderId}).then(res=>{

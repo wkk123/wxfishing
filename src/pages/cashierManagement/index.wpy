@@ -288,7 +288,7 @@
       >
         <image class="code_img" 
           src="./../../image/code.png" 
-          mode="widthFix"
+          
           @click="scanCodeAdd()"
         />
       </movable-view>
@@ -310,7 +310,7 @@
             class="head_item"
             @tap.stop="emptyCart()"
           >
-            <image class="item_icon" src="./../../image/delete.png" mode="widthFix" lazy-load="false" />
+            <image class="item_icon" src="./../../image/delete.png"  lazy-load="false" />
             <text class="item_text">清空购物车</text>
           </li>
         </ul>
@@ -330,7 +330,7 @@
           class="head_left"
           @click="gotoBack()"
         >
-          <image class="left_icon" src="./../../image/site.png" mode="widthFix" lazy-load="false" />
+          <image class="left_icon" src="./../../image/site.png"  lazy-load="false" />
           <div class="left_title">{{detail.name}}</div>  
         </div>
         <div class="head_btn"></div>
@@ -356,7 +356,7 @@
           v-for="(item,index) in goodsClassList"
           @click="leftItem(item,index)"
         >
-          <image class="item_icon" src="{{item.icon}}" mode="widthFix" lazy-load="false" />
+          <image class="item_icon" src="{{item.icon}}"  lazy-load="false" />
           <text class="item_text">{{item.name}}</text>
         </li>
       </ul>
@@ -379,7 +379,7 @@
           class="cart_left"
           @click="cartBtn(showCart)"
         >
-          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
+          <image class="cart_img" src="./../../image/cart.png"  lazy-load="false" />
           <div class="cart_Num" v-if="cartNum > 0">{{cartNum}}</div>  
         </div>
         <div class="cart_total">

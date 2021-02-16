@@ -66,7 +66,6 @@
       <image 
         class="left_icon"
         :src="imageUrl"
-        mode="widthFix"
         lazy-load="true"
       />
     </div>

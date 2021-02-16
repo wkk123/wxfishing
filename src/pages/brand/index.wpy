@@ -67,19 +67,19 @@
           <text class="item_title">{{item.name}}</text>
           <ul class="item_content">
             <li class="content_item">
-              <image class="item_icon" src="../../image/brand1.png" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand1.png"  lazy-load="false" />
               <text class="item_text">{{item.productLocation}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="../../image/brand2.png" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand2.png"  lazy-load="false" />
               <text class="item_text">{{item.deliveryAddress}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="../../image/brand3.png" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand3.png"  lazy-load="false" />
               <text class="item_text">{{item.contactPhone}}</text>
             </li>
             <li class="content_item">
-              <image class="item_icon" src="../../image/brand4.png" mode="widthFix" lazy-load="false" />
+              <image class="item_icon" src="../../image/brand4.png"  lazy-load="false" />
               <text class="item_text">{{item.remark}}</text>
             </li>
           </ul>

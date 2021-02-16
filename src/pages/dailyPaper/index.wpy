@@ -46,7 +46,7 @@
         <picker class="picker_date" mode="date" value="{{endDate}}" bindchange="bindDateChange2">
           <view class="picker">{{endDate}}</view>
         </picker>
-        <image class="picker_icon" src="./../../image/calendar.png" mode="widthFix" lazy-load="false" />
+        <image class="picker_icon" src="./../../image/calendar.png"  lazy-load="false" />
       </div>
     </div>
     <div>

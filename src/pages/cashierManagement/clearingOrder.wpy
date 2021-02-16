@@ -39,7 +39,6 @@
       .code_img{
         width: 100%;
         height: 100%;
-        background-color: #999999;
       }
     }
     .clearing_list{
@@ -61,12 +60,12 @@
 <template>
   <div class="clearing_box">
     <div class="hint_box" v-if="orderId !== -1">
-      <image class="hint_icon" src="./../../image/hint.png" mode="widthFix" lazy-load="false" />
+      <image class="hint_icon" src="./../../image/hint.png"  lazy-load="false" />
       <text class="hint_text">请让用户公众号内使用支付功能扫码</text>
     </div>
     <div class="clearing_content">
       <div class="clearing_img" v-if="orderId !== -1">
-        <image class="code_img" :src="codeImg" mode="widthFix" lazy-load="false" />
+        <image class="code_img" :src="codeImg"  lazy-load="false" />
       </div>
       <div class="clearing_list">
         <OrderList

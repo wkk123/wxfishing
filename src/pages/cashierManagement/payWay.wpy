@@ -100,11 +100,11 @@
             <image
               class="item_icon"
               :src="item.icon"
-              mode="widthFix" 
+               
             />
             <text class="item_text">{{item.text}}</text>
           </div>
-          <image class="item_selected" :src="checked === item.type?checkedImg:unchecked" mode="widthFix" />
+          <image class="item_selected" :src="checked === item.type?checkedImg:unchecked"  />
         </li>
       </ul>
     </div>

@@ -21,7 +21,6 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background-color: #999999;
         margin-right: 5px; 
       }
       .info_title{
@@ -65,7 +64,6 @@
       .item_image{
         width: 60px;
         height: 100%;
-        background-color: #999999;
         border-radius: 3px;
         overflow: hidden;
       }
@@ -153,7 +151,11 @@
   <div class="content_box">
     <div class="merchant_box">
       <div class="merchant_info">
-        <image class="info_image" :src="info.logo" mode="widthFix" lazy-load="true" />
+        <image
+          class="info_image"
+          :src="logoUrl"
+          lazy-load="true"
+        />
         <text class="info_title">{{info.name}}</text>
       </div>
       <text class="merchant_state {{orderData.status===1?'active':''}}">{{orderData.status === 1?'已支付':(orderData.status=== 0?'待支付':'已撤销')}}</text>
@@ -163,12 +165,11 @@
         <div
           class="merchandise_item"
           :key="'item'+id"
-          v-for="item in orderData.orderGoodsSnapshotList"
+          v-for="item in imageUrl"
         >
           <image
             class="item_image"
-            :src="imageUrl"
-            mode="widthFix"
+            :src="item"
             lazy-load="true"
           />
         </div>
@@ -181,7 +182,7 @@
     </div>
     <div class="buyBtn_box">
       <div class="buy_left">
-        <image class="left_icon" src="../../src/image/share.png" mode="widthFix" lazy-load="true" />
+        <image class="left_icon" src="../../src/image/share.png"  lazy-load="true" />
         <text
           class="left_text"
           @click="shareBtn"
@@ -215,12 +216,20 @@
       
     },
     computed: {
+      // 商家logo
+      logoUrl(){
+        let url = [];
+        url = this.imageTrim(this.info.logo)
+        return url[0];
+      },
       // 图片地址
       imageUrl(){
-        console.log('orderData',this.orderData)
+        if( Object.keys(this.orderData).length === 0 ) {
+          return;
+        }
         let url = [];
-        url = this.imageTrim(this.orderData.imgs)
-        return url[0];
+        url = this.imageTrim(this.orderData.orderGoodsSnapshotList[0].imgs)
+        return url;
       },
     },
     methods: {

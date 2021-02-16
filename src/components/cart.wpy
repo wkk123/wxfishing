@@ -79,7 +79,7 @@
           class="head_item"
           @tap.stop="emptyCart()"
         >
-          <image class="item_icon" src="./../image/delete.png" mode="widthFix" lazy-load="false" />
+          <image class="item_icon" src="./../image/delete.png" lazy-load="false" />
           <text class="item_text">清空购物车</text>
         </li>
       </ul>

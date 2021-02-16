@@ -62,7 +62,6 @@
         v-if="conditions"
         class="upImage_img"
         :src="imageUrl[0]"
-        mode="widthFix"
         @click="upImageBtn(0)"
       />
       <div
@@ -79,7 +78,6 @@
           class="upImage_img"
           :src="item"
           v-for="(item,index) in imageUrl"
-          mode="widthFix"
           @click="upImageBtn(index)"
         />  
       </div>

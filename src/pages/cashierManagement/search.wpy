@@ -210,7 +210,7 @@
             class="head_item"
             @tap.stop="emptyCart()"
           >
-            <image class="item_icon" src="./../../image/delete.png" mode="widthFix" lazy-load="false" />
+            <image class="item_icon" src="./../../image/delete.png"  lazy-load="false" />
             <text class="item_text">清空购物车</text>
           </li>
         </ul>
@@ -253,7 +253,7 @@
           class="cart_left"
           @click="cartBtn(showCart)"
         >
-          <image class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
+          <image class="cart_img" src="./../../image/cart.png"  lazy-load="false" />
           <div class="cart_Num" v-if="cartNum > 0">{{cartNum}}</div>  
         </div>
         <div class="cart_total">

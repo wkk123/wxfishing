@@ -123,7 +123,7 @@
       <image
         class="head_btn"
         src="../../image/right1.png"
-        mode="widthFix"
+        
         @click="gotoBack()"
       />
       <div class="head_title">订单详情</div>
@@ -136,7 +136,7 @@
       <div class="member_content">
         <!-- info -->
         <div class="member_info_content">
-          <image class="content_image" src="{{orderDetail.shop.logo}}" mode="widthFix" lazy-load="false" />
+          <image class="content_image" src="{{orderDetail.shop.logo}}"  lazy-load="false" />
           <ul class="content_text">
             <li class="text_name">
               <text class="name">{{orderDetail.shop.contactName}}</text>

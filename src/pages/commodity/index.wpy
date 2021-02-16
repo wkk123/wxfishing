@@ -127,7 +127,7 @@
           <div class="head_icon">
             <image class="icon_img"
               src="{{one ?'../../image/top.png':'../../image/bottom.png'}}"
-              mode="widthFix" 
+               
             />
           </div>
         </div>
@@ -208,7 +208,7 @@
           <div class="head_icon">
             <image class="icon_img"
               src="{{two ?'../../image/top.png':'../../image/bottom.png'}}"
-              mode="widthFix"
+              
             />
           </div>
         </div>
@@ -285,7 +285,7 @@
             <image
               class="icon_img"
               src="{{four ?'../../image/top.png':'../../image/bottom.png'}}"
-              mode="widthFix"
+              
             />
           </div>
         </div>
@@ -309,7 +309,7 @@
             <image
               class="icon_img"
               src="{{three ?'../../image/top.png':'../../image/bottom.png'}}"
-              mode="widthFix"
+              
             />
           </div>
         </div>
@@ -329,7 +329,7 @@
                   @click="scanCode()"
                   class="input_code"
                   src="./../../image/codeIcon.png"
-                  mode="widthFiX"
+                  
                 />
               </div>
             </div>

@@ -19,7 +19,6 @@
   .item_image{
     width: 80px;
     height: 80px;
-    background-color: #999999;
     margin-right: 10px;
   }
   .item_info{
@@ -82,7 +81,7 @@
     <image
       class="item_image"
       :src="imageUrl"
-      mode="widthFix"
+      
       lazy-load="true"
     />
     <div class="item_info">

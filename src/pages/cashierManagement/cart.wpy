@@ -121,7 +121,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="scanCodeAdd()" src="./../../image/code.png"  />
       </movable-view>
     </movable-area>
     <!-- 弹框 -->
@@ -146,7 +146,7 @@
           class="cart_left"
           v-if="false"
         >
-          <image v-if="false" class="cart_img" src="./../../image/cart.png" mode="widthFix" lazy-load="false" />
+          <image v-if="false" class="cart_img" src="./../../image/cart.png"  lazy-load="false" />
           <div v-if="false" class="cart_Num">{{cartNum}}</div>  
         </div>
         <div class="cart_total">

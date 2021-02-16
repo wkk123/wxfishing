@@ -125,7 +125,7 @@
         :x="10"
         :y="200"
       >
-        <image class="code_img" @click="codeBtn()" src="./../../image/code.png" mode="widthFix" />
+        <image class="code_img" @click="codeBtn()" src="./../../image/code.png"  />
       </movable-view>
     </movable-area>
     <div class="myInventory_search">
@@ -147,7 +147,7 @@
         <image
           class="item_img"
           :src="currentKey === item.key?defaultImage:image1"
-          mode="widthFix"
+          
           lazy-load="false"
         />
         <text class="item_text">{{item.text}}</text>
