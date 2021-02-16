@@ -73,6 +73,11 @@
       }   
     }
   }
+  .item_input{
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+  }
   .picker_box{
     width: 100%;
     height: 40px;
@@ -178,10 +183,21 @@
             </div>
           </li>
           <li class="list_item" v-if="info.firstClassId === '1'&&info.secondClassId==='4'">
-            <SubInput
-              :obj="form.xian"
-              @inputBtn="inputBtn"
-            />
+            <view class="item_box">
+              <text class="item_title active">线系</text>
+              <picker
+                class="picker_box"
+                mode="selector"
+                @change="xianxiPickerChange"
+                value="{{xianxiIndex}}"
+                range="{{xianxi}}"
+                range-key="name"
+              >
+                <view class="picker">
+                  {{xianxi[xianxiIndex].name}}
+                </view>
+              </picker>
+            </view>
           </li>
         </ul>
       </div>
@@ -365,6 +381,8 @@
       moldObj: {},//商品类型
       goodsParam: { },//商品参数
       isGoods: false,
+      xianxiIndex: 0,//线系
+      xianxi:[],//线系
       jcspGan:{
         jcspGanJieshu:{
           title: '节数',
@@ -414,11 +432,11 @@
           Sign: false,
           key: 'jcspGanDiaolizhi'
         },
-        jcspGanJiesh:{
+        jcspGanQita:{
           title: '其他',
           placeholder: '请输入其他',
           Sign: false,
-          key: 'jcspGanJiesh'
+          key: 'jcspGanQita'
         },
       },
       jcspGou:{
@@ -605,6 +623,7 @@
           Sign: false,
           key: 'jcspErliaoErliaoleixing',
           mold: 'picker',
+          keyword:'name',
           items:[
             {name:'鲤鱼', key:'jcspErliaoErliaoleixingLiyu'},
             {name:'鲫鱼', key:'jcspErliaoErliaoleixingJiyu'},
@@ -1032,16 +1051,6 @@
           key: 'safeTime',
           type: 'number'
         },
-        xian:{
-          title: '线系',
-          Sign: false,
-          key: 'typeBranchId',
-          mold: 'radio',
-          items: [
-            {value: '道系', name: '道系', checked: 'true'},
-            {value: '子系', name: '子系'},
-          ]
-        }
       },
       // 商品规格
       storage:{
@@ -1166,7 +1175,16 @@
       moldPickerChange(e){
         this.moldIndex = e.$wx.detail.value;
         this.moldObj = this.showArray[this.moldIndex];
+        if(this.info.firstClassId === '1' && this.info.secondClassId === '4' ){
+          this.xianxi = this.moldObj.goodsClassTypeBranchList;
+          this.info.typeBranchId = this.xianxi[0].id;
+        }
         this.info.typeId = this.showArray[this.moldIndex].id;
+      },
+      // 选择线系 道系 子系
+      xianxiPickerChange(e){
+        this.xianxiIndex = e.$wx.detail.value;
+        this.info.typeBranchId = this.xianxi[this.xianxiIndex].id;
       },
       // inputBtn
       inputBtn(data){
@@ -1189,10 +1207,29 @@
             }
           }
         }
+        if(Object.keys(this.goodsParam).length > 0){
+          this.recomposeObj(this.goodsParam,'goodsParam');
+        }
         if(this.formType === '2'){
           this.goodsUpdate();
         } else {
           this.goodsSaveFun();
+        }
+      },
+      // 修改数据 将商品参数剔除并重新包裹
+      recomposeObj(obj1, name){
+        for (const key in obj1) {
+          if (Object.hasOwnProperty.call(obj1, key)) {
+            const element = this.info[key];
+            if(element && element !== ''){
+              if(this.info[name]){
+                this.info[name]= Object.assign(this.info[name],{ [key]: element});
+              } else {
+                this.info[name] = { [key]: element};
+              }
+              delete this.info[key]
+            }
+          }
         }
       },
       // 更新商品
@@ -1232,13 +1269,16 @@
       // 商品入库
       goodsSaveFun(){
         delete this.info.id;
-        goodsSave({
+        const obj = {
           ...this.info,
           produceTime: this.info.produceTime? this.info.produceTime + ' 00:00:00':'',
           stockTime: this.info.stockTime? this.info.stockTime+ ' 00:00:00':'',
           expireTime: this.info.expireTime? this.info.expireTime + ' 00:00:00':'',
           safeTime: this.info.safeTime,
-        }).then(res => {
+        }
+        console.log('obj',obj)
+        // console.log(JSON.stringify(obj))
+        goodsSave(obj).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             wx.showToast({
@@ -1293,12 +1333,16 @@
             }
             if(data.goodsClassTypeList.length !== 0){
               this.moldArray = data.goodsClassTypeList;
-              if(this.moldArray.length > 0 &&this.info.propertyId){
+              if( this.info.propertyId ){
                 this.showArray = this.arrayFilter();
                 this.moldObj = this.showArray[this.moldIndex];
-                this.info.typeId = this.showArray[this.moldIndex].id;  
+                this.info.typeId = this.showArray[this.moldIndex].id;
               } else {
                 this.showArray = this.moldArray;
+                if(this.info.firstClassId === '1' && this.info.secondClassId === '4' ){
+                  this.xianxi = this.showArray[0].goodsClassTypeBranchList;
+                  this.info.typeBranchId = this.xianxi[0].id;
+                }
               }
             }
           }
@@ -1394,7 +1438,7 @@
       } else if(firstClassId === '3' && secondClassId === '34'){
         this.goodsParam = this.xpjShishousheng;
       }
-      this.isGoods = Object.keys(this.goodsParam).length >0;
+      this.isGoods = Object.keys(this.goodsParam).length > 0;
     },
     onShow(){
       

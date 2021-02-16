@@ -85,7 +85,7 @@
         mode="selector"
         @change="moldPickerChange"
         range="{{obj.items}}"
-        range-key="name"
+        range-key="{{obj.keyword}}"
       >
         <view class="picker">
           {{obj.items[Index].name}}
@@ -141,6 +141,10 @@
             mold: {
               type: String,
               default: 'input'
+            },
+            keyword: {
+              type: String,
+              default: 'name'
             },
           }
         }
