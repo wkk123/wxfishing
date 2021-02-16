@@ -97,7 +97,7 @@
             this.gridList = data;
             this.gridList.forEach((item=>{
               item.goodsClassSeconds.forEach((it)=>{
-                if(it.name === '钩'){
+                if(it.firstClassId === 1 && it.id === 2){
                   it.icon = `./../../image/icon/${item.id}_${this.imgIcon(it.name)}1.png`;
                 } else {
                   it.icon = `./../../image/icon/${item.id}_${this.imgIcon(it.name)}.png`;

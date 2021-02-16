@@ -288,7 +288,7 @@
       <!-- 商品规格 -->
       <div class="content_item">
         <div class="form_head" @click="headIcon(3)">
-          <text class="head_text">商品规格</text>
+          <text class="head_text active">商品规格</text>
           <div class="head_icon">
             <image
               class="icon_img"
@@ -606,27 +606,418 @@
           key: 'jcspErliaoErliaoleixing',
           mold: 'picker',
           items:[
-            {name:"鲤鱼"},
-            {name:"鲫鱼"},
-            {name:"其他"},
+            {name:'鲤鱼', key:'jcspErliaoErliaoleixingLiyu'},
+            {name:'鲫鱼', key:'jcspErliaoErliaoleixingJiyu'},
+            {name:'其他', key:'jcspErliaoErliaoleixingQita'},
           ]
         },
       },
-      ptzb:{
-        ptzbChicun:{
+      jcspXianzu:{
+        jcspXianzuChicun:{
           title: '尺寸',
           placeholder: '请输入尺寸',
           Sign: false,
-          key: 'ptzbChicun',
+          key: 'jcspXianzuChicun'
+        },
+      },
+      jcspShigua:{
+        jcspShiguaChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'jcspShiguaChicun'
+        },
+      },
+      ptzbDiaoxiang:{
+        ptzbDiaoxiangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbDiaoxiangChicun',
           type: 'digit'
         },
-        ptzbBeizhu:{
+        ptzbDiaoxiangBeizhu:{
           title: '备注',
           placeholder: '请输入备注',
           Sign: false,
-          key: 'ptzbBeizhu'
+          key: 'ptzbDiaoxiangBeizhu'
         },
       },
+      ptzbDiaoyi:{
+        ptzbDiaoyiChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbDiaoyiChicun',
+          type: 'digit'
+        },
+        ptzbDiaoyiBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbDiaoyiBeizhu'
+        },
+      },
+      ptzbGanbao:{
+        ptzbGanbaoChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbGanbaoChicun',
+          type: 'digit'
+        },
+        ptzbGanbaoBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbGanbaoBeizhu'
+        },
+      },
+      ptzbHuyu:{
+        ptzbHuyuChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbHuyuChicun',
+          type: 'digit'
+        },
+        ptzbHuyuBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbHuyuBeizhu'
+        },
+      },
+      ptzbChaowang:{
+        ptzbChaowangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbChaowangChicun',
+          type: 'digit'
+        },
+        ptzbChaowangBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbChaowangBeizhu'
+        },
+      },
+      ptzbZhijia:{
+        ptzbZhijiaChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbZhijiaChicun',
+          type: 'digit'
+        },
+        ptzbZhijiaBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbZhijiaBeizhu'
+        },
+      },
+      ptzbDiaodeng:{
+        ptzbDiaodengChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbDiaodengChicun',
+          type: 'digit'
+        },
+        ptzbDiaodengBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbDiaodengBeizhu'
+        },
+      },
+      ptzbXiaoyao:{
+        ptzbXiaoyaoChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbXiaoyaoChicun',
+          type: 'digit'
+        },
+        ptzbXiaoyaoBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbXiaoyaoBeizhu'
+        },
+      },
+      ptzbDiaosan:{
+        ptzbDiaosanChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbDiaosanChicun',
+          type: 'digit'
+        },
+        ptzbDiaosanBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbDiaosanBeizhu'
+        },
+      },
+      ptzbShuixiang:{
+        ptzbShuixiangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbShuixiangChicun',
+          type: 'digit'
+        },
+        ptzbShuixiangBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbShuixiangBeizhu'
+        },
+      },
+      ptzbPiaohe:{
+        ptzbPiaoheChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbPiaoheChicun',
+          type: 'digit'
+        },
+        ptzbPiaoheBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbPiaoheBeizhu'
+        },
+      },
+      ptzbGongbingchan:{
+        ptzbGongbingchanChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'ptzbGongbingchanChicun',
+          type: 'digit'
+        },
+        ptzbGongbingchanBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'ptzbGongbingchanBeizhu'
+        },
+      },
+      xpjPiao:{
+        xpjPiaoChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjPiaoChicun',
+          type: 'digit'
+        },
+        xpjPiaoBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjPiaoBeizhu'
+        },
+      },
+      xpjGan:{
+        xpjGanChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjGanChicun',
+          type: 'digit'
+        },
+        xpjGanBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjGanBeizhu'
+        },
+        xpjGanJieshu:{
+          title: '节数',
+          placeholder: '请输入节数',
+          Sign: false,
+          key: 'xpjGanJieshu'
+        },
+      },
+      xpjXian:{
+        xpjXianXianjing:{
+          title: '线径',
+          placeholder: '请输入线径',
+          Sign: false,
+          key: 'xpjXianXianjing',
+          type: 'digit'
+        },
+        xpjXianLali:{
+          title: '拉力',
+          placeholder: '请输入拉力',
+          Sign: false,
+          key: 'xpjXianLali'
+        },
+        xpjXianCaizhi:{
+          title: '材质',
+          placeholder: '请输入材质',
+          Sign: false,
+          key: 'xpjXianCaizhi'
+        },
+      },
+      xpjXianzu:{
+        xpjXianzuChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjXianzuChicun',
+          type: 'digit'
+        },
+        xpjXianzuBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjXianzuBeizhu'
+        },
+      },
+      xpjDiaoxiang:{
+        xpjDiaoxiangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjDiaoxiangChicun',
+          type: 'digit'
+        },
+        xpjDiaoxiangBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjDiaoxiangBeizhu'
+        },
+      },
+      xpjGanbao:{
+        xpjGanbaoChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjGanbaoChicun',
+          type: 'digit'
+        },
+        xpjGanbaoGuige:{
+          title: '规格',
+          placeholder: '请输入规格',
+          Sign: false,
+          key: 'xpjGanbaoGuige'
+        },
+        xpjGanbaoBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjGanbaoBeizhu'
+        },
+      },
+      xpjYuhu:{
+        xpjYuhuChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjYuhuChicun',
+          type: 'digit'
+        },
+        xpjYuhuBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjYuhuBeizhu'
+        },
+      },
+      xpjChaowang:{
+        xpjChaowangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjChaowangChicun',
+          type: 'digit'
+        },
+      },
+      xpjZhijia:{
+        xpjZhijiaChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjZhijiaChicun',
+          type: 'digit'
+        },
+      },
+      xpjDiaodeng:{
+        xpjDiaodengShiyongshijian:{
+          title: '使用时间',
+          placeholder: '请输入使用时间',
+          Sign: false,
+          key: 'xpjDiaodengShiyongshijian',
+        },
+        xpjDiaodengGuangyuanzhonglei:{
+          title: '光源种类',
+          placeholder: '请输入光源种类',
+          Sign: false,
+          key: 'xpjDiaodengGuangyuanzhonglei'
+        },
+      },
+      xpjDiaosan:{
+        xpjDiaosanChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjDiaosanChicun',
+          type: 'digit'
+        },
+      },
+      xpjShuixiang:{
+        xpjShuixiangChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjShuixiangChicun',
+          type: 'digit'
+        },
+      },
+      xpjDiaoyi:{
+        xpjDiaoyiChicun:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjDiaoyiChicun',
+          type: 'digit'
+        },
+        xpjDiaoyiBeizhu:{
+          title: '备注',
+          placeholder: '请输入备注',
+          Sign: false,
+          key: 'xpjDiaoyiBeizhu'
+        },
+      },
+      xpjShishousheng:{
+        xpjShishoushengCaizhi:{
+          title: '尺寸',
+          placeholder: '请输入尺寸',
+          Sign: false,
+          key: 'xpjShishoushengCaizhi',
+          type: 'digit'
+        },
+        xpjShishoushengChangdu:{
+          title: '长度',
+          placeholder: '请输入长度',
+          Sign: false,
+          key: 'xpjShishoushengChangdu'
+        },
+        xpjShishoushengShensuobi:{
+          title: '伸缩比',
+          placeholder: '请输入伸缩比',
+          Sign: false,
+          key: 'xpjShishoushengShensuobi'
+        },
+      },
+
       form:{
         name:{
           title: '商品名称',
@@ -644,7 +1035,7 @@
         xian:{
           title: '线系',
           Sign: false,
-          key: 'xianxi',
+          key: 'typeBranchId',
           mold: 'radio',
           items: [
             {value: '道系', name: '道系', checked: 'true'},
@@ -945,10 +1336,63 @@
         this.goodsParam = this.jcspLun;
       } else if(firstClassId === '1' && secondClassId === '6'){
         this.goodsParam = this.jcspErliao;
-      } else if(firstClassId === '2'){
-        this.goodsParam = this.ptzb;
-      } else if(firstClassId === '3'){
-        Object.assign()
+      } else if(firstClassId === '1' && secondClassId === '7'){
+        this.goodsParam = this.jcspXianzu;
+      } else if(firstClassId === '1' && secondClassId === '8'){
+        this.goodsParam = this.jcspShigua;
+      } else if(firstClassId === '2' && secondClassId === '9'){
+        this.goodsParam = this.ptzbDiaoxiang;
+      } else if(firstClassId === '2' && secondClassId === '10'){
+        this.goodsParam = this.ptzbDiaoyi;
+      } else if(firstClassId === '2' && secondClassId === '11'){
+        this.goodsParam = this.ptzbGanbao;
+      } else if(firstClassId === '2' && secondClassId === '12'){
+        this.goodsParam = this.ptzbHuyu;
+      } else if(firstClassId === '2' && secondClassId === '13'){
+        this.goodsParam = this.ptzbChaowang;
+      } else if(firstClassId === '2' && secondClassId === '14'){
+        this.goodsParam = this.ptzbZhijia;
+      } else if(firstClassId === '2' && secondClassId === '15'){
+        this.goodsParam = this.ptzbDiaodeng;
+      } else if(firstClassId === '2' && secondClassId === '16'){
+        this.goodsParam = this.ptzbXiaoyao;
+      } else if(firstClassId === '2' && secondClassId === '17'){
+        this.goodsParam = this.ptzbDiaosan;
+      } else if(firstClassId === '2' && secondClassId === '18'){
+        this.goodsParam = this.ptzbShuixiang;
+      } else if(firstClassId === '2' && secondClassId === '19'){
+        this.goodsParam = this.ptzbPiaohe;
+      } else if(firstClassId === '2' && secondClassId === '20'){
+        this.goodsParam = this.ptzbGongbingchan;
+      } else if(firstClassId === '3' && secondClassId === '21'){
+        // Object.assign()
+        this.goodsParam = this.xpjPiao;
+      } else if(firstClassId === '3' && secondClassId === '22'){
+        this.goodsParam = this.xpjGan;
+      } else if(firstClassId === '3' && secondClassId === '23'){
+        this.goodsParam = this.xpjXian;
+      } else if(firstClassId === '3' && secondClassId === '24'){
+        this.goodsParam = this.xpjXianzu;
+      } else if(firstClassId === '3' && secondClassId === '25'){
+        this.goodsParam = this.xpjDiaoxiang;
+      } else if(firstClassId === '3' && secondClassId === '26'){
+        this.goodsParam = this.xpjGanbao;
+      } else if(firstClassId === '3' && secondClassId === '27'){
+        this.goodsParam = this.xpjYuhu;
+      } else if(firstClassId === '3' && secondClassId === '28'){
+        this.goodsParam = this.xpjChaowang;
+      } else if(firstClassId === '3' && secondClassId === '29'){
+        this.goodsParam = this.xpjZhijia;
+      } else if(firstClassId === '3' && secondClassId === '30'){
+        this.goodsParam = this.xpjDiaodeng;
+      } else if(firstClassId === '3' && secondClassId === '31'){
+        this.goodsParam = this.xpjDiaosan;
+      } else if(firstClassId === '3' && secondClassId === '32'){
+        this.goodsParam = this.xpjShuixiang;
+      } else if(firstClassId === '3' && secondClassId === '33'){
+        this.goodsParam = this.xpjDiaoyi;
+      } else if(firstClassId === '3' && secondClassId === '34'){
+        this.goodsParam = this.xpjShishousheng;
       }
       this.isGoods = Object.keys(this.goodsParam).length >0;
     },

@@ -163,7 +163,7 @@
       moldPickerChange(e){
         this.Index = e.$wx.detail.value;
         this.$emit('inputBtn', {
-          key: this.obj.key,
+          key: this.obj.items[e.$wx.detail.value].key,
           value: this.obj.items[e.$wx.detail.value].name,
         });
       },
