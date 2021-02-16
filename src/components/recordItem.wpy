@@ -160,10 +160,14 @@
     </div>
     <div class="merchandise_box">
       <div class="merchandise_list">
-        <div class="merchandise_item" :key="'item'+id" v-for="item in orderData.orderGoodsSnapshotList">
+        <div
+          class="merchandise_item"
+          :key="'item'+id"
+          v-for="item in orderData.orderGoodsSnapshotList"
+        >
           <image
             class="item_image"
-            src="{{JSON.parse(item.imgs)[0]}}"
+            :src="imageUrl"
             mode="widthFix"
             lazy-load="true"
           />
@@ -211,9 +215,26 @@
       
     },
     computed: {
-      
+      // 图片地址
+      imageUrl(){
+        console.log('orderData',this.orderData)
+        let url = [];
+        url = this.imageTrim(this.orderData.imgs)
+        return url[0];
+      },
     },
     methods: {
+      // 修剪数据
+      imageTrim(str){
+        if(!str){
+          return [];
+        }
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
       // 按钮文案
       btnStatus(key){
         console.log('key11',key)

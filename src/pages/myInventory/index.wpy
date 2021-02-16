@@ -159,7 +159,7 @@
         :key="'item'+index"
         v-for="(item,index) in orderList"
       >
-        <orderItem :orderData="item"/>
+        <orderItem :orderData="item" />
       </li>
     </ul>
     <div class="myInventory_nav">

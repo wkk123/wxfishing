@@ -135,10 +135,21 @@
       ...mapState([ 'publics' ])
     },
     methods: {
+      // 修剪数据
+      imageTrim(str){
+        if(!str){
+          return [];
+        }
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
       // 上传图片
       upImageFile(path){
-        console.log('path',path);
-        this.info.headimgurl = path;
+        console.log('this.imageTrim(path)[0]',this.imageTrim(path)[0]);
+        this.info.headimgurl = this.imageTrim(path)[0];
       },
       // 选择生日
       birthday(e){
@@ -171,15 +182,17 @@
       }
     },
     onLoad(options){
-      // console.log('options',options)
+
     },
     onShow(){
-      // wx.navigateTo({
-      //   url: '/pages/login'
-      // })
+      
     },
     onReady(){
       const { userDetail:{ user } } = this.publics;
+      console.log('headimgurl',user.headimgurl)
+      if(user.headimgurl.indexOf('[') === -1){
+        user.headimgurl = `[${user.headimgurl}]`;
+      }
       this.info = user;
       this.info.birthday = user.birthday.split('T')[0];
     },

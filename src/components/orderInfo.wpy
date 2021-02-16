@@ -80,8 +80,8 @@
 <template>
   <div class="content_item">
     <image
-      class="item_image" 
-      src="{{JSON.parse(orderData.imgs)[0]}}"
+      class="item_image"
+      :src="imageUrl"
       mode="widthFix"
       lazy-load="true"
     />
@@ -123,12 +123,25 @@
       
     },
     computed: {
-      
+      // 图片地址
+      imageUrl(){
+        let url = [];
+        url = this.imageTrim(this.orderData.imgs)
+        return url[0];
+      },
     },
     methods: {
-      fun(){
-
-      }
+      // 修剪数据
+      imageTrim(str){
+        if(!str){
+          return [];
+        }
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
     },
     onShow(){
       

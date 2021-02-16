@@ -56,7 +56,7 @@
 </style>
 <template>
   <div class="upImage_container">
-    <text class="item_titles {{Sign ?'active':''}}">{{title}}{{Num}}</text>
+    <text class="item_titles {{Sign ?'active':''}}">{{title}}</text>
     <div class="upImage_box" v-if="Num === 1">
       <image
         v-if="conditions"

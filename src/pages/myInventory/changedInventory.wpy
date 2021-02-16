@@ -36,7 +36,7 @@
     <ul class="Inventory_list">
       <li class="list_item" v-for="(item, index) in orderList" :key="'item'+index">
         <EditOrder
-          :orderData="{...item}"
+          :orderData="item"
           @editCart="editCartFun"
         />
       </li>

@@ -367,7 +367,7 @@
           v-for="item in orderList"
         >
           <EditOrder
-            :orderData="{...item}"
+            :orderData="item"
             @editCart="editCartFun"
           />
         </li>

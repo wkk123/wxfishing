@@ -155,10 +155,11 @@
       // console.log('options',options)
     },
     onShow(){
-      
+      this.isUpload = true;
+      this.getBrandList();
     },
     onReady(){
-      this.getBrandList();
+
     },
     onUnload(){
 

@@ -65,7 +65,7 @@
       <div class="left_subtitle {{orderData.type===1?'active1':orderData.type===2?'active2':'active3'}}">{{orderData.status}}</div>
       <image 
         class="left_icon"
-        src="{{JSON.parse(orderData.imgs)[0]}}"
+        :src="imageUrl"
         mode="widthFix"
         lazy-load="true"
       />
@@ -107,10 +107,25 @@
       
     },
     computed: {
-      
+      // 图片地址
+      imageUrl(){
+        let url = [];
+        url = this.imageTrim(this.orderData.imgs)
+        return url[0];
+      },
     },
     methods: {
-      
+      // 修剪数据
+      imageTrim(str){
+        if(!str){
+          return [];
+        }
+        let url = [];
+        str.slice(1, str.length - 1).split(',').forEach((item)=>{
+          url.push(item.replace(/^\"|\"$/g,''))
+        })
+        return url;
+      },
     },
     onShow(){
 

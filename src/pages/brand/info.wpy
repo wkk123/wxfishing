@@ -26,7 +26,7 @@
       <ul class="form_list">
         <li class="list_item">
           <div class="item_box">
-            <text class="item_title">品牌名称</text>
+            <text class="item_title active">品牌名称</text>
             <div class="input_box">
               <input 
                 class="item_input"
@@ -40,7 +40,7 @@
         </li>
         <li class="list_item">
           <div class="item_box">
-            <text class="item_title">厂家名称</text>
+            <text class="item_title active">厂家名称</text>
             <div class="input_box">
               <input 
                 class="item_input"
@@ -54,7 +54,7 @@
         </li>
         <li class="list_item">
           <div class="item_box">
-            <text class="item_title">商品产地</text>
+            <text class="item_title active">商品产地</text>
             <div class="input_box">
               <input 
                 class="item_input"
@@ -68,7 +68,7 @@
         </li>
         <li class="list_item">
           <div class="item_box">
-            <text class="item_title">发货地址</text>
+            <text class="item_title active">发货地址</text>
             <div class="input_box">
               <input 
                 class="item_input"
@@ -82,7 +82,7 @@
         </li>
         <li class="list_item">
           <div class="item_box">
-            <text class="item_title">联系方式</text>
+            <text class="item_title active">联系方式</text>
             <div class="input_box">
               <input 
                 class="item_input"
