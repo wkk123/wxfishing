@@ -188,7 +188,7 @@
       <!-- 商品信息 -->
       <div class="content_item">
         <div class="form_head" @click="headIcon(2)">
-          <text class="head_text">商品信息</text>
+          <text class="head_text active">商品信息</text>
           <div class="head_icon">
             <image class="icon_img"
               src="{{two ?'../../image/top.png':'../../image/bottom.png'}}"
