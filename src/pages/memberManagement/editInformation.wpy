@@ -206,7 +206,6 @@
   navigationBarTitleText: '编辑信息',
   disableScroll: true,
   usingComponents: {
-    "SubInput": './../../components/subInput',
     "UpImage": './../../components/upImage',
   }
 }

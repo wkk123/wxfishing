@@ -223,8 +223,7 @@
   navigationBarTitleText: '续费VIP',
   disableScroll: true,
   usingComponents: {
-    "SubInput": './../../components/subInput',
-    "UpImage": './../../components/upImage',
+    
   }
 }
 </config>

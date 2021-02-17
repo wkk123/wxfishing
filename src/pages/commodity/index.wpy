@@ -329,7 +329,6 @@
                   @click="scanCode()"
                   class="input_code"
                   src="./../../image/codeIcon.png"
-                  
                 />
               </div>
             </div>
@@ -377,13 +376,13 @@
       brandObj: {},
       propertyIndex: 0,
       propertyArray: [],
-      propertyObj: {},
       moldIndex: 0,
       moldArray: [],//所有商品类型
       showArray:[],// 需要显示的商品类型
       moldObj: {},//商品类型
       goodsParam: { },//商品参数
       isGoods: false,
+      typeIdIndex: 0,
       xianxiIndex: 0,//线系
       xianxi:[],//线系
       jcspGan:{
@@ -1045,7 +1044,7 @@
           title: '商品名称',
           placeholder: '请输入商品名称',
           Sign: true,
-          key: 'name'
+          key: 'name',
         },
         safeTime:{
           title: '质保时间(月)',
@@ -1103,10 +1102,6 @@
         unitPrice: '',//单价
         sellPrice: '',//售卖价格
         imgs: '',//图片 json数据类型字符串
-      },
-      classQuery:{
-        firstClassId: 1,//一级分类id
-        secondClassId: 1,//二级分类id
       },
     },
     computed: {
@@ -1168,7 +1163,6 @@
       //选择商品属性
       propertyPickerChange(e){
         this.propertyIndex = e.$wx.detail.value;
-        this.propertyObj = this.propertyArray[this.propertyIndex];
         this.info.propertyId = this.propertyArray[this.propertyIndex].id;
         if(this.moldArray.length > 0&&this.info.propertyId){
           this.showArray = this.arrayFilter();
@@ -1189,8 +1183,9 @@
         this.xianxiIndex = e.$wx.detail.value;
         this.info.typeBranchId = this.xianxi[this.xianxiIndex].id;
       },
-      // inputBtn
+      // 数据返回
       inputBtn(data){
+        console.log('data',data);
         this.info[data.key] = data.value;
       },
       // 上传图片
@@ -1239,9 +1234,9 @@
       goodsUpdate(){
         goodsUpdate({
           ...this.info,
-          produceTime: this.info.produceTime? this.info.produceTime + ' 00:00:00':'',
-          stockTime: this.info.stockTime? this.info.stockTime+ ' 00:00:00':'',
-          expireTime: this.info.expireTime? this.info.expireTime + ' 00:00:00':'',
+          produceTime: this.info.produceTime? this.info.produceTime:'',
+          stockTime: this.info.stockTime? this.info.stockTim:'',
+          expireTime: this.info.expireTime? this.info.expireTime:'',
           safeTime: this.info.safeTime,
         }).then(res => {
           const {code, data, message} = res;
@@ -1274,9 +1269,9 @@
         delete this.info.id;
         const obj = {
           ...this.info,
-          produceTime: this.info.produceTime? this.info.produceTime + ' 00:00:00':'',
-          stockTime: this.info.stockTime? this.info.stockTime+ ' 00:00:00':'',
-          expireTime: this.info.expireTime? this.info.expireTime + ' 00:00:00':'',
+          produceTime: this.info.produceTime? this.info.produceTime:'',
+          stockTime: this.info.stockTime? this.info.stockTim:'',
+          expireTime: this.info.expireTime? this.info.expireTime:'',
           safeTime: this.info.safeTime,
         }
         console.log('obj',obj)
@@ -1314,37 +1309,55 @@
           if(res.code === 10000){
             console.log('res',res)
             this.brandArray = data;
-            this.info.brandId = this.brandArray[this.brandIndex].id;
+            if(this.formType === '2'){
+              this.brandIndex = this.ArrProcessor(this.brandArray, 'id', this.info.brandId);
+            } else {
+              this.info.brandId = this.brandArray[this.brandIndex].id; 
+            }
           }
         }).catch(err=> {
           console.log(err)
         })
       },
       // 分类下商品属性及类别
-      getGoodsTypes(){
-        this.classQuery = {
-          firstClassId: this.info.firstClassId,//一级分类id
-          secondClassId: this.info.secondClassId,//二级分类id
-        };
-        goodsPropertiesAndTypes(this.classQuery).then(res => {
+      getGoodsTypes( firstClassId, secondClassId ){
+        goodsPropertiesAndTypes({
+          firstClassId: firstClassId,//一级分类id
+          secondClassId: secondClassId,//二级分类id
+        }).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
             if(data.goodsClassPropertyList.length !== 0){
               this.propertyArray = data.goodsClassPropertyList;
-              this.propertyObj = this.propertyArray[this.propertyIndex];
-              this.info.propertyId = this.propertyArray[this.propertyIndex].id;
+              if(this.formType === '2'){
+                if(this.info.propertyId){
+                  this.propertyIndex = this.ArrProcessor(this.propertyArray,'id', this.info.propertyId);
+                  console.log('this.propertyIndex',this.propertyIndex)
+                }
+              } else {
+                this.info.propertyId = this.propertyArray[this.propertyIndex].id;
+              }
             }
             if(data.goodsClassTypeList.length !== 0){
               this.moldArray = data.goodsClassTypeList;
               if( this.info.propertyId ){
                 this.showArray = this.arrayFilter();
-                this.moldObj = this.showArray[this.moldIndex];
-                this.info.typeId = this.showArray[this.moldIndex].id;
+                if(this.formType === '2'){
+                  this.moldIndex = this.ArrProcessor(this.showArray,'id',this.info.typeId);
+                } else {
+                  this.info.typeId = this.showArray[this.moldIndex].id;  
+                }
               } else {
                 this.showArray = this.moldArray;
                 if(this.info.firstClassId === '1' && this.info.secondClassId === '4' ){
-                  this.xianxi = this.showArray[0].goodsClassTypeBranchList;
-                  this.info.typeBranchId = this.xianxi[0].id;
+                  if(this.formType === '2'){
+                    this.typeIdIndex = this.ArrProcessor(this.showArray,'id',this.info.typeId);
+                    this.xianxi = this.showArray[this.typeIdIndex].goodsClassTypeBranchList;
+                    this.xianxiIndex = this.ArrProcessor(this.xianxi,'id',this.info.typeBranchId);
+                  } else {
+                    this.xianxi = this.showArray[this.typeIdIndex].goodsClassTypeBranchList;
+                    this.info.typeBranchId = this.xianxi[this.xianxiIndex].id;  
+                  }
                 }
               }
             }
@@ -1362,10 +1375,41 @@
       BackfillData(){
         const { currentInventory } = this.inventoryList;
         console.log('currentInventory',currentInventory);
-        const { name } = currentInventory;
+        const { name, safeTime } = currentInventory;
+        this.form = {
+          name:{
+            title: '商品名称',
+            placeholder: '请输入商品名称',
+            Sign: true,
+            key: 'name',
+            value: name
+          },
+          safeTime:{
+            title: '质保时间(月)',
+            placeholder: '请输入质保时间',
+            Sign: false,
+            key: 'safeTime',
+            type: 'number',
+            value: safeTime
+          },
+        };
+        const { imgs, number, produceTime, stockTime, expireTime, brandId, propertyId, typeId, typeBranchId } = currentInventory;
         this.info = {
-          name: name,
+          number: number,
+          imgs: imgs?imgs:'[]',
+          produceTime: produceTime,
+          stockTime: stockTime,
+          expireTime: expireTime,
+          brandId: brandId,
+          propertyId: propertyId,
+          typeId: typeId,
+          typeBranchId: typeBranchId,
         }
+      },
+      // 品牌回填
+      ArrProcessor( arr, key, target){
+        const current = arr.findIndex((item)=> item[key] === target);
+        return current;
       },
     },
     onLoad(options){
@@ -1374,13 +1418,14 @@
       this.formType = type;
       this.info.firstClassId = firstClassId;
       this.info.secondClassId = secondClassId;
-      if(this.formType === '2'){
-        this.BackfillData()
-      }
-      this.getGoodsTypes();
+      this.getGoodsBrands();
+      this.getGoodsTypes(firstClassId, secondClassId);
       wx.setNavigationBarTitle({
         title: options.title
       })
+      if(this.formType === '2'){
+        this.BackfillData()
+      }
       const { windowHeight } = wx.getSystemInfoSync();
       this.windowHeight = windowHeight;
       this.goodsParam = {};
@@ -1460,7 +1505,7 @@
       
     },
     onReady(){
-      this.getGoodsBrands();
+      
     },
     onUnload(){
 

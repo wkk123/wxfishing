@@ -96,10 +96,10 @@
       <input
         class="item_input"
         type="{{obj.type}}"
-        v-model="value"
+        v-model="obj.value"
         :placeholder="obj.placeholder" 
         placeholder-class="input_placeholder"
-        @input="bindinput()"
+        bindinput="bindinput"
         adjustPosition="{{true}}"
         cursorSpacing="{{50}}"
       />
@@ -118,30 +118,42 @@
         type: Object,
         default: () => {
           return {
+            // 标题
             title: {
               type: String,
               default:''
             },
-            placeholder: {
-              type: String,
-              default:'请输入'
-            },
+            // 标记必须
             Sign: {
               type: Boolean,
               default: false
             },
-            key: {
-              type: String,
-              default: ''
-            },
-            type: {
-              type: String,
-              default: 'number'
-            },
+            // 类型
             mold: {
               type: String,
               default: 'input'
             },
+            // 返回值的字段
+            key: {
+              type: String,
+              default: ''
+            },
+            // 输入input框的类型
+            type: {
+              type: String,
+              default: 'number'
+            },
+            // input 值
+            value: {
+              type: String,
+              default:''
+            },
+            // input 提示
+            placeholder: {
+              type: String,
+              default:'请输入'
+            },
+            // 下拉框显示的关键词
             keyword: {
               type: String,
               default: 'name'
@@ -151,17 +163,16 @@
       },
     },
     data: {
-      value:'',
       Index: 0,
     },
     computed: {
 
     },
     methods: {
-      bindinput(){
+      bindinput(e){
         this.$emit('inputBtn', {
           key: this.obj.key,
-          value: this.value,
+          value: e.$wx.detail.value,
         });
       },
       moldPickerChange(e){
