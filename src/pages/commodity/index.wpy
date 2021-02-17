@@ -1377,6 +1377,7 @@
       if(this.formType === '2'){
         this.BackfillData()
       }
+      this.getGoodsTypes();
       wx.setNavigationBarTitle({
         title: options.title
       })
@@ -1460,7 +1461,6 @@
     },
     onReady(){
       this.getGoodsBrands();
-      this.getGoodsTypes();
     },
     onUnload(){
 
