@@ -182,7 +182,7 @@
               </picker>
             </div>
           </li>
-          <li class="list_item" v-if="info.firstClassId === '1'&&info.secondClassId==='4'">
+          <li class="list_item" v-show="xianxiArr.length !== 0">
             <view class="item_box">
               <text class="item_title active">线系</text>
               <picker
@@ -190,11 +190,11 @@
                 mode="selector"
                 @change="xianxiPickerChange"
                 value="{{xianxiIndex}}"
-                range="{{xianxi}}"
+                range="{{xianxiArr}}"
                 range-key="name"
               >
                 <view class="picker">
-                  {{xianxi[xianxiIndex].name}}
+                  {{xianxiArr[xianxiIndex].name}}
                 </view>
               </picker>
             </view>
@@ -382,9 +382,8 @@
       moldObj: {},//商品类型
       goodsParam: { },//商品参数
       isGoods: false,
-      typeIdIndex: 0,
       xianxiIndex: 0,//线系
-      xianxi:[],//线系
+      xianxiArr:[],//线系
       jcspGan:{
         jcspGanJieshu:{
           title: '节数',
@@ -1173,15 +1172,15 @@
         this.moldIndex = e.$wx.detail.value;
         this.moldObj = this.showArray[this.moldIndex];
         if(this.info.firstClassId === '1' && this.info.secondClassId === '4' ){
-          this.xianxi = this.moldObj.goodsClassTypeBranchList;
-          this.info.typeBranchId = this.xianxi[0].id;
+          this.xianxiArr = this.moldObj.goodsClassTypeBranchList;
+          this.info.typeBranchId = this.xianxiArr[0].id;
         }
         this.info.typeId = this.showArray[this.moldIndex].id;
       },
       // 选择线系 道系 子系
       xianxiPickerChange(e){
         this.xianxiIndex = e.$wx.detail.value;
-        this.info.typeBranchId = this.xianxi[this.xianxiIndex].id;
+        this.info.typeBranchId = this.xianxiArr[this.xianxiIndex].id;
       },
       // 数据返回
       inputBtn(data){
@@ -1349,14 +1348,14 @@
                 }
               } else {
                 this.showArray = this.moldArray;
-                if(this.info.firstClassId === '1' && this.info.secondClassId === '4' ){
+                if(firstClassId === '1' && secondClassId === '4' ){
                   if(this.formType === '2'){
-                    this.typeIdIndex = this.ArrProcessor(this.showArray,'id',this.info.typeId);
-                    this.xianxi = this.showArray[this.typeIdIndex].goodsClassTypeBranchList;
-                    this.xianxiIndex = this.ArrProcessor(this.xianxi,'id',this.info.typeBranchId);
+                    this.moldIndex = this.ArrProcessor(this.showArray,'id',this.info.typeId);
+                    this.xianxiArr = this.showArray[this.moldIndex].goodsClassTypeBranchList;
+                    this.xianxiIndex = this.ArrProcessor(this.xianxiArr,'id',this.info.typeBranchId);
                   } else {
-                    this.xianxi = this.showArray[this.typeIdIndex].goodsClassTypeBranchList;
-                    this.info.typeBranchId = this.xianxi[this.xianxiIndex].id;  
+                    this.xianxiArr = this.showArray[this.moldIndex].goodsClassTypeBranchList;
+                    this.info.typeBranchId = this.xianxiArr[this.xianxiIndex].id;  
                   }
                 }
               }
@@ -1407,7 +1406,7 @@
         }
       },
       // 品牌回填
-      ArrProcessor( arr, key, target){
+      ArrProcessor(arr, key, target){
         const current = arr.findIndex((item)=> item[key] === target);
         return current;
       },

@@ -147,21 +147,24 @@
         <image
           class="item_img"
           :src="currentKey === item.key?defaultImage:image1"
-          
           lazy-load="false"
         />
         <text class="item_text">{{item.text}}</text>
       </li>
     </ul>
-    <ul class="myInventory_content">
-      <li class="content_item"
+    <scroll-view
+      class="myInventory_content"
+      scroll-y="true"
+      bindscrolltolower="lowerList"
+    >
+      <view class="content_item"
         @tap="subItem(item)"
         :key="'item'+index"
         v-for="(item,index) in orderList"
       >
         <orderItem :orderData="item" />
-      </li>
-    </ul>
+      </view>
+    </scroll-view>
     <div class="myInventory_nav">
       <text class="nav_text">库存汇总：<text class="text_num">¥{{collectPrice}}</text></text>
       <button
@@ -208,7 +211,10 @@
       image3: './../../image/sort2.png',//降
       orderList:[],
       frequency: 2,// 点击次数
+      isUpload: true,
       query:{
+        page: 1,
+        size: 10,
         keyword: '',// 搜索关键字
         sortField: 'heat',//排序字段 heat 热度 quantity 库存量 expire_time 到期时间
         order: 'asc',//排序规则 desc 降序 asc 升序
@@ -245,6 +251,8 @@
       // 搜索输入值
       searchInput(value) {
         this.query.keyword = value;
+        this.orderList = [];
+        this.isUpload = true;
         this.getGoodsGoodsList();
       },
       // 点击库存变动
@@ -267,6 +275,8 @@
         }
         this.currentKey = key;
         this.query.sortField = key;
+        this.orderList = [];
+        this.isUpload = true;
         this.getGoodsGoodsList();
       },
       // 跳转分类
@@ -278,8 +288,15 @@
           url: '/pages/myInventory/classify'
         })
       },
+      // 上拉
+      lowerList(){
+        this.getGoodsGoodsList();
+      },
       // 库存列表
       getGoodsGoodsList(){
+        if(!this.isUpload){
+          return;
+        }
         const { firstClassId, secondClassId } = this.publics.checkedSort;
         this.query = {
           ...this.query,
@@ -289,7 +306,12 @@
         goodsGoodsList(this.query).then(res => {
           const {code, data, message} = res;
           if(res.code === 10000){
-            this.orderList = data;
+            if(data.length === 10) {
+              this.query.page += 1;
+            } else {
+              this.isUpload = false;
+            }
+            this.orderList = [...this.orderList, ...data];
             this.collectPrice = 0;
             if (Array.isArray(this.orderList)){
               this.orderList.forEach((item)=>{
@@ -316,6 +338,8 @@
       this.currentKey = this.query.sortField;
       if(name !== ''){
         this.searchClass = name;
+        this.orderList = [];
+        this.isUpload = true;
         this.getGoodsGoodsList();
       }
     },
