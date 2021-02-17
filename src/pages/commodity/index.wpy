@@ -1331,7 +1331,6 @@
               if(this.formType === '2'){
                 if(this.info.propertyId){
                   this.propertyIndex = this.ArrProcessor(this.propertyArray,'id', this.info.propertyId);
-                  console.log('this.propertyIndex',this.propertyIndex)
                 }
               } else {
                 this.info.propertyId = this.propertyArray[this.propertyIndex].id;
@@ -1437,13 +1436,29 @@
             type: 'digit',
             value: sellPrice,
           },
-        }
+        };
+        this.ObjFun();
       },
       // 品牌回填
       ArrProcessor(arr, key, target){
         const current = arr.findIndex((item)=> item[key] === target);
         return current;
       },
+      // 商品参数回填
+      ObjFun(){
+        const { currentInventory:{ goodsParam } } = this.inventoryList;
+        const obj = this.goodsParam;
+        console.log('goodsParam',goodsParam);
+        if(!obj || Object.keys(obj).length === 0 || !goodsParam || Object.keys(goodsParam).length === 0 ){
+          return;
+        }
+        for (const key in obj) {
+          if (Object.hasOwnProperty.call(obj, key)) {
+            const element = obj[key];//当前
+            element.value = goodsParam[key];
+          }
+        }
+      }
     },
     onLoad(options){
       console.log('options',options)
@@ -1456,9 +1471,6 @@
       wx.setNavigationBarTitle({
         title: options.title
       })
-      if(this.formType === '2'){
-        this.BackfillData()
-      }
       const { windowHeight } = wx.getSystemInfoSync();
       this.windowHeight = windowHeight;
       this.goodsParam = {};
@@ -1503,7 +1515,6 @@
       } else if(firstClassId === '2' && secondClassId === '20'){
         this.goodsParam = this.ptzbGongbingchan;
       } else if(firstClassId === '3' && secondClassId === '21'){
-        // Object.assign()
         this.goodsParam = this.xpjPiao;
       } else if(firstClassId === '3' && secondClassId === '22'){
         this.goodsParam = this.xpjGan;
@@ -1533,6 +1544,9 @@
         this.goodsParam = this.xpjShishousheng;
       }
       this.isGoods = Object.keys(this.goodsParam).length > 0;
+      if(this.formType === '2'){
+        this.BackfillData()
+      }
     },
     onShow(){
       

@@ -73,11 +73,11 @@
       </div>
     </div>
     <div class="upImage_box" v-if="Num === 3">
-      <div v-show="imageFile">
+      <div v-show="imageUrl.length > 0">
         <image
           class="upImage_img"
-          :src="item"
           v-for="(item,index) in imageUrl"
+          :src="item"
           @click="upImageBtn(index)"
         />  
       </div>
@@ -140,7 +140,7 @@
           }
         } else {
           if(this.imageFile !== ''){
-            return this.imageFile;
+            return this.imageTrim(this.imageFile).length;
           } else {
             return this.image.length === 0;
           }
@@ -150,13 +150,17 @@
     methods: {
       // 修剪数据
       imageTrim(str){
-        if(!str){
+        if(!str||str.length === 0){
           return [];
         }
         let url = [];
-        str.slice(1, str.length - 1).split(',').forEach((item)=>{
-          url.push(item.replace(/^\"|\"$/g,''))
-        })
+        if(typeof str === 'string'){
+          str.slice(1, str.length - 1).split(',').forEach((item)=>{
+            if(item.length){
+              url.push(item.replace(/^\"|\"$/g,''))  
+            }
+          })  
+        }
         return url;
       },
       // 上传图片
