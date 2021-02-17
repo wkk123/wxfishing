@@ -1404,6 +1404,40 @@
           typeId: typeId,
           typeBranchId: typeBranchId,
         }
+        const { model, quantity, unitPrice, sellPrice } = currentInventory;
+        this.storage = {
+          model:{
+            title: '型号',
+            placeholder: '请输入型号',
+            Sign: true,
+            key: 'model',
+            value: model,
+          },
+          quantity:{
+            title: '数量',
+            placeholder: '请输入数量',
+            Sign: true,
+            key: 'quantity',
+            type: 'number',
+            value: quantity,
+          },
+          unitPrice:{
+            title: '单价 (进货价)',
+            placeholder: '请输入单价',
+            Sign: true,
+            key: 'unitPrice',
+            type: 'digit',
+            value: unitPrice,
+          },
+          sellPrice:{
+            title: '售卖价格',
+            placeholder: '请输入售卖价格',
+            Sign: true,
+            key: 'sellPrice',
+            type: 'digit',
+            value: sellPrice,
+          },
+        }
       },
       // 品牌回填
       ArrProcessor(arr, key, target){
