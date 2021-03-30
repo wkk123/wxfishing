@@ -109,8 +109,8 @@
         commit: COMMIT
       }),
       // 获取二维码
-      getCode(){
-        orderQRCode(this.codeData).then(res => {
+      getCode(codeData){
+        orderQRCode(codeData).then(res => {
           this.codeImg = res;
         }).catch(err=> {
           this.codeImg = err;
@@ -163,7 +163,7 @@
       const { id } = options;
       this.orderId = id;
       if(id !== -1){
-        this.getCode();
+        this.getCode({id:id});
       }
     },
     onShow(){
