@@ -96,7 +96,6 @@ wepy.app({
     'pages/cashierManagement/index',
     'pages/cashierManagement/cashierOrder',
     'pages/cashierManagement/clearingOrder',
-    'pages/cashierManagement/payWay',
     'pages/cashierManagement/search',
     'pages/cashierManagement/cart',
     'pages/commodity/index',

@@ -172,7 +172,7 @@
   import {  mapState, mapActions } from '@wepy/redux';
   import store from './../../store';
   import { SETCART, SETORDER } from './../../store/types';
-  import { goodsAllGoodsList } from './../../request/api.js';
+  import { goodsAllGoodsList, orderCreate } from './../../request/api.js';
   wepy.page({
     store,
     options: {
@@ -229,7 +229,7 @@
           }
         })
       },
-      // 下单
+      // 点击下单
       placeAnOrder(){
         let goodsList = [];
         this.cartList.forEach((item)=>{
@@ -244,8 +244,31 @@
             goodsList: goodsList,
           }
         })
-        wx.navigateTo({
-          url: '/pages/cashierManagement/payWay'
+        this.orderFun({
+            totalMoney: this.totalPrice,
+            goodsList: goodsList,
+          })
+
+      },
+      // 下单函数
+      orderFun(placeAnOrder){
+        orderCreate(placeAnOrder).then(res => {
+          const {code, data, message} = res;
+          wx.showLoading({
+            title: '下单中...',
+            complete(){
+              if(res.code === 10000){
+                wx.hideLoading()
+                console.log('res',res)
+                const { orderId } = res.data;
+                wx.navigateTo({
+                  url: `/pages/cashierManagement/clearingOrder?id=${orderId}`
+                })
+              }
+            }
+          })
+        }).catch(err=> {
+          console.log(err)
         })
       },
       // 添加购物车

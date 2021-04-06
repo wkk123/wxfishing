@@ -103,10 +103,7 @@ export const orderQRCode = p => {
 export const orderRevoke = p => {
   return request.POST('/order/revoke',  {...p, isLoading: false})
 }
-// 线下支付
-export const orderOfflinePay = p => {
-  return request.POST('/order/offlinePay',  {...p, isLoading: false})
-}
+
 // 微信查询支付结果 (订单详情)
 export const orderDetailShopView = p => {
   return request.GET('/order/detail/shopView', {...p, isLoading: true})

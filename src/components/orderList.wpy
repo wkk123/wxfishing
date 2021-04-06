@@ -94,7 +94,7 @@
   <div class="order_box content_box">
     <div class="order_head">
       <text>订单信息</text>
-      <text class="{{info.status === 1?'succeed':'error'}}">{{info.status === 1?'已支付':(info.status=== 0?'待支付':'已撤销')}}</text>
+      <text class="{{info.order.status === 1?'succeed':'error'}}">{{info.order.status === 1?'已支付':(info.order.status=== 0?'待支付':'已撤销')}}</text>
     </div>
     <ul class="order_list">
       <li class="list_item" :key="'item'+item.id" v-for="item in info.order.orderGoodsSnapshotList">
