@@ -659,6 +659,7 @@
       // console.log('options',options)
     },
     onShow(){
+      console.log('this.cart',this.cart)
       const { cart:{ Num, List, total } } = this.cart;
       console.log('Num, List, total',Num, List, total)
       this.cartNum = Num;
@@ -678,7 +679,6 @@
       }).catch(err=> {
         console.log(err)
       })
-      console.log(this.publics)
       this.getGoodsAllClasses();
     },
     onUnload(){

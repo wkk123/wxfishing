@@ -1,5 +1,5 @@
 // 请求地址
-const baseURL = 'https://h5.shitingjiankang.cn/yjapi';
+const baseURL = 'https://www.yulaoban.top/yjapi';
 const http = ({url, params, method} = {}) => {
   console.log(url, params, method);
   let isLoading = params.isLoading;

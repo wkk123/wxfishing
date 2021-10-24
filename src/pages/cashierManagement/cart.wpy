@@ -232,11 +232,11 @@
       // 点击下单
       placeAnOrder(){
         let goodsList = [];
-        this.cartList.forEach((item)=>{
-          goodsList.push({
+        goodsList = this.cartList.map(item=>{
+          return {
             id: item.id,
             quantity: item.num
-          })
+          }
         })
         this.setOrder({
           placeAnOrder: {
@@ -245,23 +245,32 @@
           }
         })
         this.orderFun({
-            totalMoney: this.totalPrice,
-            goodsList: goodsList,
-          })
+          totalMoney: this.totalPrice,
+          goodsList: goodsList,
+        })
 
       },
       // 下单函数
       orderFun(placeAnOrder){
+        const that = this;
         orderCreate(placeAnOrder).then(res => {
           const {code, data, message} = res;
+          console.log('res1',res)
           wx.showLoading({
             title: '下单中...',
             complete(){
               if(res.code === 10000){
+                that.setCart({
+                  cart:{
+                    Num: 0,
+                    List: [],
+                    total: 0,
+                  }
+                })
                 wx.hideLoading()
-                console.log('res',res)
+                console.log('res000',res)
                 const { orderId } = res.data;
-                wx.navigateTo({
+                wx.redirectTo({
                   url: `/pages/cashierManagement/clearingOrder?id=${orderId}`
                 })
               }
@@ -269,6 +278,13 @@
           })
         }).catch(err=> {
           console.log(err)
+          if( err && err.message ){
+            wx.showToast({
+              title: err.message,
+              icon: 'none',
+              duration: 2000
+            })  
+          }
         })
       },
       // 添加购物车
