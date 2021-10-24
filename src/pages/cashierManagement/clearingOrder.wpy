@@ -190,6 +190,13 @@
     },
     onUnload(){
       clearTimeout(this.times)
+      this.setCart({
+        cart:{
+          Num: 0,
+          List: [],
+          total: 0,
+        }
+      })
     },
   });
 </script>
